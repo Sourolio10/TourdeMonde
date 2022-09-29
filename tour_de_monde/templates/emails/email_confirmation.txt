@@ -1,2 +1,0 @@
-Please click the link below to activate the account.
-{{ link }}
