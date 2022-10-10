@@ -1,7 +1,7 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from tour_management import db
+from tour_management import db, models
 
 
 class Admin(db.Model, UserMixin):
@@ -10,6 +10,7 @@ class Admin(db.Model, UserMixin):
     username = db.Column(db.String(255), nullable = True, unique=True)
     employee_id = db.Column(db.String(255), nullable = True, unique=True)
     email = db.Column(db.String(255), nullable = True)
+    accomadation = db.Column(db.Integer,models.Accomodation.id)
     phone_number = db.Column(db.String(255), nullable = True, unique=True)
     password = db.Column(db.String(255), nullable = True)
     email_verified = db.Column(db.Boolean, nullable = True, default=False)
