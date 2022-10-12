@@ -4,6 +4,7 @@ from urllib import response
 from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, login_required, logout_user
 from tour_management.models import User, UserToken
+from tour_management.models.Admin import Admin
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
@@ -24,7 +25,7 @@ def create_account():
     if not validate_signup_req.validate(request_body):
         print(validate_signup_req.errors)
         return 'Bad Request', status.HTTP_400_BAD_REQUEST
-    org = User()
+    org = Admin()
     org.first_name = request.json.get("first_name", None)
     org.last_name = request.json.get("last_name", None)
     org.phone_number = request.json.get("phone_number", None)
