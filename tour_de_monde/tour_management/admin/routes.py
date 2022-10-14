@@ -34,6 +34,7 @@ def create_account():
     org.username = request.json.get("username", None)
     org.email = request.json.get("email", None)
     org.password = User.hash_password(request.json.get("password", None))
+    org.role = request.json.get('role',None)
     # Remove These 2 Once email confirmation starts working
     org.email_verified = True
     org.is_active = True

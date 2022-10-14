@@ -10,6 +10,7 @@ from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
 import json
 from cerberus import Validator
+# need to fix this by making an accomodation API
 from tour_management.schemas.user_apis import user_signup, user_login
 from flask_api import FlaskAPI, status, exceptions
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
