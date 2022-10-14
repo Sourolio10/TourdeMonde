@@ -10,7 +10,7 @@ from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
 import json
 from cerberus import Validator
-from tour_management.schemas.user_apis import user_signup, user_login
+from tour_management.schemas.admin_apis import admin_signup, admin_login
 from flask_api import FlaskAPI, status, exceptions
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
@@ -21,7 +21,7 @@ admin = Blueprint('admin', __name__)
 @admin.route('/signup', methods=["POST"])
 def create_account():
     request_body = request.get_json()
-    validate_signup_req = Validator(user_signup)
+    validate_signup_req = Validator(admin_signup)
     if not validate_signup_req.validate(request_body):
         print(validate_signup_req.errors)
         return 'Bad Request', status.HTTP_400_BAD_REQUEST
@@ -43,7 +43,7 @@ def create_account():
         db.session.commit()
     except Exception as err:
         print('Error Logged : ', err)
-        return "Could not register user", status.HTTP_400_BAD_REQUEST
+        return "Could not register admin", status.HTTP_400_BAD_REQUEST
     else:
         email_conf_token = UserToken.generate_token(
             'email_confirmation', org.id, 1800)
@@ -56,7 +56,7 @@ def create_account():
         #     print('Error Logged : ', err)
         #     return "User Created - Email Sending Failure", status.HTTP_400_BAD_REQUEST
         # else:
-        return "User Created", status.HTTP_201_CREATED
+        return "Admin Created", status.HTTP_201_CREATED
 
 @admin.route('/confirmation/<string:token>')
 def email_confirmation(token):
@@ -80,7 +80,7 @@ def email_confirmation(token):
 @admin.route('/login', methods=['POST'])
 def login():
     request_body = request.get_json()
-    validate_signup_req = Validator(user_login)
+    validate_signup_req = Validator(admin_login)
     if not validate_signup_req.validate(request_body):
         print(validate_signup_req.errors)
         return 'Bad Request', status.HTTP_400_BAD_REQUEST

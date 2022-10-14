@@ -40,7 +40,7 @@ def create_account():
         db.session.commit()
     except Exception as err:
         print('Error Logged : ', err)
-        return "Could not register user", status.HTTP_400_BAD_REQUEST
+        return "Could not register accomodation", status.HTTP_400_BAD_REQUEST
     else:
         email_conf_token = UserToken.generate_token(
             'email_confirmation', org.id, 1800)
@@ -53,7 +53,7 @@ def create_account():
         #     print('Error Logged : ', err)
         #     return "User Created - Email Sending Failure", status.HTTP_400_BAD_REQUEST
         # else:
-        return "User Created", status.HTTP_201_CREATED
+        return "Accomodation created", status.HTTP_201_CREATED
 
 
 
