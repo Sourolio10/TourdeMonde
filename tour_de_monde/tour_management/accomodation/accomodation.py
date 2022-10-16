@@ -19,7 +19,7 @@ from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
 accomodation = Blueprint('accomodation', __name__)
 
 
-@accomodation.route('/signup', methods=["POST"])
+@accomodation.route('/create', methods=["POST"])
 def create_account():
     request_body = request.get_json()
     validate_signup_req = Validator(user_signup)
@@ -67,16 +67,4 @@ def dashboard():
             }
     return data, status.HTTP_200_OK
 
-    # if request.is_json:
-    #     email = request.json['email']
-    #     password = request.json['password']
-    # else:
-    #     email = request.form['email']
-    #     password = request.form['password']
 
-    # test = User.query.filter_by(email=email, password=password).first()
-    # if test:
-    #     access_token = create_access_token(identity=email)
-    #     return jsonify(message='Login Successful', access_token=access_token)
-    # else:
-    #     return jsonify('Bad email or Password'), 401
