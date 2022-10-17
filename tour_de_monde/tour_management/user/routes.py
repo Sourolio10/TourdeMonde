@@ -123,3 +123,68 @@ def dashboard():
     #     return jsonify(message='Login Successful', access_token=access_token)
     # else:
     #     return jsonify('Bad email or Password'), 401
+    
+    # GET : /search/<location>/<travel_start_date>/<travel_end_date>/<people>
+# parameters :
+                # location : Pick from Location Details Table
+                # Travel Start, Travel End, People : USed to check for avalability of bookings
+# operations :
+                # First check if location present in our db
+                # If yes, accordingly check for flight availability along with no of people - add to json object
+                # If returns json object with flight data check for hotels availability for the no of people and add to json object
+                # If that returns data then, send to the UI
+
+
+# GET : /view/locations/<number : 5>
+# parameters :
+                # Number : To show number of places on the dashboard
+# operations :
+                # First check if locations present in our db
+                # Query all of them
+                # Randomly select 2 of them and 3 highly rated ones and send to the user interface
+
+
+# GET : /view/activities/<number : 5>
+# parameters :
+                # Number : To show number of places on the dashboard
+# operations :
+                # First check if activities present in our db
+                # Query all of them
+                # Randomly select 2 of them and 3 highly rated ones and send to the user interface
+
+# GET : /Dashboard
+# @JWT_REQ
+# operations :
+                # This will be a redirect from login
+                # Retrieve user trips and user data
+                # Create a split between upcoming trips and completed trips
+                # Jsonify it and send to the UI
+
+# GET : /myorders/<order_id>
+# GET : /myorders/
+# @JWT_REQ
+# Parameters :
+                # If query is related to a specific order_id
+# operations :
+                # Query my_orders table along with users primary key
+                # In case of order_id along with primamry key pass the order_id too
+                # if found add all the available data to json object and send to UI
+
+# POST : /create/order
+# @jwt_required (Optional should work without it too - Concept of guest accounts)
+# Parameters :
+                # location
+                # flights
+                # hotel
+                # activities
+                # no of people
+                # people object 
+                # payment_made == True or payment_made == False (In this case hold the booking for 3 days)
+                # * NEED TO DISCUSS THE JSON OBJECT FOR THIS *
+# Operations : 
+                # Will check all parameters if each of them exist in the data_base or not.
+                # Add user booking in the my_orders table and create the itinerary.
+                # If payment made then booking_confirmation = True else False in the my_orders Table.
+                # Once all bookings are made in the tables and all confirmations done.
+                # return True or else send error message.
+                # * For NOW IF BOOKING FAILS THEN START ALL OVER AGAIN *
