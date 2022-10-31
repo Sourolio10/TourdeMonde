@@ -12,11 +12,14 @@ class Activities(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     
-    location_id = db.relationship("Location", secondary="ActivityLocation")
     
+    location_id = db.relationship('Activity_location',backref='activities',lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
 
     def __str__(self):
         return 'Activities :{}'.format(self.name)
+    
+    
+    # location_id = db.relationship("Location", secondary="ActivityLocation")

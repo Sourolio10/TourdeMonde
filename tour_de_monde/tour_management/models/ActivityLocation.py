@@ -21,8 +21,8 @@ class ActivityLocation(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    location = db.relationship(Locationdetails, backref=db.backref("ActivityLocation", cascade="all, delete-orphan"))
-    activity = db.relationship(Activities, backref=db.backref("ActivityLocation", cascade="all, delete-orphan"))
+    # location = db.relationship(Locationdetails, backref=db.backref("ActivityLocation", cascade="all, delete-orphan"))
+    # activity = db.relationship(Activities, backref=db.backref("ActivityLocation", cascade="all, delete-orphan"))
 
     def __str__(self):
         return 'ActivityLocation :{}'.format(self.name)

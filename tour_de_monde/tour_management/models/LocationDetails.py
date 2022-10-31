@@ -22,8 +22,8 @@ class Locationdetails(db.Model, UserMixin):
     image = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)
     
-    activity_id = db.relationship("Activities", secondary="ActivityLocation")
-    
+    # activity_id = db.relationship("Activities", secondary="ActivityLocation")
+    activity_id = db.relationship('Activity_location',backref='locationdetails',lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
