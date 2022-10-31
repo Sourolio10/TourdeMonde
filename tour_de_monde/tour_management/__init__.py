@@ -53,7 +53,7 @@ def create_app(config=DevelopmentConfig):
     # from tour_management.main.routes import main
     # from tour_management.error_handler.routes import handle_error_404, handle_error_500, handle_error_429
     from tour_management.user.routes  import user
-    # from iot_security.admin.routes import admin
+    from tour_management.admin.routes import admin
     # from iot_security.api.routes import api
     # app.register_error_handler(404, handle_error_404)
     # app.register_error_handler(500, handle_error_500)
@@ -63,7 +63,7 @@ def create_app(config=DevelopmentConfig):
     #     'admin' : '/admin/login',
     #     'user' : '/user/login'
     # }
-    # app.register_blueprint(admin,url_prefix='/admin')
+    app.register_blueprint(admin,url_prefix='/api/admin')
     # app.register_blueprint(user, url_prefix='/user')
     app.register_blueprint(user,url_prefix='/api/user')
     
