@@ -15,6 +15,7 @@ class Location(db.Model, UserMixin):
     activity_types = db.Column(db.String(255),nullable = True)
     season_visit = db.Column(db.String(255),nullable = True)
 
+# I think something is wrong here. 
     location_details_id = db.relationship('Locationdetails',backref='location',lazy=True)
     # Back References
     
