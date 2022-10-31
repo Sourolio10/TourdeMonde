@@ -16,6 +16,8 @@ class Accomodation(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable = True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
+    accomodation_details_id = db.relationship('Accomodation_details',backref='accomodation',lazy=True)
+
     def __str__(self):
         return 'Accomodation :{}'.format(self.id)
 

@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from datetime import datetime, timedelta
 from email.policy import default
 import math,random
@@ -7,18 +8,15 @@ from flask_login import UserMixin
 from tour_management import db
 from tour_management import login_manager
 
-# Table related to the flight tickets. Mainly works to show what is the cost of each ticket
-class Ticket(db.Model, UserMixin):
+class Activities(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    # foreign key flight_details_id
-    type = db.Column(db.String(255),nullable=False)
-    min_cost = db.Column(db.Integer,default=0)
-    max_cost = db.Column(db.Integer,default=0)
+    name = db.Column(db.String(255), nullable=False)
+    
+    location_id = db.relationship("Location", secondary="ActivityLocation")
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
 
-    flight_details_id = db.relationship('Flight_details',backref='ticket',lazy=True)
-
     def __str__(self):
-        return 'Ticket: {}'.format(self.id)
+        return 'Activities :{}'.format(self.name)

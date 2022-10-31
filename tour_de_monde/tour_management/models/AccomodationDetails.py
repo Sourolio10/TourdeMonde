@@ -8,6 +8,8 @@ from tour_management import login_manager
 
 class AccomodationDetails(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key= True)
+    accomodation_id = db.Column(db.Integer, db.ForeignKey('accomodation.id'), nullable=False)
+    
     # Need to add default Arguement
     room_capacity = db.Column(db.Integer, default=0)
     

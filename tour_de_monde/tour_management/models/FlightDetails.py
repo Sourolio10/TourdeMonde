@@ -17,23 +17,12 @@ class FlightDetails(db.Model, UserMixin):
     source = db.Column(db.String(255),nullable=False)
     destination = db.Column(db.String(255),nullable=False)
     vacant_seats = db.Column(db.Integer,default=0)
+    
+    flights_id = db.Column(db.Integer, db.ForeignKey('flights.id'), nullable=False)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     def __str__(self):
         return 'Flight Details:{}'.format(self.id)
-
-
-    # id = db.Column(db.Integer,primaryKey=True)
-    # flight_number = db.column(db.Integer,nullable=False)
-    # arrival_time = db.column(db.Integer,nullable=False)
-    # depart_time = db.column(db.Integer,nullable=False)
-    # number_of_seats = db.column(db.Integer,default =0)
-    # source = db.column(db.String(255),nullable=False)
-    # destination = db.column(db.String(255),nullable=False)
-    # vacant_seats = db.column(db.Integer,default=0)
-    # created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
-    # updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-    
-    # def __str__(self):
-    #     return 'Admin:{}'.format(self.id)

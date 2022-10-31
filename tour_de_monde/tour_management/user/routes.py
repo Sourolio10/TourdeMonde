@@ -124,7 +124,42 @@ def dashboard():
     # else:
     #     return jsonify('Bad email or Password'), 401
     
-    # GET : /search/<location>/<travel_start_date>/<travel_end_date>/<people>
+
+
+@user.route('/search/<location>/<travel_start_date>/<travel_end_date>/<people>', methods=['GET'])
+@jwt_required()
+def search():
+    
+    
+    data = {
+            "message" : "Welcome To The Search Board"
+            }
+    return data, status.HTTP_200_OK
+
+
+@user.route('/check/flights/<current_location>/<travel_start_date>/<travel_end_date>/<people>', methods=['GET'])
+@jwt_required()
+def check_flights():
+    
+    
+    data = {
+            "message" : "Welcome To The Search Board"
+            }
+    return data, status.HTTP_200_OK
+
+
+@user.route('/check/accomodation/<location>/<accomodation_name>/<travel_start_date>/<travel_end_date>/<people>', methods=['GET'])
+@jwt_required()
+def check_accomodation():
+    
+    
+    data = {
+            "message" : "Welcome To The Search Board"
+            }
+    return data, status.HTTP_200_OK
+
+
+# GET : /search/<location>/<travel_start_date>/<travel_end_date>/<people>
 # parameters :
                 # location : Pick from Location Details Table
                 # Travel Start, Travel End, People : USed to check for avalability of bookings

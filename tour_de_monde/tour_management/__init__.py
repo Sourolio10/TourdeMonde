@@ -8,11 +8,15 @@ from tour_management.config import DevelopmentConfig
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
 from flask_jwt_extended import JWTManager
+from twilio.rest import Client
+
 
 db = SQLAlchemy()
 migrate = Migrate()
 mail = Mail()
 jwt = JWTManager()
+sms_client = Client(DevelopmentConfig.TWILIO_ACCOUNT_SID, DevelopmentConfig.TWILIO_AUTH_TOKEN)
+# sms_client = Client()
 login_manager = LoginManager()
 login_manager.login_message = 'Please login to continue'
 login_manager.login_view = 'user.login'
@@ -24,6 +28,7 @@ def create_app(config=DevelopmentConfig):
     app.config.from_object(config)
     jwt.init_app(app)
     db.init_app(app)
+    # sms_client.init_app(app)
     # limiter.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
@@ -38,9 +43,11 @@ def create_app(config=DevelopmentConfig):
     from tour_management.models import Guest
     from tour_management.models import Itinerary
     from tour_management.models import ItineraryType
-    from tour_management.models import LocationDetails
+    from tour_management.models import Locationdetails
+    from tour_management.models.ActivityLocation import ActivityLocation
+    from tour_management.models.Activities import Activities
     # from tour_management.models.MyOrders import MyOrders
-    from tour_management.models import Place
+    from tour_management.models import Location
     from tour_management.models import Ticket
     # from iot_security.auth import utils
     # from tour_management.main.routes import main

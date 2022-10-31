@@ -22,7 +22,8 @@ class Config:
     # REMEMBER_COOKIE_HTTPONLY =
     RATELIMIT_DEFAULT = '50/hour;100/day;2000/year'
     RATELIMIT_STORAGE_URL = 'redis://localhost:6379'
-
+    TWILIO_ACCOUNT_SID = 'ACb083c410c171a6f23863e6b65c6ea1bc'
+    TWILIO_AUTH_TOKEN = 'f4cb26461776c2502396af3e56a38ec6'
 
 '''
 class ProductionConfig(Config):

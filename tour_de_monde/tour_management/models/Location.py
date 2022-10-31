@@ -6,15 +6,21 @@ from flask_login import UserMixin
 from tour_management import db
 
 
-class Place(db.Model, UserMixin):
+class Location(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable = False)
     average_review = db.Column(db.Integer,nullable = True)
+    # change activity_types to many to many with the ActivityLocation - DONE
     activity_types = db.Column(db.String(255),nullable = True)
     season_visit = db.Column(db.String(255),nullable = True)
+
+    location_details_id = db.relationship('Locationdetails',backref='location',lazy=True)
+    # Back References
+    
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     def __str__(self):
-        return 'Place:{}'.format(self.name)
+        return 'Location:{}'.format(self.name)

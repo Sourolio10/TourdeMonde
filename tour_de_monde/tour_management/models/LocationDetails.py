@@ -8,16 +8,22 @@ from flask_login import UserMixin
 from tour_management import db
 from tour_management import login_manager
 
-class LocationDetails(db.Model, UserMixin):
+# Similar to the activity table. Gives more details about what the activity is
+class Locationdetails(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    location_id = db.Column(db.Integer, db.ForeignKey('location.id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     average_review = db.Column(db.Integer, default=0)
+    average_time = db.Column(db.Integer, nullable=True)
     contact_email = db.Column(db.String(255), nullable=False)
     contact_phone = db.Column(db.String(255), nullable=False)
     owner_name = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)
+    
+    activity_id = db.relationship("Activities", secondary="ActivityLocation")
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 

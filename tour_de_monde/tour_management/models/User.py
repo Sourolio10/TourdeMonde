@@ -48,6 +48,14 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password, password)
 
     # Generate OTP
+    # Need to connect with twilio for sending sms
+    #     message = client.messages.create(
+    # body='Hi there',
+    # from_='+14632637937',
+    # to='+18127784955'
+    # )
+
+    # print(message.sid)
     @staticmethod
     def generate_smcode(user_id, valid_sm_sec):
         OTP = rand_pass(9)                              # Generate password using rand_pass

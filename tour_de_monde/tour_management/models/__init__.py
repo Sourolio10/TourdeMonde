@@ -7,7 +7,9 @@ from tour_management.models.Flights import Flights
 from tour_management.models.Guest import Guest
 from tour_management.models.Itinerary import Itinerary
 from tour_management.models.ItineraryType import ItineraryType
-from tour_management.models.LocationDetails import LocationDetails
+from tour_management.models.Locationdetails import Locationdetails
 # # from tour_management.models.MyOrders import MyOrders
-from tour_management.models.Place import Place
+from tour_management.models.Location import Location
 from tour_management.models.Ticket import Ticket
+from tour_management.models.ActivityLocation import ActivityLocation
+from tour_management.models.Activities import Activities
