@@ -13,7 +13,7 @@ class Activities(db.Model, UserMixin):
     name = db.Column(db.String(255), nullable=False)
     
     
-    location_id = db.relationship('Activity_location',backref='activities',lazy=True)
+    # location_id = db.relationship('Activity_location',backref='activities',lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 

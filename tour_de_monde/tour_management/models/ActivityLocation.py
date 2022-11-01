@@ -4,14 +4,14 @@ from email.policy import default
 import math,random
 from tour_management.models.Activities import Activities
 from tour_management.models.Location import Location
-from tour_management.models.Locationdetails import Locationdetails
+from tour_management.models.Locationdetails import LocationDetails
 from werkzeug.security import generate_password_hash, check_password_hash
 from tour_management.models.utils import rand_pass
 from flask_login import UserMixin
 from tour_management import db
 from tour_management import login_manager
 
-class ActivityLocation(db.Model, UserMixin):
+class Activitylocation(db.Model, UserMixin):
     # Add the id of activity and location. WIll be a mix of both the location and the activity associated. Many-To-Many
     id = db.Column(db.Integer, primary_key=True)
     

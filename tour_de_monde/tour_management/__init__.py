@@ -34,24 +34,22 @@ def create_app(config=DevelopmentConfig):
     login_manager.init_app(app)
     login_manager.session_protection = "strong"
     mail.init_app(app)
-    from tour_management.models import Accomodation
-    from tour_management.models import AccomodationDetails
-    from tour_management.models import User
-    from tour_management.models import UserToken
-    from tour_management.models import FlightDetails
-    from tour_management.models import Flights
-    from tour_management.models import Guest
-    from tour_management.models import Itinerary
-    from tour_management.models import ItineraryType
-    from tour_management.models import Locationdetails
-    from tour_management.models.ActivityLocation import ActivityLocation
-    from tour_management.models.Activities import Activities
+    from tour_management.models.Accomodation import Accomodation
+    from tour_management.models.Accomodationdetails import Accomodationdetails
+    from tour_management.models.User import User
+    from tour_management.models.UserToken import UserToken
+    from tour_management.models.Flights import Flights
+    from tour_management.models.Flightdetails import Flightdetails
+    from tour_management.models.Guest import Guest
+    from tour_management.models.Itinerary import Itinerary
+    from tour_management.models.Itinerarytype import Itinerarytype
+    from tour_management.models.Location import Location
+    from tour_management.models.Locationdetails import Locationdetails
     # from tour_management.models.MyOrders import MyOrders
-    from tour_management.models import Location
-    from tour_management.models import Ticket
-    # from iot_security.auth import utils
-    # from tour_management.main.routes import main
-    # from tour_management.error_handler.routes import handle_error_404, handle_error_500, handle_error_429
+    from tour_management.models.Ticket import Ticket
+    from tour_management.models.Activities import Activities
+    from tour_management.models.Place import Place
+
     from tour_management.user.routes  import user
     from tour_management.admin.routes import admin
     # from iot_security.api.routes import api

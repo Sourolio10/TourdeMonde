@@ -7,15 +7,18 @@ from tour_management import db
 from tour_management import login_manager
 
 
-class FlightDetails(db.Model, UserMixin):
+class Flightdetails(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key= True)
+    # Make flight number to string
     flight_number = db.Column(db.Integer,nullable=False)
+    # Make arrival time and departure time as date-time
     arrival_time = db.Column(db.Integer,nullable=False)
     depart_tim = db.Column(db.Integer,nullable=False)
     number_of_seats = db.Column(db.Integer,default=0)
     source = db.Column(db.String(255),nullable=False)
     destination = db.Column(db.String(255),nullable=False)
+    # write logic to self update vacant seats based on no of bookings
     vacant_seats = db.Column(db.Integer,default=0)
     
     flights_id = db.Column(db.Integer, db.ForeignKey('flights.id'), nullable=False)

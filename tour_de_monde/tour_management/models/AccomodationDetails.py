@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from tour_management import db
 from tour_management import login_manager
 
-class AccomodationDetails(db.Model, UserMixin):
+class Accomodationdetails(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key= True)
     accomodation_id = db.Column(db.Integer, db.ForeignKey('accomodation.id'), nullable=False)
     

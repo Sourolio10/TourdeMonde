@@ -10,14 +10,15 @@ from tour_management import login_manager
 class Accomodation(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     hotel_name = db.Column(db.String(255), nullable=False)
-    location = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    place_id = db.Column(db.Integer, db.ForeignKey('place.id'), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     discount_code = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable = True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    accomodation_details_id = db.relationship('AccomodationDetails',backref='accomodation',lazy=True)
+    accomodation_details_id = db.relationship('Accomodationdetails',backref='accomodation',lazy=True)
 
     def __str__(self):
         return 'Accomodation :{}'.format(self.id)
