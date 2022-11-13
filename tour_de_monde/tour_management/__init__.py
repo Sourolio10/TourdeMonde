@@ -52,13 +52,14 @@ def create_app(config=DevelopmentConfig):
     from tour_management.models.Activities import Activities
     from tour_management.models.Place import Place
     from tour_management.auth import utils
+    from tour_management.error_handler.routes import handle_error_404, handle_error_500, handle_error_429
     from tour_management.user.routes  import user
     from tour_management.admin.routes import admin
     from tour_management.main.routes import main
     # from iot_security.api.routes import api
-    # app.register_error_handler(404, handle_error_404)
-    # app.register_error_handler(500, handle_error_500)
-    # app.register_error_handler(429, handle_error_429)
+    app.register_error_handler(404, handle_error_404)
+    app.register_error_handler(500, handle_error_500)
+    app.register_error_handler(429, handle_error_429)
     # app.register_blueprint(user)
     login_manager.blueprint_login_views = {
         'admin' : '/admin/login',
