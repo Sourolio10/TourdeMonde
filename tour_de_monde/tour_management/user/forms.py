@@ -1,11 +1,10 @@
 import re
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, Form
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField , SelectField, DateTimeLocalField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, InputRequired
 from flask_wtf.file import FileField, FileAllowed
 from tour_management.models import User
-
 
 class SignupForm(FlaskForm):
     first_name = StringField('First Name', validators=[
@@ -101,3 +100,9 @@ class ResendValidateotpForm(FlaskForm):
     def validate_phone_number(self, phone_number):
         if not phone_number.data.isdigit():
             raise ValidationError('Only numeric values are allowed')
+
+
+class DashboardForm(FlaskForm):
+    search = StringField('search', [DataRequired()])
+    date = DateTimeLocalField('Which date is your favorite?', format='%m/%d/%y', validators=[InputRequired()])
+    submit = SubmitField('Submit')

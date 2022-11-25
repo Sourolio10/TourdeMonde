@@ -17,7 +17,8 @@ from tour_management.user.forms import (SignupForm,
                                         ResendValidateotpForm,
                                         ResendEmailConfirmationForm,
                                         ResetPasswordRequestForm,
-                                        ResetPasswordForm)
+                                        ResetPasswordForm,
+                                        DashboardForm)
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 
@@ -154,7 +155,8 @@ def resend_validate_OTP():
 @user.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('user/dashboard.html')
+    dashboard_form = DashboardForm()
+    return render_template('user/dashboard.html', form=dashboard_form)
 
 
 @user.route('/logout')
