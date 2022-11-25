@@ -1,7 +1,7 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from tour_management import db, models
+from tour_management import db
 
 
 class Admin(db.Model, UserMixin):
@@ -18,6 +18,7 @@ class Admin(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     role = db.Column(db.String(255), nullable = True, unique=False)
+    first_login = db.Column(db.Boolean, nullable = True, default=False)
     tokens = db.relationship('AdminToken',backref='admin',lazy=True)
 
     def __str__(self):

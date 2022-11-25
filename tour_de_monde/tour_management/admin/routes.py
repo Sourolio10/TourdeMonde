@@ -5,15 +5,17 @@ import re
 from urllib import response
 from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, login_required, logout_user
-from tour_management.models.Accomodation import Accomodation
-from tour_management.models.Accomodationdetails import Accomodationdetails
-from tour_management.models.Flightdetails import Flightdetails
-from tour_management.models.Flights import Flights
-from tour_management.models.Location import Location
-from tour_management.models.Locationdetails import Locationdetails
-from tour_management.models.Place import Place
-from tour_management.models.Ticket import Ticket
-# from tour_management.models.Admin import Admin
+from tour_management.admin.utils import admin_creation, no_admin, super_user
+from tour_management.models import (Accomodation, 
+                                    Accomodationdetails,
+                                    Flightdetails,
+                                    Flights,
+                                    Location,
+                                    Locationdetails,
+                                    Place,
+                                    Ticket,
+                                    Admin,
+                                    AdminToken)
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
@@ -23,117 +25,241 @@ from tour_management.schemas.admin_apis import admin_signup, admin_login
 from flask_api import FlaskAPI, status, exceptions
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
+from tour_management.admin.forms import (RegistrationForm,
+                                            LoginForm,
+                                            ResendEmailConfirmationForm,
+                                            ResetPasswordRequestForm,
+                                            ResetPasswordForm,
+                                            UpdateUsernameForm,
+                                            UpdatePasswordForm,
+                                            UpdateEmailForm,
+                                            SuperUserRegister,
+                                            AddAdminsForm,
+                                            NewAdminRegistrationForm)
 
 admin = Blueprint('admin', __name__)
 
+@admin.route('/', methods=['GET', 'POST'])
+@admin.route('/registration', methods=['GET', 'POST'])
+@admin_creation
+def registration():
+        return redirect(url_for('admin.login'))
 
-# @admin.route('/signup', methods=["POST"])
-# def create_account():
-#     request_body = request.get_json()
-#     validate_signup_req = Validator(admin_signup)
-#     if not validate_signup_req.validate(request_body):
-#         print(validate_signup_req.errors)
-#         return 'Bad Request', status.HTTP_400_BAD_REQUEST
-#     org = Admin()
-#     org.first_name = request.json.get("first_name", None)
-#     org.last_name = request.json.get("last_name", None)
-#     org.phone_number = request.json.get("phone_number", None)
-#     org.dob = request.json.get("date_of_birth", None)
-#     org.sex = request.json.get("gender", None)
-#     org.username = request.json.get("username", None)
-#     org.email = request.json.get("email", None)
-#     org.password = User.hash_password(request.json.get("password", None))
-#     org.role = request.json.get('role',None)
-#     # Remove These 2 Once email confirmation starts working
-#     org.email_verified = True
-#     org.is_active = True
 
-#     try:
-#         db.session.add(org)
-#         db.session.commit()
-#     except Exception as err:
-#         print('Error Logged : ', err)
-#         return "Could not register admin", status.HTTP_400_BAD_REQUEST
-#     else:
-#         email_conf_token = UserToken.generate_token(
-#             'email_confirmation', org.id, 1800)
-#         User.generate_smcode(org.id, 180)
-#         # try:
-#         #     send_confirmation_mail(org.email,
-#         #                             url_for('user.email_confirmation',
-#         #                                     token=email_conf_token.token, _external=True))
-#         # except Exception as err:
-#         #     print('Error Logged : ', err)
-#         #     return "User Created - Email Sending Failure", status.HTTP_400_BAD_REQUEST
-#         # else:
-#         return "Admin Created", status.HTTP_201_CREATED
+@admin.route('/login', methods=['GET', 'POST'])
+@admin_creation
+@no_admin
+# create decorater to check if actually product is validated
+def login():
+    if current_user.is_authenticated:
+        flash('You are aleady logged in.', 'info')
+        return redirect(url_for('admin.dashboard'))
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        username = login_form.username.data.lower()
+        password = login_form.password.data
+        org = Admin.query.filter_by(username=username).first()
+        if org is None or org.check_password(password) is False:
+            flash('Incorrect Username or Password', 'danger')
+        elif not org.email_verified:
+            flash('Your email is not verified Please verify email first', 'danger')
+        elif not org.is_active:
+            flash('Your Account is disabled.')
+        else:
+            login_user(org)
+            flash('You are logged in successfully', 'info')
+            return redirect(url_for('admin.dashboard'))
+    return render_template('admin/login.html', form=login_form)
 
-# @admin.route('/confirmation/<string:token>')
-# def email_confirmation(token):
-#     # if current_user.is_authenticated:
-#     #     return redirect(url_for('.dashboard'))
+@admin.route('/registration/admin/<string:token>' , methods=['GET','POST'])
+@admin_creation
+@no_admin
+def register(token):
+    token_info = AdminToken.query.filter_by(token=token).first()
+    if token_info is None:
+        flash('Invalid URL Token', 'danger')
+        return redirect(url_for('admin.login'))
+    else:
+        if not token_info.is_valid():
+            flash('Token is expired.', 'danger')
+            return redirect(url_for('admin.login'))
+        # Enter only if the token is valid.
+        first_activation_status = Admin.query.filter_by(username='admin').first()
+        if first_activation_status is not None:
+            first_user = True
+            activation_status = Admin.query.filter_by(id=token_info.id).first()
+            if activation_status.first_login == False:
+                if token_info.token_type == 'admin_activation':
+                    form = SuperUserRegister()
+                    if form.validate_on_submit():
+                        org = Admin.query.filter_by(username='admin').first()
+                        org.name = form.name.data
+                        org.username = form.username.data.lower()
+                        org.employee_id = form.employee_id.data
+                        org.email = form.email.data.lower()
+                        org.phone_number = form.phone_number.data
+                        org.first_login = True
+                        org.password = Admin.hash_password(form.password.data)
+                        org.role = 'super_user'
+                        # Change These Two once email api is working
+                        org.email_verified = True
+                        org.is_active = True
+                        db.session.commit()
+                        flash('Admin signed up successfully', 'success')
+                        return redirect(url_for('admin.login'))
+                    return render_template('admin/register.html', form = form, item = first_user)
+                else:
+                    flash ('Invalid Token Type', 'danger')
+                    return redirect(url_for('admin.login'))
+        else:
+            first_user = False
+            if token_info.token_type == 'admin_token':
+                form = NewAdminRegistrationForm()
+                if form.validate_on_submit():
+                    admin_id = token_info.admin_id
+                    org = Admin.query.filter_by(id = admin_id).first()
+                    if org is None or org == []:
+                        flash('You need to log in to add admins','danger')
+                        return redirect(url_for('admin.login'))
+                    else:
+                        org.name = form.name.data
+                        org.username = form.username.data.lower()
+                        org.phone_number = form.phone_number.data
+                        org.password = Admin.hash_password(form.password.data)
+                        db.session.commit()
+                        flash('User signed up successfully', 'success')
+                        return redirect(url_for('admin.login'))
+                return render_template('admin/register.html', form = form, item = first_user)
+            else:
+                flash ('Invalid Token Type', 'danger')
+                return redirect(url_for('admin.login'))
 
-#     token_info = UserToken.query.filter_by(
-#         token=token, token_type='email_confirmation').first()
 
-#     if not token_info:
-#         return "Token Not Found", status.HTTP_401_UNAUTHORIZED
-#     if not token_info.is_valid():
-#         return "Token Expired", status.HTTP_401_UNAUTHORIZED
-#     token_info.user.email_verified = True
-#     token_info.user.is_active = True
+
+@admin.route('/add/admins' , methods=['GET','POST'])
+@login_required
+@super_user
+def add_admins():
+    form = AddAdminsForm()
+    if form.validate_on_submit():
+        org = Admin()
+        org.employee_id = form.employee_id.data
+        org.email = form.email.data
+        org.role = form.role.data
+        db.session.add(org)
+        db.session.commit()
+        if org.role == 'super_user':
+            super_user_conf_token = AdminToken.generate_token('admin_token', org.id, 1800)
+            # send_registration_mail(org.email, url_for('.registration_confirmation',token=super_user_conf_token.token, _external=True))
+            flash('Super User is successfully created', 'info')
+        elif org.role == 'admin':
+            admin_token = AdminToken.generate_token('admin_token', org.id, 1800)
+            # send_registration_mail(org.email,url_for('.registration_confirmation',token=admin_token.token, _external=True))
+            flash('Admin is successfully created', 'info')
+        else:
+            flash('error detected' , 'danger')
+            return redirect(url_for('admin.dashboard'))
+    return render_template('admin/add_admins.html', form=form)
+
+
+@admin.route('/registration/confirmation/<string:token>')
+@admin_creation
+def registration_confirmation(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('admin.dashboard'))
+    token_info = AdminToken.query.filter_by(token=token).first()
+
+    if not token_info:
+        flash('Invalid registration confirmation token', 'danger')
+        return redirect(url_for('admin.login'))
     
-#     db.session.commit()
-#     return "Mail Confirmation Successfull" ,status.HTTP_200_OK
+    if not token_info.is_valid():
+        flash('Token is expired. Please get new registration confirmation link', 'danger')
+        return redirect('admin.login')
+    token_info.admin.email_verified = True
+    token_info.admin.is_active = True
+    db.session.commit()
+    flash('Email has been verified', 'success')
+    return redirect(url_for('admin.register',token=token, _external=True))
+
+@admin.route('/reset-password-request', methods=['GET', 'POST'])
+@admin_creation
+@no_admin
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('admin.dashboard'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        org = Admin.query.filter_by(email=email).first()
+        if not org:
+            flash('Email address is not registered with us. Please signup', 'info')
+            return redirect(url_for('admin.registration'))
+        if not org.email_verified:
+            flash('Email is not verified. Please verify email first', 'danger')
+            return redirect(url_for('admin.login'))
+        if not org.is_active:
+            flash('Your account has been deactivated Please contact admin', 'info')
+            return redirect(url_for('admin.login'))
+        reset_password_token = AdminToken.generate_token(
+            'reset_password', org.id, 1800)
+        # send_reset_password_mail(org.email,
+        #                          url_for('admin.reset_password',
+        #                                  token=reset_password_token.token, _external=True))
+        flash('Reset password link has been sent to your email address', 'info')
+        return redirect(url_for('admin.login'))
+    return render_template('admin/reset_password_request.html', form=form)
+
+#Password reset
+@admin.route('/reset-password/<string:token>', methods=['GET', 'POST'])
+@admin_creation
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('admin.dashboard'))
+
+    token_info = AdminToken.query.filter_by(
+        token=token, token_type='reset_password').first()
+
+    if not token_info:
+        flash('Invalid Reset password token', 'danger')
+        return redirect(url_for('admin.login'))
+    if not token_info.is_valid():
+        flash('Token is expired. Please get new email confirmation link', 'danger')
+        return redirect('admin.login')
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        password = form.password.data
+        token_info.user.password = Admin.hash_password(password)
+        db.session.commit()
+        flash('Your password has been updated. Please login with new password', 'success')
+        return redirect(url_for('admin.login'))
+    return render_template('admin/reset_password.html', form=form)
+
+@admin.route('/profile')
+@login_required
+def profile():
+    return render_template('admin/profile.html', org=current_user)
+
+@admin.route('/dashboard')
+@login_required
+def dashboard():
+    # user_data = User.query.count()
+    # prop_data = Property.query.filter_by(is_active = True).count()
+    # bill_data = Metertransactionlog.query.count()
+    # server_data = Iotserver.query.filter_by(server_reg_confirm = True).count()
+    # admin_data = Admin.query.filter_by(is_active = True).count()
+    # device_data = Iotdevice.query.filter_by(device_reg_confirm = True).count()
+    # data = [user_data,prop_data,bill_data,server_data,admin_data,device_data]
+    # return render_template('admin/dashboard.html', data = data)
+    return render_template('admin/dashboard.html')
 
 
-# @admin.route('/login', methods=['POST'])
-# def login():
-#     request_body = request.get_json()
-#     validate_signup_req = Validator(admin_login)
-#     if not validate_signup_req.validate(request_body):
-#         print(validate_signup_req.errors)
-#         return 'Bad Request', status.HTTP_400_BAD_REQUEST
-#     username = request.json.get("username", None)
-#     password = request.json.get("password", None)
-#     org = User.query.filter_by(username=username).first()
-#     if org is None or org.check_password(password) is False:
-#         return "Either User does not Exist or Incorrect Credentials", status.HTTP_401_UNAUTHORIZED        
-#     elif not org.email_verified:
-#         return "Email is not verified", status.HTTP_401_UNAUTHORIZED
-#     elif not org.valid_sm_code:
-#         return "Validate SMS code", status.HTTP_401_UNAUTHORIZED
-#     elif not org.is_active:
-#         return "Your Account is disabled. Please contact admin", status.HTTP_401_UNAUTHORIZED
-#     else:
-#         access_token = create_access_token(identity=org.email)
-#         data = {
-#             "access_token" : access_token,
-#             "message" : "Login Successful"
-#             }
-#         return data, status.HTTP_200_OK
-
-# @admin.route('/dashboard', methods=['GET'])
-# @jwt_required()
-# def dashboard():
-#     data = {
-#             "message" : "Welcome To The Dashboard"
-#             }
-#     return data, status.HTTP_200_OK
-
-    # if request.is_json:
-    #     email = request.json['email']
-    #     password = request.json['password']
-    # else:
-    #     email = request.form['email']
-    #     password = request.form['password']
-
-    # test = User.query.filter_by(email=email, password=password).first()
-    # if test:
-    #     access_token = create_access_token(identity=email)
-    #     return jsonify(message='Login Successful', access_token=access_token)
-    # else:
-    #     return jsonify('Bad email or Password'), 401
+@admin.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You are logged out successfully.', 'info')
+    return redirect(url_for('admin.login'))
     
     
     
