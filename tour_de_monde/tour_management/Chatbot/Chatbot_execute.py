@@ -53,7 +53,7 @@ def ExclamationFunc(r):
     return False
 a=0
 while a==0:
-    user_input = input("Hi, I'm Kolly. I can help you with Kolkata tourism. Ask me about historical locations & restaurants. Type `bye` to exit me. What would you like to know?\n")
+    user_input = input("Hi, I'm Tracy. I can help you with information on booking flights, hotels for your upcoming trip. Ask me about your upcoming trip. Type `bye` to exit me. What would you like to know?\n")
     if user_input in negative_word:
         print("okay , have a great day")
         break
