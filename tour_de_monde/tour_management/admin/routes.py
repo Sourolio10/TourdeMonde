@@ -229,7 +229,7 @@ def reset_password(token):
     form = ResetPasswordForm()
     if form.validate_on_submit():
         password = form.password.data
-        token_info.user.password = Admin.hash_password(password)
+        token_info.admin.password = Admin.hash_password(password)
         db.session.commit()
         flash('Your password has been updated. Please login with new password', 'success')
         return redirect(url_for('admin.login'))
