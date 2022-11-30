@@ -139,7 +139,7 @@ p:last-child { margin-bottom: 0; }
     position: relative;
     z-index: 100;
     justify-content: center;
-    padding-top: 100px;
+    padding-top: 100px; 
 }
 .tm-banner-row-header { text-align: center; }
 .tm-down-arrow-link { 
@@ -497,6 +497,10 @@ footer p { color: white; }
     cursor: pointer;
     font-size: 0.8rem;
     font-weight: 600;
+}
+
+.card {
+    border-radius: 20px;
 }
 
 #google-map { height: 600px; }

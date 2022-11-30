@@ -185,3 +185,102 @@ class NewAdminRegistrationForm(FlaskForm):
     def validate_phone_number(self, phone_number):
         if not phone_number.data.isdigit():
             raise ValidationError('Only numeric values are allowed')
+
+
+class AddAccomodationForm(FlaskForm):
+    hotel_name = StringField('HotelName', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    address = StringField('Address', validators=[
+                               DataRequired(), Length(min=3, max=40)])
+    discount_code = StringField('DiscountCode', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    description = StringField('Description', validators=[
+                               DataRequired(), Length(min=3, max=60)])
+    email = StringField('Email', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    room_description = StringField('RoomDescription', validators=[
+                               DataRequired(), Length(min=3, max=60)])
+    room_capactiy = StringField('RoomCapactiy', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    min_price = StringField('MinPrice', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    max_price = StringField('MaxPrice', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    rooms_availble = StringField('RoomsAvailble', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    submit = SubmitField('Submit')
+
+
+class CreateFlightForm(FlaskForm):
+    flight_name = StringField('FlightName', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    role = RadioField('Role', choices=[('international','International'),('domestic','Domestic')])
+    discount_code = StringField('DiscountCode', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    submit = SubmitField('Submit')
+
+
+class CreateFlightTicketForm(FlaskForm):
+    type = StringField('Type', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    min_cost = StringField('MinCost', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    max_cost = StringField('MaxCost', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    submit = SubmitField('Submit')
+
+
+class CreateFlightDetailsForm(FlaskForm):
+    flight_name_res = StringField('FlightNameRes', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    flight_type = StringField('FlightType', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    flight_number = StringField('FlightMNumber', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    arrival_time = StringField('ArrivalTime', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    depart_tim = StringField('DepartureTime', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    number_of_seats = StringField('NumberOfSeats', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    source = StringField('Source', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    destination = StringField('Destination', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    vacant_seats = StringField('VacantSeats', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    rooms_availble = StringField('RoomsAvailble', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    submit = SubmitField('Submit')
+
+
+class AddPlaceForm(FlaskForm):
+    place = StringField('Place', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    code = StringField('Code', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    submit = SubmitField('Submit')
+
+
+class CreateLocationForm(FlaskForm):
+    place_name = StringField('PlaceName', validators=[
+                               DataRequired(), Length(min=3, max=20)])
+    Name = StringField('name', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    season_visit = StringField('SeasonVisit', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    address = StringField('Address', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    average_review = StringField('AverageReview', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    average_time = StringField('AverageTime', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    contact_email = StringField('ContactEmail', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    contact_phone = StringField('ContactPhone', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    owner_name = StringField('OwnerName', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    description = StringField('Description', validators=[
+                               DataRequired(), Length(min=3, max=10)])
+    submit = SubmitField('Submit')

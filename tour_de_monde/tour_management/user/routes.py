@@ -152,7 +152,13 @@ def resend_validate_OTP():
     return render_template('user/resend_validate_otp.html', form=otp_form)
     
 
-@user.route('/dashboard')
+@user.route('/' , methods=['GET', 'POST'])
+def landing():
+    dashboard_form = DashboardForm()
+    return render_template('user/index.html', form=dashboard_form)
+
+
+@user.route('/dashboard' , methods=['GET', 'POST'])
 @login_required
 def dashboard():
     dashboard_form = DashboardForm()

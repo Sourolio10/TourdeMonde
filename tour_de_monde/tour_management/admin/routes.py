@@ -235,12 +235,12 @@ def reset_password(token):
         return redirect(url_for('admin.login'))
     return render_template('admin/reset_password.html', form=form)
 
-@admin.route('/profile')
+@admin.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     return render_template('admin/profile.html', org=current_user)
 
-@admin.route('/dashboard')
+@admin.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     # user_data = User.query.count()
