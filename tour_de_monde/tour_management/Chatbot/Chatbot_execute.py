@@ -251,6 +251,9 @@ while a==0:
                         #Remove <START> and <STOP> tokens from chatbot_response
                         ans = ans.replace("START",'')
                         ans = ans.replace("STOP",'')
-                    user_input = input(ans+"\n")#final answer is shown and a new user input is taken
+                    if len(ans.split()) > 15:
+                        user_input = input("Sorry, couldn't get you. \n")
+                    else:
+                        user_input = input(ans+"\n")#final answer is shown and a new user input is taken
 
 
