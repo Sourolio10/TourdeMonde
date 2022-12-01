@@ -1,0 +1,61 @@
+{% extends 'layout/admin_layout.html' %}
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-8 col-sm-10">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: rgb(7, 88, 117); color: white;">
+                    Add Accomodation
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.place.label(for="place") }}
+                                    {% if form.place.errors %}
+                                        {{ form.place(class="form-control is-invalid", id="place", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.place.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.place(class="form-control", id="place", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.code.label(for="code") }}
+                                    {% if form.code.errors %}
+                                        {{ form.code(class="form-control is-invalid", id="code", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.code.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.code(class="form-control", id="code", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+  
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-success  btn-block mx-auto">Submit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+           
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

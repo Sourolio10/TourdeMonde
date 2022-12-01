@@ -265,7 +265,7 @@ class AddPlaceForm(FlaskForm):
 class CreateLocationForm(FlaskForm):
     place_name = StringField('PlaceName', validators=[
                                DataRequired(), Length(min=3, max=20)])
-    Name = StringField('name', validators=[
+    name = StringField('Name', validators=[
                                DataRequired(), Length(min=3, max=10)])
     season_visit = StringField('SeasonVisit', validators=[
                                DataRequired(), Length(min=3, max=10)])

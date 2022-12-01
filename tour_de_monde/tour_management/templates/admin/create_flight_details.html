@@ -1,0 +1,173 @@
+{% extends 'layout/admin_layout.html' %}
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-8 col-sm-10">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: rgb(7, 88, 117); color: white;">
+                    Add Accomodation
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.flight_name_res.label(for="flight_name_res") }}
+                                    {% if form.flight_name_res.errors %}
+                                        {{ form.flight_name_res(class="form-control is-invalid", id="flight_name_res", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.flight_name_res.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.flight_name_res(class="form-control", id="flight_name_res", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.flight_type.label(for="flight_type") }}
+                                    {% if form.flight_type.errors %}
+                                        {{ form.flight_type(class="form-control is-invalid", id="flight_type", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.flight_type.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.flight_type(class="form-control", id="flight_type", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.flight_number.label(for="flight_number") }}
+                                    {% if form.flight_number.errors %}
+                                        {{ form.flight_number(class="form-control is-invalid", id="flight_number", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.flight_number.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.flight_number(class="form-control", id="flight_number", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.arrival_time.label(for="arrival_time") }}
+                                    {% if form.arrival_time.errors %}
+                                        {{ form.arrival_time(class="form-control is-invalid", id="arrival_time", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.arrival_time.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.arrival_time(class="form-control", id="arrival_time", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.depart_tim.label(for="depart_tim") }}
+                                    {% if form.depart_tim.errors %}
+                                        {{ form.depart_tim(class="form-control is-invalid", id="depart_tim", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.depart_tim.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.depart_tim(class="form-control", id="depart_tim", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.number_of_seats.label(for="number_of_seats") }}
+                                    {% if form.number_of_seats.errors %}
+                                        {{ form.number_of_seats(class="form-control is-invalid", id="number_of_seats", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.number_of_seats.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.number_of_seats(class="form-control", id="number_of_seats", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.source.label(for="source") }}
+                                    {% if form.source.errors %}
+                                        {{ form.source(class="form-control is-invalid", id="source", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.source.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.source(class="form-control", id="source", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.destination.label(for="destination") }}
+                                    {% if form.destination.errors %}
+                                        {{ form.destination(class="form-control is-invalid", id="destination", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.destination.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.destination(class="form-control", id="destination", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.vacant_seats.label(for="vacant_seats") }}
+                                    {% if form.vacant_seats.errors %}
+                                        {{ form.vacant_seats(class="form-control is-invalid", id="vacant_seats", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.vacant_seats.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.vacant_seats(class="form-control", id="vacant_seats", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+  
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-success  btn-block mx-auto">Submit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+           
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

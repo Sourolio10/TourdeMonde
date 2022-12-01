@@ -1,0 +1,77 @@
+{% extends 'layout/admin_layout.html' %}
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-8 col-sm-10">
+            <div class="card">
+                <div class="card-header text-center" style="background-color: rgb(7, 88, 117); color: white;">
+                    Add Accomodation
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.flight_name.label(for="flight_name") }}
+                                    {% if form.flight_name.errors %}
+                                        {{ form.flight_name(class="form-control is-invalid", id="flight_name", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.flight_name.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.flight_name(class="form-control", id="flight_name", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.role.label(for="role") }}
+                                    {% if form.role.errors %}
+                                        {{ form.role(class="form-control is-invalid", id="role", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.role.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.role(class="form-control", id="role", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.discount_code.label(for="discount_code") }}
+                                    {% if form.discount_code.errors %}
+                                        {{ form.discount_code(class="form-control is-invalid", id="discount_code", placeholder="Hotel Name") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.discount_code.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.discount_code(class="form-control", id="discount_code", placeholder="Hotel Name") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+  
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-success  btn-block mx-auto">Submit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+           
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

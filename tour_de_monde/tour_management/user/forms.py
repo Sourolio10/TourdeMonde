@@ -1,7 +1,7 @@
 import re
 from flask_wtf import FlaskForm, Form
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField , SelectField, DateTimeLocalField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField , SelectField, DateTimeLocalField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, InputRequired
 from flask_wtf.file import FileField, FileAllowed
 from tour_management.models import User
@@ -103,6 +103,14 @@ class ResendValidateotpForm(FlaskForm):
 
 
 class DashboardForm(FlaskForm):
-    search = StringField('search', [DataRequired()])
-    date = DateTimeLocalField('Which date is your favorite?', format='%m/%d/%y', validators=[InputRequired()])
+    source = StringField('Choose your source', [DataRequired()])
+    destination = StringField('Choose your destination', [DataRequired()])
+    no_of_rooms = SelectField('How many rooms?' , choices=[('1 Room'), ('2 Rooms'), ('3 Rooms'), ('4 Rooms'), ('5 Rooms')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    adults = SelectField('Adults' , choices=[('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
     submit = SubmitField('Submit')
