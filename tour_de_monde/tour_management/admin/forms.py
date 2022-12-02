@@ -1,11 +1,11 @@
 import re
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField, RadioField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField, RadioField, DateTimeField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, InputRequired
 from flask_wtf.file import FileField, FileAllowed
 from tour_management.models import Admin
-
+from wtforms.fields import DateTimeLocalField
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[
@@ -188,6 +188,8 @@ class NewAdminRegistrationForm(FlaskForm):
 
 
 class AddAccomodationForm(FlaskForm):
+    place_name = StringField('HotelName', validators=[
+                               DataRequired(), Length(min=3, max=20)])
     hotel_name = StringField('HotelName', validators=[
                                DataRequired(), Length(min=3, max=20)])
     address = StringField('Address', validators=[
@@ -198,6 +200,13 @@ class AddAccomodationForm(FlaskForm):
                                DataRequired(), Length(min=3, max=60)])
     email = StringField('Email', validators=[
                                DataRequired(), Length(min=3, max=20)])
+    submit = SubmitField('Submit')
+
+class AddAccomodationDetailsForm(FlaskForm):
+    hotel_id = StringField('Hotel ID', validators=[
+                               DataRequired(), Length(min=3, max=60)]) 
+    room_name = StringField('RoomDescription', validators=[
+                               DataRequired(), Length(min=3, max=60)])
     room_description = StringField('RoomDescription', validators=[
                                DataRequired(), Length(min=3, max=60)])
     room_capactiy = StringField('RoomCapactiy', validators=[
@@ -214,13 +223,16 @@ class AddAccomodationForm(FlaskForm):
 class CreateFlightForm(FlaskForm):
     flight_name = StringField('FlightName', validators=[
                                DataRequired(), Length(min=3, max=20)])
-    role = RadioField('Role', choices=[('international','International'),('domestic','Domestic')])
+    international = BooleanField('Indternational', validators=[DataRequired()])
+    domestic = BooleanField('Domestic', validators=[DataRequired()])
     discount_code = StringField('DiscountCode', validators=[
                                DataRequired(), Length(min=3, max=10)])
     submit = SubmitField('Submit')
 
 
 class CreateFlightTicketForm(FlaskForm):
+    flight_id = StringField('FlightID', validators=[
+                               DataRequired(), Length(min=1, max=20)])
     type = StringField('Type', validators=[
                                DataRequired(), Length(min=3, max=20)])
     min_cost = StringField('MinCost', validators=[
@@ -237,10 +249,10 @@ class CreateFlightDetailsForm(FlaskForm):
                                DataRequired(), Length(min=3, max=10)])
     flight_number = StringField('FlightMNumber', validators=[
                                DataRequired(), Length(min=3, max=10)])
-    arrival_time = StringField('ArrivalTime', validators=[
-                               DataRequired(), Length(min=3, max=10)])
-    depart_tim = StringField('DepartureTime', validators=[
-                               DataRequired(), Length(min=3, max=10)])
+    departure_date_time = DateTimeLocalField('Departure Date-Time', format='%Y-%m-%dT%H:%M',
+                                validators=[InputRequired()])
+    arrival_date_time = DateTimeLocalField('Arrival Date-Time', format='%Y-%m-%dT%H:%M', 
+                                validators=[InputRequired()])
     number_of_seats = StringField('NumberOfSeats', validators=[
                                DataRequired(), Length(min=3, max=10)])
     source = StringField('Source', validators=[
@@ -248,8 +260,6 @@ class CreateFlightDetailsForm(FlaskForm):
     destination = StringField('Destination', validators=[
                                DataRequired(), Length(min=3, max=10)])
     vacant_seats = StringField('VacantSeats', validators=[
-                               DataRequired(), Length(min=3, max=10)])
-    rooms_availble = StringField('RoomsAvailble', validators=[
                                DataRequired(), Length(min=3, max=10)])
     submit = SubmitField('Submit')
 
@@ -259,11 +269,10 @@ class AddPlaceForm(FlaskForm):
                                DataRequired(), Length(min=3, max=20)])
     code = StringField('Code', validators=[
                                DataRequired(), Length(min=3, max=10)])
-    submit = SubmitField('Submit')
-
+    
 
 class CreateLocationForm(FlaskForm):
-    place_name = StringField('PlaceName', validators=[
+    place_name = StringField('PlaceCode', validators=[
                                DataRequired(), Length(min=3, max=20)])
     name = StringField('Name', validators=[
                                DataRequired(), Length(min=3, max=10)])
@@ -272,9 +281,9 @@ class CreateLocationForm(FlaskForm):
     address = StringField('Address', validators=[
                                DataRequired(), Length(min=3, max=10)])
     average_review = StringField('AverageReview', validators=[
-                               DataRequired(), Length(min=3, max=10)])
+                               DataRequired(), Length(min=1, max=1)])
     average_time = StringField('AverageTime', validators=[
-                               DataRequired(), Length(min=3, max=10)])
+                               DataRequired(), Length(min=1, max=1)])
     contact_email = StringField('ContactEmail', validators=[
                                DataRequired(), Length(min=3, max=10)])
     contact_phone = StringField('ContactPhone', validators=[

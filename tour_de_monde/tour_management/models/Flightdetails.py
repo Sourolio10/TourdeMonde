@@ -11,10 +11,10 @@ class Flightdetails(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key= True)
     # Make flight number to string
-    flight_number = db.Column(db.Integer,nullable=False)
+    flight_number = db.Column(db.String(255),nullable=False)
     # Make arrival time and departure time as date-time
-    arrival_time = db.Column(db.Integer,nullable=False)
-    depart_tim = db.Column(db.Integer,nullable=False)
+    departure_date_time = db.Column(db.DateTime, nullable=False)
+    arrival_date_time = db.Column(db.DateTime, nullable=False)
     number_of_seats = db.Column(db.Integer,default=0)
     source = db.Column(db.String(255),nullable=False)
     destination = db.Column(db.String(255),nullable=False)

@@ -9,6 +9,7 @@ from tour_management import login_manager
 class Accomodationbooking(db.model,UserMixin):
     id = db.Column(db.Integer,primary_key =True)
     accomodation_id = db.Column(db.Integer, db.ForeignKey('accomodation.id'), nullable=False)
+    # make this start date -> end date
     booked_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     
        

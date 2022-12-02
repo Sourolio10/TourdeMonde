@@ -9,8 +9,7 @@ from tour_management import db
 class Accomodationdetails(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key= True)
     accomodation_id = db.Column(db.Integer, db.ForeignKey('accomodation.id'), nullable=False)
-    
-    # Need to add default Arguement
+    room_name = db.Column(db.String(255), nullable=True)
     room_capacity = db.Column(db.Integer, default=0)
     
     rooms_availble = db.Column(db.Integer, default=0)

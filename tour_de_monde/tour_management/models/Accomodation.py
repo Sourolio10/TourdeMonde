@@ -22,13 +22,3 @@ class Accomodation(db.Model, UserMixin):
 
     def __str__(self):
         return 'Accomodation :{}'.format(self.id)
-
-    # hotel_name = db.column(db.String(255),nullable=False)
-    # location = db.Column(db.String(255), nullable=False)
-    # discount_code = db.column(db.String(255),nullable=False)
-    # description = db.column(db.String(255),nullable=False)
-    # created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
-    # updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-
-    # def __str__(self):
-    #     return 'Accomodation :{}'.format(self.hotel_name)

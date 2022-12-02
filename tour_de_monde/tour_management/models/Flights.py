@@ -12,11 +12,14 @@ class Flights(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     flight_name = db.Column(db.String(255),nullable=False, unique=True)
     international = db.Column(db.Boolean, nullable = True, default=True)
+    # Add this code
+    domestic = db.Column(db.Boolean, nullable = True, default=True)
     # Add discount code as new table eventually
     discount_code = db.Column(db.String(255),nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
+    tickets_id = db.relationship('Ticket',backref='flights',lazy=True)
     flight_details_id = db.relationship('Flightdetails',backref='flights',lazy=True)
 
     def __str__(self):

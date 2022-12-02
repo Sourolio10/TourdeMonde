@@ -35,7 +35,14 @@ from tour_management.admin.forms import (RegistrationForm,
                                             UpdateEmailForm,
                                             SuperUserRegister,
                                             AddAdminsForm,
-                                            NewAdminRegistrationForm)
+                                            NewAdminRegistrationForm,
+                                            AddAccomodationForm,
+                                            CreateFlightForm,
+                                            CreateFlightTicketForm,
+                                            CreateFlightDetailsForm,
+                                            AddPlaceForm,
+                                            CreateLocationForm,
+                                            AddAccomodationDetailsForm)
 
 admin = Blueprint('admin', __name__)
 
@@ -263,193 +270,252 @@ def logout():
     
     
     
-@admin.route('/add/accomodation' ,methods=['POST'])
+@admin.route('/add/accomodation' ,methods=['GET','POST'])
 def create_accomodation():
-    
-    request_body = request.get_json()
-    place_name = request.json.get("place_name",None)
-    place_obj = Place.query.filter_by(place=place_name).first()
-    if place_obj is None or place_obj == []:
-        return "Please register a Place", status.HTTP_400_BAD_REQUEST
-    
-    tempAccomodation = Accomodation()
-    tempAccomodation.hotel_name = request.json.get("hotel_name",None)
-    tempAccomodation.address = request.json.get("address",None)
-    tempAccomodation.discount_code = request.json.get("discount_code")
-    tempAccomodation.description = request.json.get("description",None)
-    tempAccomodation.email = request.json.get("email",None)
-    tempAccomodation.place_id = place_obj.id
-    try:
-        db.session.add(tempAccomodation)
-        db.session.commit()
-    except Exception as err:
-        print('Error Logged : ', err)
-        return "Could not register Accomodation", status.HTTP_400_BAD_REQUEST
-    else:
-        temp_Acc_Id = Accomodation.query.filter_by(email=tempAccomodation.email).first()
-        print("asdsa",temp_Acc_Id.id)
-        tempAccDetails = Accomodationdetails()
-        tempAccDetails.accomodation_id = temp_Acc_Id.id
-        tempAccDetails.description = request.json.get("description",None)
-        tempAccDetails.room_capacity = request.json.get("room_capactiy",None)
-        tempAccDetails.min_price = request.json.get("min_price",None)
-        tempAccDetails.max_price = request.json.get("max_price",None)
-        tempAccDetails.rooms_availble = request.json.get("rooms_availble",None)
+    place_data = Place.query.all()
+    form = AddAccomodationForm()
+    if form.validate_on_submit():
+        place_name = form.place_name.data.lower()
+        place_obj = Place.query.filter_by(place=place_name).first()
+        if place_obj is None or place_obj == []:
+            flash('Please register a Place', 'info')
+            return redirect(url_for('admin.create_accomodation'))
+        
+        tempAccomodation = Accomodation()
+        tempAccomodation.hotel_name = form.hotel_name.data
+        tempAccomodation.address = form.address.data
+        tempAccomodation.discount_code = form.discount_code.data
+        tempAccomodation.description = form.description.data
+        tempAccomodation.email = form.email.data
+        tempAccomodation.place_id = place_obj.id
         try:
-            db.session.add(tempAccDetails)
+            db.session.add(tempAccomodation)
             db.session.commit()
         except Exception as err:
-            print('Error Logged : ', err)
-            return "Could not register Accomodation", status.HTTP_400_BAD_REQUEST
+            flash('Could not register Accomodation', 'info')
+            return redirect(url_for('admin.create_accomodation'))
         else:
-            data = {
-                    "message" : "Added Accomodation Data"
-                    }
-            return data, status.HTTP_200_OK
-
+            flash('Successfully Registed Hotel. Please add Room Types')
+            return redirect(url_for('admin.create_accomodation_details'))
+    return render_template('admin/add_accomodation.html', form=form, items=place_data)
 
 
     #Take a hotel name, location, discount code and description 
     #Accomodation detial, will take room capacity, rooms availble, min and max prce and a description 
 
-@admin.route('/add/flight' ,methods=['POST'])
-def create_flight():
-    request_body = request.get_json()
-    tempFlights = Flights()
-    tempFlights.flight_name = request.json.get("flight_name",None)
-    tempFlights.international = bool(request.json.get("international",None))
-    tempFlights.discount_code = request.json.get("discount_code", None)
-    
-    try:
-        db.session.add(tempFlights)
-        db.session.commit()
-    except Exception as err:
-        print('Error Logged : ', err)
-        return "Could not register Flight Company", status.HTTP_400_BAD_REQUEST
-    else:
-        data = {
-                "message" : "Added Flight Data"
-                }
-        return data, status.HTTP_200_OK
+@admin.route('/add/accomodation/details' ,methods=['GET','POST'])
+def create_accomodation_details():
+    accomodation_data = Accomodation.query.all()
+    form = AddAccomodationDetailsForm()
+    if form.validate_on_submit():
         
-
-@admin.route('/add/ticket' ,methods=['POST'])
-def create_flight_ticket():
-    tempTicket = Ticket()
-    tempTicket.type = request.json.get("type",None)
-    tempTicket.min_cost = request.json.get("min_cost",None)
-    tempTicket.max_cost = request.json.get("max_cost",None)
-
-    try:
-        db.session.add(tempTicket)
-        db.session.commit()
-    except Exception as err:
-        print('Error Logged : ', err)
-        return "Could not register Flight Ticket Data", status.HTTP_400_BAD_REQUEST
-    else:
-        data = {
-                "message" : "Added Ticket Data"
-                }
-        return data, status.HTTP_200_OK
-
-
-@admin.route('/add/flight/details' ,methods=['POST'])
-def create_flight_details():
-    flight_name_res = request.json.get("flight_name",None)
-    flight_type = request.json.get("flight_type",None)
-    temp_flights_id = Flights.query.filter_by(flight_name=flight_name_res).first()
-    # Change ticket logic. Make a many-to-many table.
-    temp_ticket_id = Ticket.query.filter_by(type=flight_type).first()
-    if temp_flights_id is None or temp_flights_id == [] or temp_ticket_id is None or temp_ticket_id == []:
-        return "Please register a Flight Company or Register a Ticket", status.HTTP_400_BAD_REQUEST
-    temp_flights_details_id = Flightdetails()
-    temp_flights_details_id.flight_number = request.json.get("flight_number",None)
-    temp_flights_details_id.arrival_time = request.json.get("arrival_time",None)
-    temp_flights_details_id.depart_tim = request.json.get("depart_tim",None)
-    temp_flights_details_id.number_of_seats = request.json.get("number_of_seats",None)
-    
-    # Add check for source and destination. As they should be a part of the place table.
-    
-    temp_flights_details_id.source = request.json.get("source",None)
-    temp_flights_details_id.destination = request.json.get("destination",None)
-    temp_flights_details_id.vacant_seats = request.json.get("vacant_seats",None)
-    temp_flights_details_id.flights_id = temp_flights_id.id
-    temp_flights_details_id.ticket_id = temp_ticket_id.id
-    try:
-        db.session.add(temp_flights_details_id)
-        db.session.commit()
-    except Exception as err:
-        print('Error Logged : ', err)
-        return "Could not register Flight Details", status.HTTP_400_BAD_REQUEST
-    else:
-        data = {
-                "message" : "Added Flight Details"
-                }
-        return data, status.HTTP_200_OK
-
-
-@admin.route('/add/place' ,methods=['POST'])
-def create_place():
-    request_body = request.get_json()
-    tempPlace = Place()
-    tempPlace.place = request.json.get("place",None)
-    tempPlace.code = request.json.get("code",None)
-    
-    try:
-        db.session.add(tempPlace)
-        db.session.commit()
-    except Exception as err:
-        print('Error Logged : ', err)
-        return "Could not register Place", status.HTTP_400_BAD_REQUEST
-    else:
-        data = {
-                "message" : "Added Place Data"
-                }
-        return data, status.HTTP_200_OK
-
-@admin.route('/add/location' ,methods=['POST'])
-def create_location():
-    place_name = request.json.get("place_name",None)
-    place_obj = Place.query.filter_by(place=place_name).first()
-    if place_obj is None or place_obj == []:
-        return "Please register a Place", status.HTTP_400_BAD_REQUEST
-    
-    tempLocation = Location()
-    tempLocation.name = request.json.get("name",None)
-    tempLocation.season_visit = request.json.get("season_visit",None)
-    tempLocation.place_id = place_obj.id
-    try:
-        db.session.add(tempLocation)
-        db.session.commit()
-    except Exception as err:
-        print('Error Logged : ', err)
-        return "Could not register Location", status.HTTP_400_BAD_REQUEST
-    else:
-        # Need to add unique constraint here
-        location_obj = Location.query.filter_by(name=tempLocation.name).first()
-        if location_obj is None or location_obj == []:
-            return "Please register a Location", status.HTTP_400_BAD_REQUEST
-        
-        tempLocationDetails = Locationdetails()
-        tempLocationDetails.location_id = location_obj.id
-        tempLocationDetails.address = request.json.get("address",None)
-        tempLocationDetails.average_review = request.json.get("average_review",None)
-        tempLocationDetails.average_time = request.json.get("average_time",None)
-        tempLocationDetails.contact_email = request.json.get("contact_email",None)
-        tempLocationDetails.contact_phone = request.json.get("contact_phone",None)
-        tempLocationDetails.owner_name = request.json.get("owner_name",None)
-        # tempLocationDetails.image = request.json.get("image",None)
-        tempLocationDetails.description = request.json.get("description",None)
+        tempAccDetails = Accomodationdetails()
+        tempAccDetails.accomodation_id = form.hotel_id.data
+        tempAccDetails.room_name = form.room_name.data
+        tempAccDetails.description = form.room_description.data
+        tempAccDetails.room_capacity = form.room_capactiy.data
+        tempAccDetails.min_price = form.min_price.data
+        tempAccDetails.max_price = form.max_price.data
+        tempAccDetails.rooms_availble = form.rooms_availble.data
         try:
-            db.session.add(tempLocationDetails)
+            db.session.add(tempAccDetails)
             db.session.commit()
         except Exception as err:
-            print('Error Logged : ', err)
-            return "Could not register Location Details", status.HTTP_400_BAD_REQUEST
+            flash('Could Not Register Accomodation Details', 'danger')
+            return redirect(url_for('admin.create_accomodation_details'))
         else:
-            
+            flash('Added Accomodation Details.', 'info')
+            return redirect(url_for('admin.create_accomodation_details'))
+
+
+
+@admin.route('/add/flight' ,methods=['GET','POST'])
+def create_flight():
+    flight_data = Flights.query.all()
+    form = CreateFlightForm()
+    if form.validate_on_submit():
+
+        tempFlights = Flights()
+        tempFlights.flight_name = form.flight_name.data.lower()
+        tempFlights.international = form.international.data
+        tempFlights.domestic = form.domestic.data
+        tempFlights.discount_code = form.discount_code.data
         
-            data = {
-                    "message" : "Added Location/Location Details Data"
-                    }
-            return data, status.HTTP_200_OK
+        try:
+            db.session.add(tempFlights)
+            db.session.commit()
+        except Exception as err:
+            flash('Data Already Present/ Data Format Incorrect', 'danger')
+            return redirect(url_for('admin.create_flight'))
+        else:
+            flash('Added Flight Data', 'info')
+            return redirect(url_for('admin.create_flight'))
+    return render_template('admin/create_flight.html', form=form, items=flight_data)
+
+@admin.route('/add/ticket' ,methods=['GET','POST'])
+def create_flight_ticket():
+    # Add flight company name and pick id from it and add logic to add it to this db
+    flight_data = Flights.query.all()
+    form = CreateFlightTicketForm()
+    if form.validate_on_submit():
+        tempTicket = Ticket()
+        # flight_id
+        tempTicket.flights_id = form.flight_id.data
+        tempTicket.type = form.type.data
+        tempTicket.min_cost = form.min_cost.data
+        tempTicket.max_cost = form.max_cost.data
+
+        try:
+            db.session.add(tempTicket)
+            db.session.commit()
+        except Exception as err:
+            flash('Could not register Flight Ticket Data','danger')
+            return redirect(url_for('admin.create_flight_ticket'))
+        else:
+            flash('Ticket Data Added Successfully.','info')
+            return redirect(url_for('admin.create_flight_ticket'))
+    return render_template('admin/create_flight_ticket.html', form=form, items=flight_data)
+
+@admin.route('/add/flight/details' ,methods=['GET','POST'])
+def create_flight_details():
+    place_data = Place.query.all()
+    flight_data = Flights.query.all()
+    form = CreateFlightDetailsForm()
+    print('form')
+    if form.validate_on_submit():
+        print('ENtered')
+        source_present = Place.query.filter_by(place = form.source.data.lower()).all()
+        destination_present = Place.query.filter_by(place = form.destination.data.lower()).all()
+        if form.source.data.lower() == form.destination.data.lower():
+            flash('Source And Destination are the same', 'danger')
+            return redirect(url_for('admin.create_flight_details'))
+        if source_present is None or source_present == [] or destination_present is None or destination_present == []:
+            flash('Please Enter Valid Souce or Destination', 'danger')
+            return redirect(url_for('admin.create_flight_details'))
+        flight_name_res = form.flight_name_res.data
+        flight_type = form.flight_type.data
+        temp_flights_id = Flights.query.filter_by(flight_name=flight_name_res).first()
+        if temp_flights_id is None or temp_flights_id == [] :
+            flash('Could not find Flight Company', 'danger')
+            return redirect(url_for('admin.create_flight_details'))
+        # Change ticket logic. Change dependency with Flight Details.
+        temp_ticket_id = Ticket.query.filter_by(type=flight_type, flights_id=temp_flights_id.id).first()
+        if temp_ticket_id is None or temp_ticket_id == []:
+            flash('Could not find ticket type', 'danger')
+            return redirect(url_for('admin.create_flight_details'))
+        temp_flights_details_id = Flightdetails()
+        temp_flights_details_id.flight_number = form.flight_number.data
+        temp_flights_details_id.arrival_date_time = form.arrival_date_time.data
+        temp_flights_details_id.departure_date_time = form.departure_date_time.data
+        temp_flights_details_id.number_of_seats = form.number_of_seats.data
+        temp_flights_details_id.source = form.source.data.lower()
+        temp_flights_details_id.destination = form.destination.data.lower()
+        temp_flights_details_id.vacant_seats = form.vacant_seats.data
+        temp_flights_details_id.flights_id = temp_flights_id.id
+        temp_flights_details_id.ticket_id = temp_ticket_id.id
+        try:
+            db.session.add(temp_flights_details_id)
+            db.session.commit()
+        except Exception as err:
+            flash('Could not register Flight Details','danger')
+            return redirect(url_for('admin.create_flight_details'))
+        else:
+            flash('Successfully add flight details.', 'info')
+            return redirect(url_for('admin.create_flight_details'))
+    return render_template('admin/create_flight_details.html', form=form, items=flight_data, place=place_data)
+
+
+@admin.route('/add/place' ,methods=['GET', 'POST'])
+@login_required
+@admin_creation
+def create_place():
+    place_data = Place.query.all()
+    form = AddPlaceForm()
+    
+    if form.validate():
+        if request.form['submit'] == 'delete':
+            code = request.form.get('code').lower()
+            place = request.form.get('place').lower() 
+            print(code)
+            print(place)
+            place_enter_data = Place.query.filter_by(place = place, code = code).all()
+            if place_enter_data is None or place_enter_data == []:
+                flash('Data Not Present.', 'danger')
+                return redirect(url_for('admin.create_place'))
+            else:
+                Place.query.filter_by(place = place, code = code).delete()
+                db.session.commit()
+                flash('Data Deleted.','info')
+                return redirect(url_for('admin.create_place'))
+        
+        elif request.form['submit'] == 'submit':
+            tempPlace = Place()
+
+            tempPlace.place = form.place.data.lower()
+            tempPlace.code = form.code.data.lower()
+            
+            try:
+                db.session.add(tempPlace)
+                db.session.commit()
+            except Exception as err:
+                flash('Could Not Add New Place', 'danger')
+                return redirect(url_for('admin.create_place'))
+            else:
+                flash('New Location Added', 'info')
+                return redirect(url_for('admin.create_place'))
+    if place_data is None or place_data == []:
+        return render_template('admin/add_place.html', form=form, items=None)        
+    else:
+        return render_template('admin/add_place.html', form=form, items=place_data)
+
+
+@admin.route('/add/location' ,methods=['GET','POST'])
+@login_required
+@admin_creation
+def create_location():
+    place_data = Place.query.all()
+    form = CreateLocationForm()
+    if form.validate_on_submit():
+        place_name = form.place_name.data
+        place_obj = Place.query.filter_by(code=place_name).first()
+        if place_obj is None or place_obj == []:
+            flash('Please register a Place', 'danger')
+            return redirect(url_for('admin.create_location'))
+        
+        tempLocation = Location()
+        tempLocation.name = form.name.data
+        tempLocation.season_visit = form.season_visit.data
+        tempLocation.place_id = place_obj.id
+        try:
+            db.session.add(tempLocation)
+            db.session.commit()
+        except Exception as err:
+            flash('Could not register Location', 'danger')
+            return redirect(url_for('admin.create_location'))
+        else:
+            # Need to add unique constraint here
+            location_obj = Location.query.filter_by(name=tempLocation.name).first()
+            if location_obj is None or location_obj == []:
+                flash('Please register a Location', 'danger')
+                return redirect(url_for('admin.create_location'))
+            
+            tempLocationDetails = Locationdetails()
+            tempLocationDetails.location_id = location_obj.id
+            tempLocationDetails.address = form.address.data
+            tempLocationDetails.average_review = form.average_review.data
+            tempLocationDetails.average_time = form.average_time.data
+            tempLocationDetails.contact_email = form.contact_email.data
+            tempLocationDetails.contact_phone = form.contact_phone.data
+            tempLocationDetails.owner_name = form.owner_name.data
+            # tempLocationDetails.image = request.json.get("image",None)
+            tempLocationDetails.description = form.description.data
+            try:
+                db.session.add(tempLocationDetails)
+                db.session.commit()
+            except Exception as err:
+                flash('Could not register Location Details', 'danger')
+                return redirect(url_for('admin.create_location'))
+            else:
+                flash('Added Location and Location Details', 'info')
+                return redirect(url_for('admin.create_location'))
+    return render_template('admin/create_location.html', form=form, items=place_data)
