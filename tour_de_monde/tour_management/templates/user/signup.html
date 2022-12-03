@@ -60,14 +60,14 @@
                                 <div class="form-group">
                                     {{ form.dob.label(for="dob") }}
                                     {% if form.dob.errors %}
-                                        {{ form.dob(class="form-control is-invalid", id="dob", placeholder="Date Of Birth") }}
+                                        {{ form.dob(class="form-control is-invalid", id="dob", placeholder="Date Of Birth", type="date") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.dob.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.dob(class="form-control", id="dob", placeholder="Date of Birth") }}
+                                        {{ form.dob(class="form-control", id="dob", placeholder="Date of Birth", type="date") }}
                                     {% endif %}
                                 </div>
                             </div>

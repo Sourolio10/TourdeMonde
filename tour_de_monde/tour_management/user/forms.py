@@ -13,8 +13,8 @@ class SignupForm(FlaskForm):
         DataRequired(), Length(min=2, max=255)])
     phone_number = StringField('Phone number', validators=[
         DataRequired(), Length(min=10, max=10)])
-    dob = StringField('Date of Birth', validators=[
-        DataRequired(), Length(min=8, max=10)])
+    dob = DateField('Date Of Birth',
+                                validators=[InputRequired()])
     sex = StringField('Gender', validators=[
         DataRequired(), Length(min=1, max=10)])
     username = StringField('Username', validators=[

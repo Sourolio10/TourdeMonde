@@ -6,12 +6,12 @@ from flask_login import UserMixin
 from tour_management import db
 from tour_management import login_manager
 
-class Accomodationbooking(db.Model,UserMixin):
+class Flightbookingtemp(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key =True)
-    accomodation_details_id = db.Column(db.Integer, db.ForeignKey('accomodationdetails.id'), nullable=False)
+    flight_details_id = db.Column(db.Integer, db.ForeignKey('flightdetails.id'), nullable=False)
     cost = db.Column(db.Integer, default=0)
-    no_of_rooms = db.Column(db.Integer, default=0)
-    my_orders_id = db.Column(db.Integer, db.ForeignKey('myorders.id'), nullable=False)
+    no_of_people = db.Column(db.Integer, default=0)
+    my_orders_id = db.Column(db.Integer, db.ForeignKey('myorderstemp.id'), nullable=False)
 
     def __str__(self):
-        return 'Accomodation Booking :{}'.format(self.id)
+        return 'Flight Booking Temp:{}'.format(self.id)

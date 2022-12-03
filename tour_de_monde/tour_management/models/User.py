@@ -25,6 +25,8 @@ class User(db.Model, UserMixin):
     valid_sm_code = db.Column(db.Boolean, default=False, nullable=False)
     sm_code_sent_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=True)
     tokens = db.relationship('UserToken', backref='user', lazy=True)
+    orders = db.relationship('Myorders', backref='user', lazy=True)
+    orders_temp = db.relationship('Myorderstemp', backref='user', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     

@@ -42,15 +42,23 @@ def create_app(config=DevelopmentConfig):
     from tour_management.models.AdminToken import AdminToken
     from tour_management.models.Flights import Flights
     from tour_management.models.Flightdetails import Flightdetails
-    from tour_management.models.Guest import Guest
     from tour_management.models.Itinerary import Itinerary
     from tour_management.models.Itinerarytype import Itinerarytype
     from tour_management.models.Location import Location
     from tour_management.models.Locationdetails import Locationdetails
-    # from tour_management.models.MyOrders import MyOrders
+    from tour_management.models.Myorders import Myorders
+    from tour_management.models.Myorderstemp import Myorderstemp
     from tour_management.models.Ticket import Ticket
     from tour_management.models.Activities import Activities
     from tour_management.models.Place import Place
+    from tour_management.models.Accomodationavailability import Accomodationavailability
+    from tour_management.models.Accomodationbooking import Accomodationbooking
+    from tour_management.models.Accomodationbookingtemp import Accomodationbookingtemp
+    from tour_management.models.Flightbooking import Flightbooking
+    from tour_management.models.Flightbookingtemp import Flightbookingtemp
+    from tour_management.models.Locationbooking import Locationbooking
+    from tour_management.models.Locationbookingtemp import Locationbookingtemp
+    from tour_management.models.Passenger import Passenger
     from tour_management.auth import utils
     from tour_management.error_handler.routes import handle_error_404, handle_error_500, handle_error_429
     from tour_management.user.routes  import user

@@ -10,20 +10,6 @@ from tour_management import db
 
 # Similar to the activity table. Gives more details about what the activity is
 
-# ActivityLocation = {
-#         'ActivityLocation',
-#         db.Column('location_id',db.Integer, db.ForeignKey('location_details.id')),
-#         db.Column('activity_id',db.Integer, db.ForeignKey('activities.id'))
-#         }
-    # # Add the id of activity and location. WIll be a mix of both the location and the activity associated. Many-To-Many
-    # id = db.Column(db.Integer, primary_key=True)
-    
-    # location_id = db.Column(db.Integer, db.ForeignKey('location_details.id'))
-    # activity_id = db.Column(db.Integer, db.ForeignKey('activities.id'))
-    
-    # created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
-    # updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
-
 class Locationdetails(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'), nullable=False)
@@ -35,13 +21,17 @@ class Locationdetails(db.Model, UserMixin):
     owner_name = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String(255), nullable=True)
     description = db.Column(db.String(255), nullable=False)
-    
+    cost = db.Column(db.Integer, default=0)
     # activity_id = db.relationship("Activities", secondary=ActivityLocation)
     # activity_id = db.relationship('Activities', secondary=db.backref('Activity_location'), lazy='subquery',
         # backref=db.backref('Location_details', lazy=True))
     # activity_id = db.relationship('Activity_location',backref=db.backref('location_details'),lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+    # Backref
+    location_booking_id = db.relationship('Locationbooking',backref='locationdetails',lazy=True)
+    location_booking_temp_id = db.relationship('Locationbookingtemp',backref='locationdetails',lazy=True)
 
     def __str__(self):
         return 'Location Details :{}'.format(self.name)

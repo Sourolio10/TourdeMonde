@@ -27,5 +27,10 @@ class Flightdetails(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
+    # Backref
+    flight_booking_id = db.relationship('Flightbooking', backref='flightdetails', lazy=True)
+    flight_booking_temp_id = db.relationship('Flightbookingtemp', backref='flightdetails', lazy=True)
+    
+    
     def __str__(self):
         return 'Flight Details:{}'.format(self.id)
