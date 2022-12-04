@@ -4,7 +4,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField , SelectField, DateTimeLocalField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, InputRequired
 from flask_wtf.file import FileField, FileAllowed
-from tour_management.models import User
+from tour_management.models import User, Place
 
 class SignupForm(FlaskForm):
     first_name = StringField('First Name', validators=[
@@ -111,6 +111,18 @@ class DashboardForm(FlaskForm):
     coerce=lambda x: x == 'True')
     children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
     coerce=lambda x: x == 'True')
-    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
-    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    inputCheckIn = DateField('Check In Date', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', validators=[InputRequired()])
+    international = BooleanField('International Travel ?')
     submit = SubmitField('Submit')
+    
+    def validate_source(self, source):
+        org = Place.query.filter_by(place=source.data.lower()).first()
+        print("\n\n\n\n\n Hey Soruce Check")
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')
+    
+    def validate_destination(self, destination):
+        org = Place.query.filter_by(place=destination.data.lower()).first()
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')

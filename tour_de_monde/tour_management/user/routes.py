@@ -159,8 +159,22 @@ def landing():
 @user.route('/dashboard' , methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    dashboard_form = DashboardForm()
-    return render_template('user/dashboard.html', form=dashboard_form)
+    form = DashboardForm()
+    if form.validate_on_submit():
+        source = form.source.data.lower()
+        destination = form.destination.data.lower()
+        no_of_rooms = form.no_of_rooms.data
+        adults = form.adults.data
+        children = form.children.data
+        inputCheckIn = form.inputCheckIn.data
+        inputCheckOut = form.inputCheckOut.data
+        international = form.international.data
+        booking_type = "complete"
+        flash('Added Data', 'info')
+        print('Hi')
+        print(source, destination, no_of_rooms, adults, children, inputCheckIn, inputCheckOut, international)
+        return redirect(url_for('user.dashboard'))
+    return render_template('user/dashboard.html', form=form)
 
 # @user.route('/flight-booking' , methods=['GET', 'POST'])
 # @login_required
@@ -180,7 +194,7 @@ def dashboard():
 def logout():
     logout_user()
     flash('You are logged out successfully.', 'info')
-    return redirect(url_for('.login'))
+    return redirect(url_for('user.login'))
 
 # Confirm whether users email is verified or not
 @user.route('/confirmation/<string:token>')

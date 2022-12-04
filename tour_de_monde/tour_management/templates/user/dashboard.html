@@ -45,7 +45,27 @@
                     </div>
                 </div>
             </div> 
+        
 
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-6 col-sm-10">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                <span>{{ message }}</span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        
         <div class="tm-page-wrap mx-auto">
             <section class="tm-banner">
                 <div class="tm-container-outer tm-banner-bg">
@@ -63,7 +83,7 @@
                         </div> <!-- row -->
                         <div class="row tm-banner-row" id="tm-section-search">
 
-                            <form action="index.html" method="POST" class="tm-search-form tm-section-pad-2">
+                            <form action="" method="POST" class="tm-search-form tm-section-pad-2">
                                 {{ form.hidden_tag() }}
                                 <div class="form-row tm-search-form-row">            
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
@@ -71,7 +91,7 @@
                                         <!-- <input name="Source" type="text" class="form-control" id="inputCity" placeholder="Type your Source..."> -->
                                         {{ form.source.label(for="source") }}
                                         {% if form.source.errors %}
-                                            {{ form.first_name(class="form-control is-invalid", id="source", placeholder="Enter your source... ") }}
+                                            {{ form.source(class="form-control is-invalid", id="source", placeholder="Enter your source... ") }}
                                             <div class="invalid-feedback">
                                                 {% for error in form.source.errors %}
                                                 <span>{{ error }}</span>
@@ -200,6 +220,23 @@
                                                 {{ form.inputCheckOut(class="form-control", id="inputCheckOut", placeholder="inputCheckOut") }}
                                             {% endif %}
                                     </div>
+
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                        <!-- <label for="inputCheckOut">Check Out Date</label>
+                                        <input name="check-out" type="text" class="form-control" id="inputCheckOut" placeholder="Check Out"> -->
+                                        {{ form.international.label(for="international") }}
+                                            {% if form.international.errors %}
+                                                {{ form.international(class="form-control is-invalid", id="international", placeholder="International Travel? ") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.international.errors %}
+                                                    <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                {{ form.international(class="form-control", id="international", placeholder="International Travel? ") }}
+                                            {% endif %}
+                                    </div>
+
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="btnSubmit">&nbsp;</label>
                                         <button type="submit" class="btn btn-primary tm-btn tm-btn-search text-uppercase" id="btnSubmit">Check Availability</button>

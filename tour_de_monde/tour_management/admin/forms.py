@@ -223,8 +223,8 @@ class AddAccomodationDetailsForm(FlaskForm):
 class CreateFlightForm(FlaskForm):
     flight_name = StringField('FlightName', validators=[
                                DataRequired(), Length(min=3, max=20)])
-    international = BooleanField('Indternational', validators=[DataRequired()])
-    domestic = BooleanField('Domestic', validators=[DataRequired()])
+    international = BooleanField('Indternational')
+    domestic = BooleanField('Domestic')
     discount_code = StringField('DiscountCode', validators=[
                                DataRequired(), Length(min=3, max=10)])
     submit = SubmitField('Submit')
