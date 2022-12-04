@@ -11,9 +11,12 @@
 
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         
         <!-- Custom styles for this template -->
         <link href="{{ url_for('static', filename = 'css1/simple-sidebar.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename = 'css/profile.css') }}" rel="stylesheet">
+
 
         <!-- custom styles -->
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
@@ -40,6 +43,37 @@
                 {% if 'super_user' == current_user.role %}
                   <a href="{{ url_for('admin.add_admins') }}" class="list-group-item list-group-item-action bg-light">Add Admin</a>
                 {% endif %}
+
+                <a href="{{ url_for('admin.create_accomodation') }}" class="list-group-item list-group-item-action bg-light">Add Accomodation</a>
+
+                <a href="{{ url_for('admin.create_accomodation_details') }}" class="list-group-item list-group-item-action bg-light">Add Accomodation Details</a>
+
+                <a href="{{ url_for('admin.create_place') }}" class="list-group-item list-group-item-action bg-light">Add Place</a>
+
+                <a href="{{ url_for('admin.create_flight') }}" class="list-group-item list-group-item-action bg-light">Create Flight</a>
+
+                <a href="{{ url_for('admin.create_flight_details') }}" class="list-group-item list-group-item-action bg-light">Create Flight Details</a>
+
+                <a href="{{ url_for('admin.create_flight_ticket') }}" class="list-group-item list-group-item-action bg-light">Create Flight Ticket</a>
+
+                <a href="{{ url_for('admin.create_location') }}" class="list-group-item list-group-item-action bg-light">Create Location</a>
+
+                <hr>
+                
+                <a href="{{ url_for('admin.view_accomodation') }}" class="list-group-item list-group-item-action bg-light">View Accomodation</a>
+
+                <a href="{{ url_for('admin.view_accomodation_details') }}" class="list-group-item list-group-item-action bg-light">View Accomodation Details</a>
+                
+                <a href="{{ url_for('admin.view_flights') }}" class="list-group-item list-group-item-action bg-light">View Flights</a>
+                
+                <a href="{{ url_for('admin.view_flight_details') }}" class="list-group-item list-group-item-action bg-light">View Flight Details</a>
+                
+                <a href="{{ url_for('admin.view_location_details') }}" class="list-group-item list-group-item-action bg-light">View Location Details</a>
+                
+                <a href="{{ url_for('admin.view_place') }}" class="list-group-item list-group-item-action bg-light">View Place</a>
+                
+                <hr>
+                
                 <a href="{{ url_for('admin.logout') }}" class="list-group-item list-group-item-action bg-light">Logout</a>
                 
               </div>

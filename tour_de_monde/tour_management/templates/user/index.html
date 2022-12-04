@@ -34,7 +34,13 @@
                             <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                                        <a class="nav-link active" href="{{ url_for('user.index') }}">Home <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('user.flight_booking') }}" class="nav-link">Flights</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('user.hotel_booking') }}" class="nav-link">Hotels</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ url_for('user.signup') }}" class="nav-link">New User?</a>

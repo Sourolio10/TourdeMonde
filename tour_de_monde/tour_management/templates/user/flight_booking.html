@@ -37,6 +37,12 @@
                                         <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="{{ url_for('user.flight_booking') }}" class="nav-link">Flights</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('user.hotel_booking') }}" class="nav-link">Hotels</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{ url_for('user.logout') }}" class="nav-link">Logout</a>
                                     </li>
                                 </ul>
@@ -108,14 +114,14 @@
                                             </select> -->
                                             {{ form.no_of_rooms.label(for="no_of_rooms") }}
                                             {% if form.no_of_rooms.errors %}
-                                                {{ form.no_of_rooms(class="form-control is-invalid", id="no_of_rooms", placeholder="How many rooms? ") }}
+                                                {{ form.no_of_rooms(class="form-control is-invalid", id="no_of_rooms", placeholder="Flight Type? ") }}
                                                 <div class="invalid-feedback">
                                                     {% for error in form.no_of_rooms.errors %}
                                                     <span>{{ error }}</span>
                                                     {% endfor %}
                                                 </div>
                                             {% else %}
-                                                {{ form.no_of_rooms(class="form-control", id="no_of_rooms", placeholder="How many rooms?") }}
+                                                {{ form.no_of_rooms(class="form-control", id="no_of_rooms", placeholder="Flight Type?") }}
                                             {% endif %} 
                                                                                    
                                         </div>
@@ -186,8 +192,8 @@
                                             {% endif %}
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
-                                        <label for="inputCheckOut">Check Out Date</label>
-                                        <input name="check-out" type="text" class="form-control" id="inputCheckOut" placeholder="Check Out">
+                                        <!-- <label for="inputCheckOut">Check Out Date</label>
+                                        <input name="check-out" type="text" class="form-control" id="inputCheckOut" placeholder="Check Out"> -->
                                         {{ form.inputCheckOut.label(for="inputCheckOut") }}
                                             {% if form.inputCheckOut.errors %}
                                                 {{ form.inputCheckOut(class="form-control is-invalid", id="inputCheckOut", placeholder="inputCheckOut ") }}
