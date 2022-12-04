@@ -204,7 +204,7 @@ class AddAccomodationForm(FlaskForm):
 
 class AddAccomodationDetailsForm(FlaskForm):
     hotel_id = StringField('Hotel ID', validators=[
-                               DataRequired(), Length(min=3, max=60)]) 
+                               DataRequired(), Length(min=1, max=60)]) 
     room_name = StringField('RoomDescription', validators=[
                                DataRequired(), Length(min=3, max=60)])
     room_description = StringField('RoomDescription', validators=[

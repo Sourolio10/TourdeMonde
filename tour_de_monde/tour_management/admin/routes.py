@@ -295,7 +295,7 @@ def create_accomodation():
             flash('Could not register Accomodation', 'info')
             return redirect(url_for('admin.create_accomodation'))
         else:
-            flash('Successfully Registed Hotel. Please add Room Types')
+            flash('Successfully Registed Hotel. Please add Room Types', 'info')
             return redirect(url_for('admin.create_accomodation_details'))
     return render_template('admin/add_accomodation.html', form=form, items=place_data)
 
@@ -326,7 +326,7 @@ def create_accomodation_details():
         else:
             flash('Added Accomodation Details.', 'info')
             return redirect(url_for('admin.create_accomodation_details'))
-
+    return render_template('admin/add_accomodation_details.html', form=form, items=accomodation_data)
 
 
 @admin.route('/add/flight' ,methods=['GET','POST'])
