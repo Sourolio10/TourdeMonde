@@ -11,7 +11,7 @@ class Accomodationdetails(db.Model, UserMixin):
     accomodation_id = db.Column(db.Integer, db.ForeignKey('accomodation.id'), nullable=False)
     room_name = db.Column(db.String(255), nullable=True)
     room_capacity = db.Column(db.Integer, default=0)
-    cost = cost = db.Column(db.Integer, default=0)
+    cost = db.Column(db.Integer, default=0)
     rooms_availble = db.Column(db.Integer, default=0)
     min_price = db.Column(db.Integer, default=0)
     max_price = db.Column(db.Integer, default=0)

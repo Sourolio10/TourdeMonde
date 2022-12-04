@@ -520,3 +520,35 @@ def create_location():
                 flash('Added Location and Location Details', 'info')
                 return redirect(url_for('admin.create_location'))
     return render_template('admin/create_location.html', form=form, items=place_data)
+
+
+
+@admin.route('/view/place' ,methods=['GET','POST'])
+def view_place():
+    place_data = Place.query.all()
+    return render_template('admin/view_place.html', items=place_data)
+
+@admin.route('/view/flights' ,methods=['GET','POST'])
+def view_flights():
+    flight_data = Flights.query.all()
+    return render_template('admin/view_flights.html', items=flight_data)
+
+@admin.route('/view/accomodation' ,methods=['GET','POST'])
+def view_accomodation():
+    place_accomodation = Accomodation.query.all()
+    return render_template('admin/view_accomodation.html', items=place_accomodation)
+
+@admin.route('/view/flight/details' ,methods=['GET','POST'])
+def view_flight_details():
+    flight_details_data = Flightdetails.query.all()
+    return render_template('admin/view_flight_details.html', items=flight_details_data)
+
+@admin.route('/view/accomodation/details' ,methods=['GET','POST'])
+def view_accomodation_details():
+    accomodation_details_data = Accomodationdetails.query.all()
+    return render_template('admin/view_accomodation_details.html', items=accomodation_details_data)
+
+@admin.route('/view/location/details' ,methods=['GET','POST'])
+def view_location_details():
+    location_details_data = Locationdetails.query.all()
+    return render_template('admin/view_location_details.html', items=location_details_data)
