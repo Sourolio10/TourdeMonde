@@ -14,96 +14,112 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.place_name.label(for="place_name") }}
-                                    {% if form.place_name.errors %}
-                                        {{ form.place_name(class="form-control is-invalid", id="place_name", placeholder="Place Name") }}
+                                    {{ form.hotel_id.label(for="hotel_id") }}
+                                    {% if form.hotel_id.errors %}
+                                        {{ form.hotel_id(class="form-control is-invalid", id="hotel_id", placeholder="Hotel Id") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.place_name.errors %}
+                                            {% for error in form.hotel_id.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.place_name(class="form-control", id="place_name", placeholder="Place Name") }}
+                                        {{ form.hotel_id(class="form-control", id="hotel_id", placeholder="Hotel Id") }}
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.hotel_name.label(for="hotel_name") }}
-                                    {% if form.hotel_name.errors %}
-                                        {{ form.hotel_name(class="form-control is-invalid", id="hotel_name", placeholder="Hotel Name") }}
+                                    {{ form.room_name.label(for="room_name") }}
+                                    {% if form.room_name.errors %}
+                                        {{ form.room_name(class="form-control is-invalid", id="room_name", placeholder="Room Name") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.hotel_name.errors %}
+                                            {% for error in form.room_capactiy.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.hotel_name(class="form-control", id="hotel_name", placeholder="Hotel Name") }}
+                                        {{ form.room_name(class="form-control", id="room_name", placeholder="Room Name") }}
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.address.label(for="address") }}
-                                    {% if form.address.errors %}
-                                        {{ form.address(class="form-control is-invalid", id="address", placeholder="Address") }}
+                                    {{ form.room_description.label(for="room_description") }}
+                                    {% if form.room_description.errors %}
+                                        {{ form.room_description(class="form-control is-invalid", id="room_description", placeholder="Room Description") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.address.errors %}
+                                            {% for error in form.room_description.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.address(class="form-control", id="address", placeholder="Address") }}
+                                        {{ form.room_description(class="form-control", id="room_description", placeholder="Room Description") }}
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.discount_code.label(for="discount_code") }}
-                                    {% if form.discount_code.errors %}
-                                        {{ form.discount_code(class="form-control is-invalid", id="discount_code", placeholder="Discount Code") }}
+                                    {{ form.room_capactiy.label(for="room_capactiy") }}
+                                    {% if form.room_capactiy.errors %}
+                                        {{ form.room_capactiy(class="form-control is-invalid", id="room_capactiy", placeholder="Room Capacity") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.discount_code.errors %}
+                                            {% for error in form.room_capactiy.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.discount_code(class="form-control", id="discount_code", placeholder="Discount Code") }}
+                                        {{ form.room_capactiy(class="form-control", id="room_capactiy", placeholder="Room Capacity") }}
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.description.label(for="description") }}
-                                    {% if form.description.errors %}
-                                        {{ form.description(class="form-control is-invalid", id="description", placeholder="Description") }}
+                                    {{ form.min_price.label(for="min_price") }}
+                                    {% if form.min_price.errors %}
+                                        {{ form.min_price(class="form-control is-invalid", id="min_price", placeholder="Minimum Price") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.description.errors %}
+                                            {% for error in form.min_price.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.description(class="form-control", id="description", placeholder="Description") }}
+                                        {{ form.min_price(class="form-control", id="min_price", placeholder="Minimum Price") }}
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.email.label(for="email") }}
-                                    {% if form.email.errors %}
-                                        {{ form.email(class="form-control is-invalid", id="email", placeholder="Email") }}
+                                    {{ form.max_price.label(for="max_price") }}
+                                    {% if form.max_price.errors %}
+                                        {{ form.max_price(class="form-control is-invalid", id="max_price", placeholder="Maximum Price") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.email.errors %}
+                                            {% for error in form.max_price.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.email(class="form-control", id="email", placeholder="Email") }}
+                                        {{ form.max_price(class="form-control", id="max_price", placeholder="Maximum Price") }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.rooms_availble.label(for="rooms_availble") }}
+                                    {% if form.rooms_availble.errors %}
+                                        {{ form.rooms_availble(class="form-control is-invalid", id="rooms_availble", placeholder="Rooms Available") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.rooms_availble.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.rooms_availble(class="form-control", id="rooms_availble", placeholder="Rooms Available") }}
                                     {% endif %}
                                 </div>
                             </div>

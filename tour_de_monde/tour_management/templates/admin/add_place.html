@@ -16,14 +16,14 @@
                                 <div class="form-group">
                                     {{ form.place.label(for="place") }}
                                     {% if form.place.errors %}
-                                        {{ form.place(class="form-control is-invalid", id="place", placeholder="Hotel Name") }}
+                                        {{ form.place(class="form-control is-invalid", id="place", placeholder="Place") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.place.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.place(class="form-control", id="place", placeholder="Hotel Name") }}
+                                        {{ form.place(class="form-control", id="place", placeholder="Place") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -32,14 +32,14 @@
                                 <div class="form-group">
                                     {{ form.code.label(for="code") }}
                                     {% if form.code.errors %}
-                                        {{ form.code(class="form-control is-invalid", id="code", placeholder="Hotel Name") }}
+                                        {{ form.code(class="form-control is-invalid", id="code", placeholder="Code") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.code.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.code(class="form-control", id="code", placeholder="Hotel Name") }}
+                                        {{ form.code(class="form-control", id="code", placeholder="Code") }}
                                     {% endif %}
                                 </div>
                             </div>

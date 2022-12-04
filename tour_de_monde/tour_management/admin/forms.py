@@ -292,4 +292,6 @@ class CreateLocationForm(FlaskForm):
                                DataRequired(), Length(min=3, max=10)])
     description = StringField('Description', validators=[
                                DataRequired(), Length(min=3, max=10)])
+    cost = StringField('Cost', validators=[
+                               DataRequired(), Length(min=3, max=10)])
     submit = SubmitField('Submit')

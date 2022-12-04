@@ -20,7 +20,7 @@ class Myorders(db.Model,UserMixin):
     # Backref
     passenger_id = db.relationship('Passenger', backref='myorders', lazy=True)
     accomodation_id = db.relationship('Accomodationbooking', backref='myorders', lazy=True)
-    flight_id = db.relationship('Accomodationbooking', backref='myorders', lazy=True)
+    flight_id = db.relationship('Flightbooking', backref='myorders', lazy=True)
     location_id = db.relationship('Locationbooking', backref='myorders', lazy=True)
 
 

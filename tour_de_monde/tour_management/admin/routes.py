@@ -509,6 +509,7 @@ def create_location():
             tempLocationDetails.owner_name = form.owner_name.data
             # tempLocationDetails.image = request.json.get("image",None)
             tempLocationDetails.description = form.description.data
+            tempLocationDetails.cost = form.cost.data
             try:
                 db.session.add(tempLocationDetails)
                 db.session.commit()

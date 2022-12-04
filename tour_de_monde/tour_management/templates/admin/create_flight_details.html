@@ -16,14 +16,14 @@
                                 <div class="form-group">
                                     {{ form.flight_name_res.label(for="flight_name_res") }}
                                     {% if form.flight_name_res.errors %}
-                                        {{ form.flight_name_res(class="form-control is-invalid", id="flight_name_res", placeholder="Hotel Name") }}
+                                        {{ form.flight_name_res(class="form-control is-invalid", id="flight_name_res", placeholder="Flight Company Name") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.flight_name_res.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.flight_name_res(class="form-control", id="flight_name_res", placeholder="Hotel Name") }}
+                                        {{ form.flight_name_res(class="form-control", id="flight_name_res", placeholder="Flight Company Name") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -32,14 +32,14 @@
                                 <div class="form-group">
                                     {{ form.flight_type.label(for="flight_type") }}
                                     {% if form.flight_type.errors %}
-                                        {{ form.flight_type(class="form-control is-invalid", id="flight_type", placeholder="Hotel Name") }}
+                                        {{ form.flight_type(class="form-control is-invalid", id="flight_type", placeholder="Flight Type") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.flight_type.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.flight_type(class="form-control", id="flight_type", placeholder="Hotel Name") }}
+                                        {{ form.flight_type(class="form-control", id="flight_type", placeholder="Flight Type") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -48,14 +48,14 @@
                                 <div class="form-group">
                                     {{ form.flight_number.label(for="flight_number") }}
                                     {% if form.flight_number.errors %}
-                                        {{ form.flight_number(class="form-control is-invalid", id="flight_number", placeholder="Hotel Name") }}
+                                        {{ form.flight_number(class="form-control is-invalid", id="flight_number", placeholder="Flight Number") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.flight_number.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.flight_number(class="form-control", id="flight_number", placeholder="Hotel Name") }}
+                                        {{ form.flight_number(class="form-control", id="flight_number", placeholder="Flight Number") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -96,14 +96,14 @@
                                 <div class="form-group">
                                     {{ form.number_of_seats.label(for="number_of_seats") }}
                                     {% if form.number_of_seats.errors %}
-                                        {{ form.number_of_seats(class="form-control is-invalid", id="number_of_seats", placeholder="Hotel Name") }}
+                                        {{ form.number_of_seats(class="form-control is-invalid", id="number_of_seats", placeholder="Number Of Seats") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.number_of_seats.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.number_of_seats(class="form-control", id="number_of_seats", placeholder="Hotel Name") }}
+                                        {{ form.number_of_seats(class="form-control", id="number_of_seats", placeholder="Number Of Seats") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -112,14 +112,14 @@
                                 <div class="form-group">
                                     {{ form.source.label(for="source") }}
                                     {% if form.source.errors %}
-                                        {{ form.source(class="form-control is-invalid", id="source", placeholder="Hotel Name") }}
+                                        {{ form.source(class="form-control is-invalid", id="source", placeholder="Source") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.source.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.source(class="form-control", id="source", placeholder="Hotel Name") }}
+                                        {{ form.source(class="form-control", id="source", placeholder="Source") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -128,14 +128,14 @@
                                 <div class="form-group">
                                     {{ form.destination.label(for="destination") }}
                                     {% if form.destination.errors %}
-                                        {{ form.destination(class="form-control is-invalid", id="destination", placeholder="Hotel Name") }}
+                                        {{ form.destination(class="form-control is-invalid", id="destination", placeholder="Destination") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.destination.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.destination(class="form-control", id="destination", placeholder="Hotel Name") }}
+                                        {{ form.destination(class="form-control", id="destination", placeholder="Destination") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -144,14 +144,14 @@
                                 <div class="form-group">
                                     {{ form.vacant_seats.label(for="vacant_seats") }}
                                     {% if form.vacant_seats.errors %}
-                                        {{ form.vacant_seats(class="form-control is-invalid", id="vacant_seats", placeholder="Hotel Name") }}
+                                        {{ form.vacant_seats(class="form-control is-invalid", id="vacant_seats") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.vacant_seats.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.vacant_seats(class="form-control", id="vacant_seats", placeholder="Hotel Name") }}
+                                        {{ form.vacant_seats(class="form-control", id="vacant_seats") }}
                                     {% endif %}
                                 </div>
                             </div>

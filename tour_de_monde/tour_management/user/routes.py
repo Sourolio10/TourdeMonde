@@ -164,6 +164,18 @@ def dashboard():
     dashboard_form = DashboardForm()
     return render_template('user/dashboard.html', form=dashboard_form)
 
+# @user.route('/flight-booking' , methods=['GET', 'POST'])
+# @login_required
+# def flight_booking():
+#     flight_booking_form = DashboardForm()
+#     return render_template('user/flight_booking.html', form=flight_booking_form)
+
+# @user.route('/hotel-booking' , methods=['GET', 'POST'])
+# @login_required
+# def hotel_booking():
+#     hotel_booking_form = DashboardForm()
+#     return render_template('user/hotel_booking.html', form=hotel_booking_form)
+
 
 @user.route('/logout')
 @login_required

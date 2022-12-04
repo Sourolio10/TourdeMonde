@@ -16,14 +16,14 @@
                                 <div class="form-group">
                                     {{ form.flight_name.label(for="flight_name") }}
                                     {% if form.flight_name.errors %}
-                                        {{ form.flight_name(class="form-control is-invalid", id="flight_name", placeholder="Hotel Name") }}
+                                        {{ form.flight_name(class="form-control is-invalid", id="flight_name", placeholder="Flight Name") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.flight_name.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.flight_name(class="form-control", id="flight_name", placeholder="Hotel Name") }}
+                                        {{ form.flight_name(class="form-control", id="flight_name", placeholder="Flight Name") }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -68,14 +68,14 @@
                                 <div class="form-group">
                                     {{ form.discount_code.label(for="discount_code") }}
                                     {% if form.discount_code.errors %}
-                                        {{ form.discount_code(class="form-control is-invalid", id="discount_code", placeholder="Hotel Name") }}
+                                        {{ form.discount_code(class="form-control is-invalid", id="discount_code", placeholder="Discount Code") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.discount_code.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.discount_code(class="form-control", id="discount_code", placeholder="Hotel Name") }}
+                                        {{ form.discount_code(class="form-control", id="discount_code", placeholder="Discount Code") }}
                                     {% endif %}
                                 </div>
                             </div>
