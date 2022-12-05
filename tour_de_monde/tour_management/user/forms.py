@@ -115,6 +115,35 @@ class DashboardForm(FlaskForm):
     inputCheckOut = DateField('Check Out Date', validators=[InputRequired()])
     international = BooleanField('International Travel ?')
     submit = SubmitField('Submit')
+
+class FlightBookingForm(FlaskForm):
+    source = StringField('Choose your source', [DataRequired()])
+    destination = StringField('Choose your destination', [DataRequired()])
+    no_of_rooms = SelectField('Flight Type?' , choices=[('Roundtrip'), ('One way'), ('Multi-city')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    adults = SelectField('Adults' , choices=[('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    cabin_class = SelectField('Cabin Class' , choices=[('Economy'), ('Premium Economy'), ('Business'), ('First')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    submit = SubmitField('Submit')
+
+
+class HotelBookingForm(FlaskForm):
+    source = StringField('Choose your source', [DataRequired()])
+    destination = StringField('Choose your destination', [DataRequired()])
+    no_of_rooms = SelectField('How many rooms?' , choices=[('1 Room'), ('2 Rooms'), ('3 Rooms'), ('4 Rooms'), ('5 Rooms')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    adults = SelectField('Adults' , choices=[('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
+    coerce=lambda x: x == 'True')
+    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    submit = SubmitField('Submit')
     
     def validate_source(self, source):
         org = Place.query.filter_by(place=source.data.lower()).first()

@@ -37,6 +37,12 @@
                                         <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="{{ url_for('user.flight_booking') }}" class="nav-link">Flights</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('user.hotel_booking') }}" class="nav-link">Hotels</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{ url_for('user.logout') }}" class="nav-link">Logout</a>
                                     </li>
                                 </ul>

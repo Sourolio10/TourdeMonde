@@ -18,7 +18,9 @@ from tour_management.user.forms import (SignupForm,
                                         ResendEmailConfirmationForm,
                                         ResetPasswordRequestForm,
                                         ResetPasswordForm,
-                                        DashboardForm)
+                                        DashboardForm,
+                                        HotelBookingForm,
+                                        FlightBookingForm)
 
 user = Blueprint('user', __name__)
 
@@ -175,6 +177,23 @@ def dashboard():
         print(source, destination, no_of_rooms, adults, children, inputCheckIn, inputCheckOut, international)
         return redirect(url_for('user.dashboard'))
     return render_template('user/dashboard.html', form=form)
+
+@user.route('/hotel_booking' , methods=['GET', 'POST'])
+@login_required
+def hotel_booking():
+    hotel_booking_form = HotelBookingForm()
+    return render_template('user/hotel_booking.html', form=hotel_booking_form)
+
+@user.route('/flight_booking' , methods=['GET', 'POST'])
+@login_required
+def flight_booking():
+    flight_booking_form = FlightBookingForm()
+    return render_template('user/flight_booking.html', form=flight_booking_form)
+
+@user.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    return render_template('user/profile.html', org=current_user)
 
 # @user.route('/flight-booking' , methods=['GET', 'POST'])
 # @login_required
