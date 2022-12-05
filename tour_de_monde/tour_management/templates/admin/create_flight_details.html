@@ -62,35 +62,71 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.departure_date_time.label(for="departure_date_time") }}
-                                        {% if form.departure_date_time.errors %}
-                                            {{ form.departure_date_time(class="form-control is-invalid", id="departure_date_time", placeholder="departure_date_time ", type="datetime-local") }}
+                                    {{ form.departure_date.label(for="departure_date") }}
+                                        {% if form.departure_date.errors %}
+                                            {{ form.departure_date(class="form-control is-invalid", id="departure_date", placeholder="departure_date ", type="date") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form.departure_date_time.errors %}
+                                                {% for error in form.departure_date.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{ form.departure_date_time(class="form-control", id="departure_date_time", placeholder="departure_date_time", type="datetime-local") }}
+                                            {{ form.departure_date(class="form-control", id="departure_date", placeholder="departure_date", type="date") }}
                                         {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.arrival_date_time.label(for="arrival_date_time") }}
-                                        {% if form.arrival_date_time.errors %}
-                                            {{ form.arrival_date_time(class="form-control is-invalid", id="arrival_date_time", placeholder="departure_date_time", type="datetime-local") }}
+                                    {{ form.arrival_date.label(for="arrival_date") }}
+                                        {% if form.arrival_date.errors %}
+                                            {{ form.arrival_date(class="form-control is-invalid", id="arrival_date", placeholder="departure_date", type="date") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form.arrival_date_time.errors %}
+                                                {% for error in form.arrival_date.errors %}
                                                 <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{ form.arrival_date_time(class="form-control", id="arrival_date_time", placeholder="arrival_date_time", type="datetime-local") }}
+                                            {{ form.arrival_date(class="form-control", id="arrival_date", placeholder="arrival_date", type="date") }}
                                         {% endif %}
                                 </div>
                             </div>
+
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.departure_time.label(for="departure_time") }}
+                                        {% if form.departure_time.errors %}
+                                            {{ form.departure_time(class="form-control is-invalid", id="departure_time", placeholder="departure_time ", type="time") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.departure_time.errors %}
+                                                <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.departure_time(class="form-control", id="departure_time", placeholder="departure_time", type="time") }}
+                                        {% endif %}
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.arrival_time.label(for="arrival_time") }}
+                                        {% if form.arrival_time.errors %}
+                                            {{ form.arrival_time(class="form-control is-invalid", id="arrival_time", placeholder="arrival_time", type="time") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.arrival_time.errors %}
+                                                <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.arrival_time(class="form-control", id="arrival_time", placeholder="arrival_time", type="time") }}
+                                        {% endif %}
+                                </div>
+                            </div>
+
+
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">

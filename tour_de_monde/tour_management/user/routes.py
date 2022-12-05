@@ -3,7 +3,18 @@ from lib2to3.pgen2 import token
 from urllib import response
 from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, login_required, logout_user
-from tour_management.models import User, UserToken
+from tour_management.models import (User, 
+                                    UserToken,
+                                    Myorders, 
+                                    Location, 
+                                    Place, 
+                                    Myorderstemp,
+                                    Accomodation,
+                                    Flights,
+                                    Flightdetails,
+                                    Locationdetails,
+                                    Accomodationdetails)
+
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
@@ -171,12 +182,42 @@ def dashboard():
         inputCheckIn = form.inputCheckIn.data
         inputCheckOut = form.inputCheckOut.data
         international = form.international.data
-        booking_type = "complete"
-        flash('Added Data', 'info')
-        print('Hi')
+        booking_type = False
+        my_orders_temp = Myorderstemp()
+        print(current_user.id)
+        my_orders_temp.user_id = current_user.id
+        my_orders_temp.international = international
+        my_orders_temp.start_date = inputCheckIn
+        my_orders_temp.end_date = inputCheckOut
+        my_orders_temp.source = source
+        my_orders_temp.destination = destination
+        my_orders_temp.individual = booking_type
+        db.session.commit()
+        total_no_people = adults + children
+        # Add booking Id, No of People, No of rooms to every request              
+        flash('Please Select your FLight info', 'info')
+        
         print(source, destination, no_of_rooms, adults, children, inputCheckIn, inputCheckOut, international)
         return redirect(url_for('user.dashboard'))
     return render_template('user/dashboard.html', form=form)
+
+@user.route('/booking/flights/start/<string:booking_id>/<string:no_of_people>/<string:no_of_rooms>' , methods=['GET', 'POST'])
+@login_required
+def book_flights(booking_id, no_of_people, no_of_rooms):
+    my_orders_temp = Myorderstemp.query.filter_by(id=booking_id).first()
+    if my_orders_temp is None or my_orders_temp == []:
+        flash('Booking Failed. Please start again', 'danger')
+        return redirect(url_for('user.dashboard'))
+    # Invoice.query.filter(Invoice.invoicedate >= date.today())
+    source = my_orders_temp.source
+    destination = my_orders_temp.destination
+    start_date = my_orders_temp.start_date
+
+    # flights_data = Flightdetails.query.filter_by(source=source, destination=destination, departure_date_time=start_date, ).all()
+    # if flights_data is None or flights_data == []:
+        
+    #     Myorderstemp.query.filter_by(id = booking_id).delete()
+    return "Wait. Work in Progress"
 
 @user.route('/hotel_booking' , methods=['GET', 'POST'])
 @login_required

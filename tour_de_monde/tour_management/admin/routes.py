@@ -262,7 +262,7 @@ def dashboard():
 
 
 @admin.route('/logout')
-@login_required
+# @login_required
 def logout():
     logout_user()
     flash('You are logged out successfully.', 'info')
@@ -405,8 +405,10 @@ def create_flight_details():
             return redirect(url_for('admin.create_flight_details'))
         temp_flights_details_id = Flightdetails()
         temp_flights_details_id.flight_number = form.flight_number.data
-        temp_flights_details_id.arrival_date_time = form.arrival_date_time.data
-        temp_flights_details_id.departure_date_time = form.departure_date_time.data
+        temp_flights_details_id.arrival_date = form.arrival_date.data
+        temp_flights_details_id.departure_date = form.departure_date.data
+        temp_flights_details_id.arrival_time = form.arrival_time.data
+        temp_flights_details_id.departure_time = form.departure_time.data
         temp_flights_details_id.number_of_seats = form.number_of_seats.data
         temp_flights_details_id.source = form.source.data.lower()
         temp_flights_details_id.destination = form.destination.data.lower()

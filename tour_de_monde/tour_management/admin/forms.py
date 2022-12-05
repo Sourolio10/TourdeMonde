@@ -1,7 +1,7 @@
 import re
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField, RadioField, DateTimeField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField, RadioField, DateTimeField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, InputRequired
 from flask_wtf.file import FileField, FileAllowed
 from tour_management.models import Admin
@@ -249,9 +249,13 @@ class CreateFlightDetailsForm(FlaskForm):
                                DataRequired(), Length(min=3, max=10)])
     flight_number = StringField('FlightMNumber', validators=[
                                DataRequired(), Length(min=3, max=10)])
-    departure_date_time = DateTimeLocalField('Departure Date-Time', format='%Y-%m-%dT%H:%M',
+    departure_date = DateField('Departure Date', format='%Y-%m-%d',
                                 validators=[InputRequired()])
-    arrival_date_time = DateTimeLocalField('Arrival Date-Time', format='%Y-%m-%dT%H:%M', 
+    arrival_date = DateField('Arrival Date', format='%Y-%m-%d', 
+                                validators=[InputRequired()])                            
+    departure_time = TimeField('Departure Time', format='%H:%M',
+                                validators=[InputRequired()])
+    arrival_time = TimeField('Arrival Time', format='%H:%M',
                                 validators=[InputRequired()])
     number_of_seats = StringField('NumberOfSeats', validators=[
                                DataRequired(), Length(min=3, max=10)])
