@@ -13,12 +13,14 @@ from tour_management.models import (User,
                                     Flights,
                                     Flightdetails,
                                     Locationdetails,
-                                    Accomodationdetails)
+                                    Accomodationdetails,
+                                    Ticket)
 
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
 import json
+import random
 from cerberus import Validator
 from tour_management.schemas.user_apis import user_signup, user_login
 from flask_api import FlaskAPI, status, exceptions
@@ -228,8 +230,52 @@ def hotel_booking():
 @user.route('/flight_booking' , methods=['GET', 'POST'])
 @login_required
 def flight_booking():
-    flight_booking_form = FlightBookingForm()
-    return render_template('user/flight_booking.html', form=flight_booking_form)
+
+    items = None
+    form = FlightBookingForm()
+    if form.validate_on_submit():
+        print("E")
+        no_of_rooms = form.no_of_rooms.data
+
+        source = form.source.data.lower()
+        destination = form.destination.data.lower()
+        number_of_people = form.adults.data + form.children.data
+        departure_date = form.inputCheckIn.data
+        arrival_date = form.inputCheckOut.data
+        cabin_class = form.cabin_class.data
+        print("\n\n\n\n\n\n\n\n\n\n",cabin_class)
+        flight_details = (db.session.query(Flightdetails, Ticket)
+                .join(Flightdetails, Flightdetails.id == Ticket.flights_id)
+                .filter(Flightdetails.source == source,
+                            Flightdetails.destination == destination,
+                            Flightdetails.departure_date == departure_date,
+                            Ticket.type == "economy")
+                .all())
+        
+        print('\n\n\n\n\n\n\n\n\n', flight_details)
+        items = []
+        for flight_det, tickets in flight_details:
+            if flight_det.vacant_seats < number_of_people:
+                continue
+            temp_dict = {}
+            temp_dict['flight_number'] = flight_det.flight_number
+            temp_dict['source'] = flight_det.source
+            temp_dict['destination'] = flight_det.destination
+            temp_dict['no_of_people'] = str(number_of_people)
+            temp_dict['departure_date'] = str(flight_det.departure_date)
+            temp_dict['departure_time'] = str(flight_det.departure_time)
+            temp_dict['arrival_date'] = str(flight_det.arrival_date)
+            temp_dict['arrival_time'] = str(flight_det.arrival_time)
+            temp_dict['cost'] = str(random.randrange(tickets.min_cost,tickets.max_cost))
+            temp_dict = json.dumps(temp_dict)
+            print(temp_dict)
+            items.append(temp_dict)
+        print(items)
+        items = json.dumps(items)
+        items = json.loads(items)
+        print("ASD",items)
+        return render_template('user/flight_booking.html', form=form, items = items)
+    return render_template('user/flight_booking.html', form=form, items = items)
 
 @user.route('/profile', methods=['GET', 'POST'])
 @login_required

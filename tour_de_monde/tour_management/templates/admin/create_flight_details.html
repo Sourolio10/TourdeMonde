@@ -28,22 +28,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    {{ form.flight_type.label(for="flight_type") }}
-                                    {% if form.flight_type.errors %}
-                                        {{ form.flight_type(class="form-control is-invalid", id="flight_type", placeholder="Flight Type") }}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.flight_type.errors %}
-                                                <span>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {{ form.flight_type(class="form-control", id="flight_type", placeholder="Flight Type") }}
-                                    {% endif %}
-                                </div>
-                            </div>
-
+                            
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     {{ form.flight_number.label(for="flight_number") }}

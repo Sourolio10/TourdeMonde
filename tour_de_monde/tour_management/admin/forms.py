@@ -245,8 +245,6 @@ class CreateFlightTicketForm(FlaskForm):
 class CreateFlightDetailsForm(FlaskForm):
     flight_name_res = StringField('FlightNameRes', validators=[
                                DataRequired(), Length(min=3, max=20)])
-    flight_type = StringField('FlightType', validators=[
-                               DataRequired(), Length(min=3, max=10)])
     flight_number = StringField('FlightMNumber', validators=[
                                DataRequired(), Length(min=3, max=10)])
     departure_date = DateField('Departure Date', format='%Y-%m-%d',

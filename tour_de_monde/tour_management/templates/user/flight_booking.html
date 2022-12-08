@@ -69,7 +69,7 @@
                         </div> <!-- row -->
                         <div class="row tm-banner-row" id="tm-section-search">
 
-                            <form action="index.html" method="POST" class="tm-search-form tm-section-pad-2">
+                            <form action="" method="POST" class="tm-search-form tm-section-pad-2">
                                 {{ form.hidden_tag() }}
                                 <div class="form-row tm-search-form-row">            
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
@@ -125,6 +125,33 @@
                                             {% endif %} 
                                                                                    
                                         </div>
+
+                                        
+                                        <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
+                                            <!-- <label for="inputRoom">How many rooms?</label>
+                                            <select name="room" class="form-control tm-select" id="inputRoom">
+                                                <option value="1" selected>1 Room</option>
+                                                <option value="2">2 Rooms</option>
+                                                <option value="3">3 Rooms</option>
+                                                <option value="4">4 Rooms</option>
+                                                <option value="5">5 Rooms</option>
+                                            </select> -->
+                                            {{ form.cabin_class.label(for="cabin_class") }}
+                                            {% if form.cabin_class.errors %}
+                                                {{ form.cabin_class(class="form-control is-invalid", id="cabin_class", placeholder="Cabin Type ") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.cabin_class.errors %}
+                                                    <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                {{ form.cabin_class(class="form-control", id="cabin_class", placeholder="Cabin Type") }}
+                                            {% endif %} 
+                                                                                   
+                                        </div>
+
+
+
                                         <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">                                       
                                             <!-- <label for="inputAdult">Adult</label>     
                                             <select name="adult" class="form-control tm-select" id="inputAdult">
@@ -208,7 +235,8 @@
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="btnSubmit">&nbsp;</label>
-                                        <button type="submit" class="btn btn-primary tm-btn tm-btn-search text-uppercase" id="btnSubmit">Check Availability</button>
+                                        {{ form.submit(class="btn btn-primary tm-btn tm-btn-search text-uppercase", id="btnSubmit", type="submit") }}
+                                    
                                     </div>
                                 </div>                              
                             </form>                             
@@ -218,7 +246,42 @@
                     </div>  <!-- .container -->                   
                 </div>              
             </section>
-      
+            
+            
+            <div class="row justify-content-center">
+                {% if items is not none %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight Number</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Number Of People</th>
+                            <th>Departure Date - Time</th>
+                            <th>Arrival Date - Time</th>
+                            <th>Cost - Per Person</th>
+                        </tr>
+                        </thead>
+                        {% for item in items %}
+                            
+                            <tbody>
+                                <tr>
+                                    {% for key, value in item.items() %}
+                                    <td>{{item[1].flight_number}}</td>
+                                    <td>{{item[0].source}}</td>
+                                    <td>{{item[0].destination}}</td>
+                                    <td>{{item[0].no_of_people}}</td>
+                                    <td>{{item[0].departure_date}}</td>
+                                    <td><a class="" href="">Click Here</a></td>
+                                    
+                                </tr>
+                            </tbody>
+                                
+                        {% endfor %}
+                </table>
+                {% else %}
+                    {% endif %}
+            </div>
             <div class="tm-container-outer" id="tm-section-3">
 
             <footer class="tm-container-outer">

@@ -297,7 +297,7 @@ def create_accomodation():
         else:
             flash('Successfully Registed Hotel. Please add Room Types', 'info')
             return redirect(url_for('admin.create_accomodation_details'))
-    return render_template('admin/add_accomodation.html', form=form, items=place_data)
+    return render_template('admin/add_accomodation.html', form=form, place=place_data)
 
 
     #Take a hotel name, location, discount code and description 
@@ -355,7 +355,7 @@ def create_flight():
 @admin.route('/add/ticket' ,methods=['GET','POST'])
 def create_flight_ticket():
     # Add flight company name and pick id from it and add logic to add it to this db
-    flight_data = Flights.query.all()
+    flight_data = Flightdetails.query.all()
     form = CreateFlightTicketForm()
     if form.validate_on_submit():
         tempTicket = Ticket()
@@ -393,16 +393,11 @@ def create_flight_details():
             flash('Please Enter Valid Souce or Destination', 'danger')
             return redirect(url_for('admin.create_flight_details'))
         flight_name_res = form.flight_name_res.data
-        flight_type = form.flight_type.data
         temp_flights_id = Flights.query.filter_by(flight_name=flight_name_res).first()
         if temp_flights_id is None or temp_flights_id == [] :
             flash('Could not find Flight Company', 'danger')
             return redirect(url_for('admin.create_flight_details'))
         # Change ticket logic. Change dependency with Flight Details.
-        temp_ticket_id = Ticket.query.filter_by(type=flight_type, flights_id=temp_flights_id.id).first()
-        if temp_ticket_id is None or temp_ticket_id == []:
-            flash('Could not find ticket type', 'danger')
-            return redirect(url_for('admin.create_flight_details'))
         temp_flights_details_id = Flightdetails()
         temp_flights_details_id.flight_number = form.flight_number.data
         temp_flights_details_id.arrival_date = form.arrival_date.data
@@ -414,7 +409,6 @@ def create_flight_details():
         temp_flights_details_id.destination = form.destination.data.lower()
         temp_flights_details_id.vacant_seats = form.vacant_seats.data
         temp_flights_details_id.flights_id = temp_flights_id.id
-        temp_flights_details_id.ticket_id = temp_ticket_id.id
         try:
             db.session.add(temp_flights_details_id)
             db.session.commit()

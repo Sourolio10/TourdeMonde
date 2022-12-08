@@ -19,7 +19,6 @@ class Flights(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    tickets_id = db.relationship('Ticket',backref='flights',lazy=True)
     flight_details_id = db.relationship('Flightdetails',backref='flights',lazy=True)
 
     def __str__(self):

@@ -10,9 +10,7 @@ from tour_management import db
 class Flightdetails(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key= True)
-    # Make flight number to string
     flight_number = db.Column(db.String(255),nullable=False)
-    # Make arrival time and departure time as date-time
     departure_date = db.Column(db.Date, nullable=False)
     arrival_date = db.Column(db.Date, nullable=False)
     departure_time = db.Column(db.Time, nullable=False)
@@ -24,12 +22,12 @@ class Flightdetails(db.Model, UserMixin):
     vacant_seats = db.Column(db.Integer,default=0)
     
     flights_id = db.Column(db.Integer, db.ForeignKey('flights.id'), nullable=False)
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
     # Backref
+    tickets_id = db.relationship('Ticket',backref='flightdetails',lazy=True)
     flight_booking_id = db.relationship('Flightbooking', backref='flightdetails', lazy=True)
     flight_booking_temp_id = db.relationship('Flightbookingtemp', backref='flightdetails', lazy=True)
     

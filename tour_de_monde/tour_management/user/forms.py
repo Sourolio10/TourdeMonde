@@ -116,6 +116,17 @@ class DashboardForm(FlaskForm):
     international = BooleanField('International Travel ?')
     submit = SubmitField('Submit')
 
+    def validate_source(self, source):
+        org = Place.query.filter_by(place=source.data.lower()).first()
+        print("\n\n\n\n\n Hey Soruce Check")
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')
+    
+    def validate_destination(self, destination):
+        org = Place.query.filter_by(place=destination.data.lower()).first()
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')
+
 class FlightBookingForm(FlaskForm):
     source = StringField('Choose your source', [DataRequired()])
     destination = StringField('Choose your destination', [DataRequired()])
@@ -125,12 +136,22 @@ class FlightBookingForm(FlaskForm):
     coerce=lambda x: x == 'True')
     children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
     coerce=lambda x: x == 'True')
-    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
-    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    inputCheckIn = DateField('Check In Date', format='%Y-%m-%d', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%Y-%m-%d', validators=[InputRequired()])
     cabin_class = SelectField('Cabin Class' , choices=[('Economy'), ('Premium Economy'), ('Business'), ('First')],validators=[InputRequired()],
     coerce=lambda x: x == 'True')
     submit = SubmitField('Submit')
 
+    def validate_source(self, source):
+        org = Place.query.filter_by(place=source.data.lower()).first()
+        print("\n\n\n\n\n Hey Soruce Check")
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')
+    
+    def validate_destination(self, destination):
+        org = Place.query.filter_by(place=destination.data.lower()).first()
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')
 
 class HotelBookingForm(FlaskForm):
     source = StringField('Choose your source', [DataRequired()])
