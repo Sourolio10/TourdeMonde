@@ -267,15 +267,32 @@ def flight_booking():
             temp_dict['arrival_date'] = str(flight_det.arrival_date)
             temp_dict['arrival_time'] = str(flight_det.arrival_time)
             temp_dict['cost'] = str(random.randrange(tickets.min_cost,tickets.max_cost))
-            temp_dict = json.dumps(temp_dict)
+            # temp_dict = json.dumps(temp_dict)
             print(temp_dict)
             items.append(temp_dict)
         print(items)
-        items = json.dumps(items)
-        items = json.loads(items)
+        # items = json.dumps(items)
+        # items = json.loads(items)
         print("ASD",items)
         return render_template('user/flight_booking.html', form=form, items = items)
     return render_template('user/flight_booking.html', form=form, items = items)
+
+@user.route('/flight_booking/confim/<string:flight_number>/<string:source>/<string:destination>/<string:no_of_people>/<string:departure_date>/<string:departure_time>/<string:arrival_date>/<string:arrival_time>/<string:cost>' , methods=['GET', 'POST'])
+@login_required
+def flight_booking_confirm(flight_number, source, destination, no_of_people, departure_date, departure_time, arrival_date, arrival_time, cost):
+    flight_number = flight_number
+    source = source
+    destination = destination
+    no_of_people = no_of_people
+    departure_date = departure_date
+    departure_time = departure_time
+    arrival_date = arrival_date
+    arrival_time = arrival_time
+    cost = cost
+    user_id = current_user.id
+    # Booking Temp Orders
+    
+    return "Hey Booking Here"
 
 @user.route('/profile', methods=['GET', 'POST'])
 @login_required

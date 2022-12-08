@@ -260,21 +260,26 @@
                             <th>Departure Date - Time</th>
                             <th>Arrival Date - Time</th>
                             <th>Cost - Per Person</th>
+                            <th>Book Ticket</th>
                         </tr>
                         </thead>
                         {% for item in items %}
                             
                             <tbody>
+                                
                                 <tr>
-                                    {% for key, value in item.items() %}
-                                    <td>{{item[1].flight_number}}</td>
-                                    <td>{{item[0].source}}</td>
-                                    <td>{{item[0].destination}}</td>
-                                    <td>{{item[0].no_of_people}}</td>
-                                    <td>{{item[0].departure_date}}</td>
-                                    <td><a class="" href="">Click Here</a></td>
+                                    
+                                    <td>{{item['flight_number']}}</td>
+                                    <td>{{item['source']}}</td>
+                                    <td>{{item['destination']}}</td>
+                                    <td>{{item['no_of_people']}}</td>
+                                    <td>{{item['departure_date']}} - {{item['departure_time']}}</td>
+                                    <td>{{item['arrival_date']}} - {{item['arrival_time']}}</td>
+                                    <td>{{item['cost']}}</td>
+                                    <td><a class="" href="{{ url_for('user.flight_booking_confirm', flight_number=item['flight_number'], source=item['source'], destination=item['destination'], no_of_people=item['no_of_people'], departure_date=item['departure_date'], departure_time=item['departure_time'], arrival_date=item['arrival_date'], arrival_time=item['arrival_time'], cost=item['cost'], _external=True) }}">Book</a></td>
                                     
                                 </tr>
+                                
                             </tbody>
                                 
                         {% endfor %}
