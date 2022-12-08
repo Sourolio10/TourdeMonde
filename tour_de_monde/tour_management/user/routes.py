@@ -14,7 +14,8 @@ from tour_management.models import (User,
                                     Flightdetails,
                                     Locationdetails,
                                     Accomodationdetails,
-                                    Ticket)
+                                    Ticket,
+                                    Flightbookingtemp)
 
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
@@ -291,8 +292,33 @@ def flight_booking_confirm(flight_number, source, destination, no_of_people, dep
     cost = cost
     user_id = current_user.id
     # Booking Temp Orders
-    
-    return "Hey Booking Here"
+    temp_orders = Myorderstemp()
+    temp_orders.user_id = user_id
+    #change later
+    temp_orders.international = True
+    temp_orders.cost = cost
+    temp_orders.start_date = departure_date
+    temp_orders.end_date = arrival_date
+    temp_orders.source = source
+    temp_orders.destination = destination
+    temp_orders.individual = True
+    temp_orders.booking_complete = False
+    db.session.commit()
+    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, cost = cost, start_date = departure_date, end_date=arrival_date, source=source, destination=destination, booking_complete=False).first()
+    flight_details = Flightdetails.query.filter_by(flight_number=flight_number).first()
+    flight_booking_temp = Flightbookingtemp()
+    flight_booking_temp.flight_details_id = flight_details.id
+    flight_booking_temp.cost = cost
+    flight_booking_temp.no_of_people = no_of_people
+    flight_booking_temp.my_orders_id = temp_orders.id
+    db.session.commit()
+    return redirect(url_for('user.flightpassengerinfo', booking_id=temp_orders.id, _external=True))
+
+@user.route('/flight_booking/passenger/<string:booking_id>' , methods=['GET', 'POST'])
+@login_required
+def flightpassengerinfo(booking_id):
+
+    return 'Taking Flight Passenger Info'
 
 @user.route('/profile', methods=['GET', 'POST'])
 @login_required
