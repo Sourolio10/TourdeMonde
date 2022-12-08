@@ -16,13 +16,14 @@ class Myorders(db.Model,UserMixin):
     source = db.Column(db.String(255),nullable=False)
     destination = db.Column(db.String(255),nullable=False)
     individual = db.Column(db.Boolean, nullable = True, default=True)
-    
+    payment_completed = db.Column(db.Boolean, nullable = True, default=False)
+
     # Backref
     passenger_id = db.relationship('Passenger', backref='myorders', lazy=True)
     accomodation_id = db.relationship('Accomodationbooking', backref='myorders', lazy=True)
     flight_id = db.relationship('Flightbooking', backref='myorders', lazy=True)
     location_id = db.relationship('Locationbooking', backref='myorders', lazy=True)
-
+    payment_id = db.relationship('Payments', backref='myorders', lazy=True)
 
     def __str__(self):
         return 'My Orders :{}'.format(self.id)

@@ -24,3 +24,4 @@ from tour_management.models.Flightbookingtemp import Flightbookingtemp
 from tour_management.models.Locationbooking import Locationbooking
 from tour_management.models.Locationbookingtemp import Locationbookingtemp
 from tour_management.models.Passenger import Passenger
+from tour_management.models.Payments import Payments

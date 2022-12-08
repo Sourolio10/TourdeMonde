@@ -59,6 +59,7 @@ def create_app(config=DevelopmentConfig):
     from tour_management.models.Locationbooking import Locationbooking
     from tour_management.models.Locationbookingtemp import Locationbookingtemp
     from tour_management.models.Passenger import Passenger
+    from tour_management.models.Payments import Payments
     from tour_management.auth import utils
     from tour_management.error_handler.routes import handle_error_404, handle_error_500, handle_error_429
     from tour_management.user.routes  import user

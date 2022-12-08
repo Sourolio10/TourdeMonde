@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
     tokens = db.relationship('UserToken', backref='user', lazy=True)
     orders = db.relationship('Myorders', backref='user', lazy=True)
     orders_temp = db.relationship('Myorderstemp', backref='user', lazy=True)
+    payments_temp = db.relationship('Payments', backref='user', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     

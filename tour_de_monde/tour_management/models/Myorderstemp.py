@@ -16,6 +16,7 @@ class Myorderstemp(db.Model,UserMixin):
     source = db.Column(db.String(255),nullable=False)
     destination = db.Column(db.String(255),nullable=False)
     individual = db.Column(db.Boolean, nullable = True, default=True)
+    booking_complete = db.Column(db.Boolean, nullable = True, default=False)
     
     passenger_id = db.relationship('Passenger', backref='myorderstemp', lazy=True)
     accomodation_temp_id = db.relationship('Accomodationbookingtemp', backref='myorderstemp', lazy=True)
