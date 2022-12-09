@@ -40,7 +40,8 @@ from tour_management.user.forms import (SignupForm,
                                         FlightBookingForm,
                                         MyordersForm,
                                         PassengerInfo,
-                                        PassengerInfoHotel)
+                                        PassengerInfoHotel,
+                                        LocationBookingForm)
 
 user = Blueprint('user', __name__)
 
@@ -236,54 +237,90 @@ def location_booking():
     form = LocationBookingForm()
     if form.validate_on_submit():
         source = form.source.data.lower()
+        activity_types = form.activity_types.data.lower()
         number_of_people = int(form.adults.data) + int(form.children.data)
-        number_of_rooms = int(form.no_of_rooms.data)
         departure_date = form.inputCheckIn.data
         arrival_date = form.inputCheckOut.data
-        no_of_rooms = int(number_of_rooms)
         adults = int(form.adults.data)
         children = int(form.children.data)
-        
-        print("\n\n\n\n\n Hey Rooms Check", no_of_rooms, adults, children)
-        if (2*no_of_rooms) < (adults+children):
-            flash('Please Add more rooms as 1 Room Serves 2 People.', 'danger')
-            return render_template('user/hotel_booking.html', form=form, items = items)
-        
+
         place_temp = Place.query.filter_by(place=source).first()
         
-        hotel_details = (db.session.query(Accomodation, Accomodationdetails)
-                .join(Accomodation, Accomodationdetails.accomodation_id == Accomodation.id)
-                .filter(Accomodation.place_id == place_temp.id)
+        location_details = (db.session.query(Location, Locationdetails)
+                .join(Location, Locationdetails.location_id == Location.id)
+                .filter(Location.place_id == place_temp.id)
                 .all())
         
         items = []
-        for acc, acc_d in hotel_details:
-            print("\n\n\n\n\n\n\n",acc.hotel_name, acc_d.rooms_availble)
+        for acc, acc_d in location_details:
+            # print("\n\n\n\n\n\n\n",acc.hotel_name, acc_d.rooms_availble)
             temp_dict = {}
-            temp_dict['hotel_name'] = acc.hotel_name
-            temp_dict['description'] = acc.description
-            temp_dict['no_of_rooms'] = number_of_rooms
-            temp_dict['cost'] = str(random.randrange(acc_d.min_price,acc_d.max_price)) 
-            temp_dict['room_name'] = acc_d.room_name
+            temp_dict['location_name'] = acc.name
+            temp_dict['location_id'] = acc_d.id
+            temp_dict['activity_types'] = acc.activity_types
+            temp_dict['no_of_people'] = number_of_people
+            temp_dict['cost'] = acc.cost
+            temp_dict['season_visit'] = acc.season_visit
             temp_dict['start_date'] = departure_date
+            temp_dict['address'] = acc_d.address
+            temp_dict['average_review'] = acc_d.average_review
+            temp_dict['average_time'] = acc_d.average_time
+            temp_dict['description'] = acc_d.description
             temp_dict['end_date'] = arrival_date
-            temp_dict['rooms_availble'] = acc_d.rooms_availble
-            temp_dict['room_description'] = acc_d.description
-            temp_dict['accomodation_details_id'] = acc_d.id
-            # temp_dict = json.dumps(temp_dict)
             print(temp_dict)
             items.append(temp_dict)
         print(items)
-        # items = json.dumps(items)
-        # items = json.loads(items)
         print("ASD",items)
-        return render_template('user/hotel_booking.html', form=form, items = items)
+        return render_template('user/location_booking.html', form=form, items = items)
         
-    return render_template('user/hotel_booking.html', form=form, items = items)
+    return render_template('user/location_booking.html', form=form, items = items)
 
 
+@user.route('/location_booking/confim/<string:location_name>/<string:activity_types>/<string:no_of_people>/<string:cost>/<string:season_visit>/<string:start_date>/<string:address>/<string:average_review>/<string:average_time>/<string:description>/<string:end_date>/<string:location_id>' , methods=['GET', 'POST'])
+@login_required
+def location_booking_confirm(location_name, activity_types, no_of_people, cost, season_visit, start_date, address, average_review, average_time, description, end_date, location_id):
+    location_name = location_name
+    activity_types = activity_types
+    no_of_people = no_of_people
+    cost = cost
+    season_visit = season_visit
+    start_date = start_date
+    address = address
+    average_review = average_review
+    average_time = average_time
+    description = description
+    end_date = end_date
+    location_id = location_id
+    user_id = current_user.id
 
+    temp_orders = Myorderstemp()
+    temp_orders.user_id = user_id
+    #change later
+    temp_orders.international = True
+    temp_orders.cost = int(cost)*int(no_of_people)
+    temp_orders.start_date = start_date
+    temp_orders.end_date = end_date
+    temp_orders.source = "location"
+    temp_orders.destination = "location"
+    temp_orders.individual = True
+    temp_orders.booking_complete = False
+    db.session.add(temp_orders)
+    db.session.commit()
+    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, start_date = start_date, end_date=end_date, source = 'hotel', destination = 'hotel', booking_complete=False).first()
+    
+    
+    # hotel_booking_temp = Accomodationbookingtemp()
+    # hotel_booking_temp.accomodation_details_id = accomodation_details_id
+    # hotel_booking_temp.cost = int(cost)*int(no_of_rooms)
+    # hotel_booking_temp.no_of_rooms = no_of_rooms
+    # hotel_booking_temp.start_date = start_date
+    # hotel_booking_temp.end_date = end_date
+    # hotel_booking_temp.my_orders_id = temp_orders.id
+    # db.session.add(hotel_booking_temp)
+    # db.session.commit()
+    # return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, current_passenger=1, _external=True))
 
+    pass
 
 
 
