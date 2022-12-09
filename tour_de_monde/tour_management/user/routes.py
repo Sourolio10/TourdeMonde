@@ -16,7 +16,8 @@ from tour_management.models import (User,
                                     Accomodationdetails,
                                     Ticket,
                                     Flightbookingtemp,
-                                    Passenger)
+                                    Passenger,
+                                    Accomodationbookingtemp)
 
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
@@ -37,7 +38,8 @@ from tour_management.user.forms import (SignupForm,
                                         HotelBookingForm,
                                         FlightBookingForm,
                                         MyordersForm,
-                                        PassengerInfo)
+                                        PassengerInfo,
+                                        PassengerInfoHotel)
 
 user = Blueprint('user', __name__)
 
@@ -238,18 +240,130 @@ def hotel_booking():
         number_of_rooms = int(form.no_of_rooms.data)
         departure_date = form.inputCheckIn.data
         arrival_date = form.inputCheckOut.data
+        no_of_rooms = int(number_of_rooms)
+        adults = int(form.adults.data)
+        children = int(form.children.data)
+        
+        print("\n\n\n\n\n Hey Rooms Check", no_of_rooms, adults, children)
+        if (2*no_of_rooms) < (adults+children):
+            flash('Please Add more rooms as 1 Room Serves 2 People.', 'danger')
+            return render_template('user/hotel_booking.html', form=form, items = items)
         
         place_temp = Place.query.filter_by(place=source).first()
         
-        # flight_details = (db.session.query(Accomodation, Accomodationdetails)
-        #         .join(Accomodation, Accomodationdetails.accomodation_id == Accomodation.flights_id)
-        #         .filter(.source == source,
-        #                     Flightdetails.destination == destination,
-        #                     Flightdetails.departure_date == departure_date,
-        #                     Ticket.type == cabin_class)
-        #         .all())
-        pass
+        hotel_details = (db.session.query(Accomodation, Accomodationdetails)
+                .join(Accomodation, Accomodationdetails.accomodation_id == Accomodation.id)
+                .filter(Accomodation.place_id == place_temp.id)
+                .all())
+        
+        items = []
+        for acc, acc_d in hotel_details:
+            print("\n\n\n\n\n\n\n",acc.hotel_name, acc_d.rooms_availble)
+            temp_dict = {}
+            temp_dict['hotel_name'] = acc.hotel_name
+            temp_dict['description'] = acc.description
+            temp_dict['no_of_rooms'] = number_of_rooms
+            temp_dict['cost'] = str(random.randrange(acc_d.min_price,acc_d.max_price)) 
+            temp_dict['room_name'] = acc_d.room_name
+            temp_dict['start_date'] = departure_date
+            temp_dict['end_date'] = arrival_date
+            temp_dict['rooms_availble'] = acc_d.rooms_availble
+            temp_dict['room_description'] = acc_d.description
+            temp_dict['accomodation_details_id'] = acc_d.id
+            # temp_dict = json.dumps(temp_dict)
+            print(temp_dict)
+            items.append(temp_dict)
+        print(items)
+        # items = json.dumps(items)
+        # items = json.loads(items)
+        print("ASD",items)
+        return render_template('user/hotel_booking.html', form=form, items = items)
+        
     return render_template('user/hotel_booking.html', form=form, items = items)
+
+
+
+
+@user.route('/hotel_booking/confim/<string:hotel_name>/<string:description>/<string:no_of_rooms>/<string:room_name>/<string:accomodation_details_id>/<string:room_description>/<string:rooms_availble>/<string:start_date>/<string:end_date>/<string:cost>' , methods=['GET', 'POST'])
+@login_required
+def hotel_booking_confirm(hotel_name, description, no_of_rooms, room_name, accomodation_details_id, room_description, rooms_availble, start_date, end_date, cost):
+    hotel_name = hotel_name
+    description = description
+    no_of_rooms = no_of_rooms
+    room_name = room_name
+    accomodation_details_id = accomodation_details_id
+    room_description = room_description
+    rooms_availble = rooms_availble
+    start_date = start_date
+    end_date = end_date
+    cost = cost
+    user_id = current_user.id
+    # Booking Temp Orders
+    temp_orders = Myorderstemp()
+    temp_orders.user_id = user_id
+    #change later
+    temp_orders.international = True
+    temp_orders.cost = int(cost)*int(no_of_rooms)
+    temp_orders.start_date = start_date
+    temp_orders.end_date = end_date
+    temp_orders.source = "hotel"
+    temp_orders.destination = "hotel"
+    temp_orders.individual = True
+    temp_orders.booking_complete = False
+    db.session.add(temp_orders)
+    db.session.commit()
+    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, start_date = start_date, end_date=end_date, source = 'hotel', destination = 'hotel', booking_complete=False).first()
+    
+    
+    hotel_booking_temp = Accomodationbookingtemp()
+    hotel_booking_temp.accomodation_details_id = accomodation_details_id
+    hotel_booking_temp.cost = int(cost)*int(no_of_rooms)
+    hotel_booking_temp.no_of_rooms = no_of_rooms
+    hotel_booking_temp.start_date = start_date
+    hotel_booking_temp.end_date = end_date
+    hotel_booking_temp.my_orders_id = temp_orders.id
+    db.session.add(hotel_booking_temp)
+    db.session.commit()
+    return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, current_passenger=1, _external=True))
+
+@user.route('/hotel_booking/passenger/<string:booking_id>/<string:no_of_people>/<string:current_passenger>' , methods=['GET', 'POST'])
+@login_required
+def hotelpassengerinfo(booking_id, no_of_people, current_passenger):
+    booking_id = booking_id
+    no_of_people = int(no_of_people)
+    current_passenger = int(current_passenger)
+    if int(current_passenger) > int(no_of_people):
+        return "Payments Page"
+    form = PassengerInfoHotel()
+    if form.validate_on_submit():
+        passenger_temp = Passenger()
+        passenger_temp.first_name = form.first_name.data.lower()
+        passenger_temp.last_name = form.last_name.data.lower()
+        passenger_temp.email = form.email.data
+        passenger_temp.dob = form.dob.data
+        passenger_temp.sex = form.sex.data.lower()
+        passenger_temp.passport_number = "N/A"
+        passenger_temp.temp_orders_id = booking_id
+        db.session.add(passenger_temp)
+        db.session.commit()
+        current_passenger += 1
+        return redirect(url_for('user.hotelpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, current_passenger=current_passenger, _external=True))
+
+    return render_template('user/Passenger_info_hotel.html', form=form, current_passenger = current_passenger, no_of_people=no_of_people)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @user.route('/my_orders' , methods=['GET', 'POST'])
 @login_required

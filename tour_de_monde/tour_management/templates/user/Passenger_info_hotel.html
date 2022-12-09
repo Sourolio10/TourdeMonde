@@ -5,7 +5,7 @@
         <div class="col-lg-8 col-md-8 col-sm-10">
             <div class="card">
                 <div class="card-header text-center" style="background-color:#17252A; color: white;">
-                    Passenger Info - {{current_passenger}} of {{no_of_people}}
+                    Passenger Info - {{current_passenger}} of {{no_of_people}} (We would need The details for one person per room)
                 </div>
                 <div class="card-body">
                     <form action="" method="POST">
@@ -73,21 +73,6 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    {{ form.passport_number.label(for="passport_number") }}
-                                    {% if form.passport_number.errors %}
-                                        {{ form.passport_number(class="form-control is-invalid", id="passport_number", placeholder="passport_number") }}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.passport_number.errors %}
-                                                <span>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {{ form.passport_number(class="form-control", id="passport_number", placeholder="passport_number") }}
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
                                     {{ form.email.label(for="email") }}
                                     {% if form.email.errors %}
                                         {{ form.email(class="form-control is-invalid", id="email", placeholder="Email") }}
@@ -102,7 +87,7 @@
                                 </div>
                             </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-outline-success  btn-block mx-auto">Next Passenger</button>
+                            <button type="submit" class="btn btn-outline-success  btn-block mx-auto">Passenger Info</button>
                         </div>
                     </form>
                 </div>
