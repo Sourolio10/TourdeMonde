@@ -7,12 +7,12 @@ class Config:
     SECRET_KEY = 'enter a secret key'
     SQLALCHEMY_DATABASE_URI = "postgresql://postgres:root@localhost:5432/test-db"
     MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME' , '')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD' , '')
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'authelectric@gmail.com')
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', True)
-    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', False)
+    MAIL_PORT = 465
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME' , 'tourdemonde101@gmail.com')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD' , 'wmeiiuohpjkcxtwm')
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'vedant.tapadia12.5@gmail.com')
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', False)
+    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', True)
     REMEMBER_COOKIE_DURATION = timedelta(hours=24)
     ENCRYPT_KEY = ''
     ENCRYPT_IV = ''

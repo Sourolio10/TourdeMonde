@@ -193,3 +193,20 @@ class PassengerInfoHotel(FlaskForm):
     email = StringField('Email', validators=[Email()])
     
     submit = SubmitField('Next Passenger')
+
+
+
+class LocationBookingForm(FlaskForm):
+    source = StringField('Choose your source', [DataRequired()])
+    no_of_rooms = SelectField('How many rooms?' , choices=[('1','1 Room'), ('2','2 Rooms'), ('3','3 Rooms'), ('4','4 Rooms'), ('5','5 Rooms')],validators=[InputRequired()])
+    adults = SelectField('Adults' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')],validators=[InputRequired()])
+    children = SelectField('Children' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')],validators=[InputRequired()])
+    inputCheckIn = DateField('Check In Date', format='%Y-%m-%d', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%Y-%m-%d', validators=[InputRequired()])
+    submit = SubmitField('Submit')
+
+    def validate_source(self, source):
+        org = Place.query.filter_by(place=source.data.lower()).first()
+        print("\n\n\n\n\n Hey Soruce Check")
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')

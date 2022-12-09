@@ -5,7 +5,7 @@ import re
 from urllib import response
 from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, login_required, logout_user
-from tour_management.admin.utils import admin_creation, no_admin, super_user
+from tour_management.admin.utils import admin_creation, no_admin, super_user, send_registration_mail, send_reset_password_mail
 from tour_management.models import (Accomodation, 
                                     Accomodationdetails,
                                     Flightdetails,
@@ -157,11 +157,11 @@ def add_admins():
         db.session.commit()
         if org.role == 'super_user':
             super_user_conf_token = AdminToken.generate_token('admin_token', org.id, 1800)
-            # send_registration_mail(org.email, url_for('.registration_confirmation',token=super_user_conf_token.token, _external=True))
+            send_registration_mail(org.email, url_for('.registration_confirmation',token=super_user_conf_token.token, _external=True))
             flash('Super User is successfully created', 'info')
         elif org.role == 'admin':
             admin_token = AdminToken.generate_token('admin_token', org.id, 1800)
-            # send_registration_mail(org.email,url_for('.registration_confirmation',token=admin_token.token, _external=True))
+            send_registration_mail(org.email,url_for('.registration_confirmation',token=admin_token.token, _external=True))
             flash('Admin is successfully created', 'info')
         else:
             flash('error detected' , 'danger')
@@ -210,9 +210,9 @@ def reset_password_request():
             return redirect(url_for('admin.login'))
         reset_password_token = AdminToken.generate_token(
             'reset_password', org.id, 1800)
-        # send_reset_password_mail(org.email,
-        #                          url_for('admin.reset_password',
-        #                                  token=reset_password_token.token, _external=True))
+        send_reset_password_mail(org.email,
+                                 url_for('admin.reset_password',
+                                         token=reset_password_token.token, _external=True))
         flash('Reset password link has been sent to your email address', 'info')
         return redirect(url_for('admin.login'))
     return render_template('admin/reset_password_request.html', form=form)

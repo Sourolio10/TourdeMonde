@@ -27,6 +27,7 @@ import random
 from cerberus import Validator
 from tour_management.schemas.user_apis import user_signup, user_login
 from flask_api import FlaskAPI, status, exceptions
+from tour_management.user.utils import send_reset_password_mail
 from tour_management.user.forms import (SignupForm,
                                         LoginForm,
                                         ValidateotpForm,
@@ -64,9 +65,6 @@ def signup():
         org.username = signup_form.username.data.lower()
         org.email = signup_form.email.data
         org.password = User.hash_password(signup_form.password.data)
-        # Remove These 2 Once email confirmation starts working
-        org.email_verified = True
-        org.is_active = True
         print("Accepted Data")
         try :
             db.session.add(org)
@@ -79,16 +77,16 @@ def signup():
             email_conf_token = UserToken.generate_token(
                 'email_confirmation', org.id, 1800)
             User.generate_smcode(org.id, 180)
-            # try:
-            #     send_confirmation_mail(org.email,
-            #                        url_for('user.email_confirmation',
-            #                                token=email_conf_token.token, _external=True))
-            # except Exception as err:
-            #     print ('Error Logged : ', err)
-            #     flash('Email sending failed', 'danger')
-            #     return redirect(url_for('user.signup'))
-            # else:
-            return redirect(url_for('user.validate_OTP'))
+            try:
+                send_confirmation_mail(org.email,
+                                   url_for('user.email_confirmation',
+                                           token=email_conf_token.token, _external=True))
+            except Exception as err:
+                print ('Error Logged : ', err)
+                flash('Email sending failed', 'danger')
+                return redirect(url_for('user.signup'))
+            else:
+                return redirect(url_for('user.validate_OTP'))
 
     return render_template('user/signup.html', form=signup_form)
 
@@ -228,6 +226,77 @@ def book_flights(booking_id, no_of_people, no_of_rooms):
     #     Myorderstemp.query.filter_by(id = booking_id).delete()
     return "Wait. Work in Progress"
 
+
+
+@user.route('/location_booking' , methods=['GET', 'POST'])
+@login_required
+def location_booking():
+    
+    items = None
+    form = LocationBookingForm()
+    if form.validate_on_submit():
+        source = form.source.data.lower()
+        number_of_people = int(form.adults.data) + int(form.children.data)
+        number_of_rooms = int(form.no_of_rooms.data)
+        departure_date = form.inputCheckIn.data
+        arrival_date = form.inputCheckOut.data
+        no_of_rooms = int(number_of_rooms)
+        adults = int(form.adults.data)
+        children = int(form.children.data)
+        
+        print("\n\n\n\n\n Hey Rooms Check", no_of_rooms, adults, children)
+        if (2*no_of_rooms) < (adults+children):
+            flash('Please Add more rooms as 1 Room Serves 2 People.', 'danger')
+            return render_template('user/hotel_booking.html', form=form, items = items)
+        
+        place_temp = Place.query.filter_by(place=source).first()
+        
+        hotel_details = (db.session.query(Accomodation, Accomodationdetails)
+                .join(Accomodation, Accomodationdetails.accomodation_id == Accomodation.id)
+                .filter(Accomodation.place_id == place_temp.id)
+                .all())
+        
+        items = []
+        for acc, acc_d in hotel_details:
+            print("\n\n\n\n\n\n\n",acc.hotel_name, acc_d.rooms_availble)
+            temp_dict = {}
+            temp_dict['hotel_name'] = acc.hotel_name
+            temp_dict['description'] = acc.description
+            temp_dict['no_of_rooms'] = number_of_rooms
+            temp_dict['cost'] = str(random.randrange(acc_d.min_price,acc_d.max_price)) 
+            temp_dict['room_name'] = acc_d.room_name
+            temp_dict['start_date'] = departure_date
+            temp_dict['end_date'] = arrival_date
+            temp_dict['rooms_availble'] = acc_d.rooms_availble
+            temp_dict['room_description'] = acc_d.description
+            temp_dict['accomodation_details_id'] = acc_d.id
+            # temp_dict = json.dumps(temp_dict)
+            print(temp_dict)
+            items.append(temp_dict)
+        print(items)
+        # items = json.dumps(items)
+        # items = json.loads(items)
+        print("ASD",items)
+        return render_template('user/hotel_booking.html', form=form, items = items)
+        
+    return render_template('user/hotel_booking.html', form=form, items = items)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @user.route('/hotel_booking' , methods=['GET', 'POST'])
 @login_required
 def hotel_booking():
@@ -350,15 +419,6 @@ def hotelpassengerinfo(booking_id, no_of_people, current_passenger):
         return redirect(url_for('user.hotelpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, current_passenger=current_passenger, _external=True))
 
     return render_template('user/Passenger_info_hotel.html', form=form, current_passenger = current_passenger, no_of_people=no_of_people)
-
-
-
-
-
-
-
-
-
 
 
 
@@ -580,17 +640,17 @@ def reset_password_request():
             return redirect(url_for('.login'))
         reset_password_token = UserToken.generate_token(
             'reset_password', org.id, 1800)
-        # try:
-        #     send_reset_password_mail(org.email,
-        #                          url_for('.reset_password',
-        #                                  token=reset_password_token.token, _external=True))
-        # except Exception as err:
-        #     print ('Error Logged : ', err)
-        #     flash('Email sending failed', 'danger')
-        #     return redirect(url_for('user.login')) 
-        # else:
-        flash('Reset password link has been sent to your email address', 'info')
-        return redirect(url_for('.login'))
+        try:
+            send_reset_password_mail(org.email,
+                                 url_for('.reset_password',
+                                         token=reset_password_token.token, _external=True))
+        except Exception as err:
+            print ('Error Logged : ', err)
+            flash('Email sending failed', 'danger')
+            return redirect(url_for('user.login')) 
+        else:
+            flash('Reset password link has been sent to your email address', 'info')
+            return redirect(url_for('.login'))
     return render_template('user/reset_password_request.html', form=form)
 
 
@@ -617,69 +677,3 @@ def reset_password(token):
         flash('Your password has been updated. Please login with new password', 'success')
         return redirect(url_for('.login'))
     return render_template('user/reset_password.html', form=form)
-
-
-# GET : /search/<location>/<travel_start_date>/<travel_end_date>/<people>
-# parameters :
-                # location : Pick from Location Details Table
-                # Travel Start, Travel End, People : USed to check for avalability of bookings
-# operations :
-                # First check if location present in our db
-                # If yes, accordingly check for flight availability along with no of people - add to json object
-                # If returns json object with flight data check for hotels availability for the no of people and add to json object
-                # If that returns data then, send to the UI
-
-
-# GET : /view/locations/<number : 5>
-# parameters :
-                # Number : To show number of places on the dashboard
-# operations :
-                # First check if locations present in our db
-                # Query all of them
-                # Randomly select 2 of them and 3 highly rated ones and send to the user interface
-
-
-# GET : /view/activities/<number : 5>
-# parameters :
-                # Number : To show number of places on the dashboard
-# operations :
-                # First check if activities present in our db
-                # Query all of them
-                # Randomly select 2 of them and 3 highly rated ones and send to the user interface
-
-# GET : /Dashboard
-# @JWT_REQ
-# operations :
-                # This will be a redirect from login
-                # Retrieve user trips and user data
-                # Create a split between upcoming trips and completed trips
-                # Jsonify it and send to the UI
-
-# GET : /myorders/<order_id>
-# GET : /myorders/
-# @JWT_REQ
-# Parameters :
-                # If query is related to a specific order_id
-# operations :
-                # Query my_orders table along with users primary key
-                # In case of order_id along with primamry key pass the order_id too
-                # if found add all the available data to json object and send to UI
-
-# POST : /create/order
-# @jwt_required (Optional should work without it too - Concept of guest accounts)
-# Parameters :
-                # location
-                # flights
-                # hotel
-                # activities
-                # no of people
-                # people object 
-                # payment_made == True or payment_made == False (In this case hold the booking for 3 days)
-                # * NEED TO DISCUSS THE JSON OBJECT FOR THIS *
-# Operations : 
-                # Will check all parameters if each of them exist in the data_base or not.
-                # Add user booking in the my_orders table and create the itinerary.
-                # If payment made then booking_confirmation = True else False in the my_orders Table.
-                # Once all bookings are made in the tables and all confirmations done.
-                # return True or else send error message.
-                # * For NOW IF BOOKING FAILS THEN START ALL OVER AGAIN *

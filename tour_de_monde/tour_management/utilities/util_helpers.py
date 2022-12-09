@@ -18,3 +18,5 @@ def send_confirmation_mail(reciever_email, link):
     msg.body = text_message
     msg.html = html_message
     mail.send(msg)
+
+    
