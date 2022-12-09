@@ -108,40 +108,9 @@
                                             {{ form.destination(class="form-control", id="destination", placeholder="Enter your destination...") }}
                                         {% endif %}
                                     </div>
-                                    <div class="form-group tm-form-group tm-form-group-1">                                    
-                                        <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
-                                            <!-- <label for="inputRoom">How many rooms?</label>
-                                            <select name="room" class="form-control tm-select" id="inputRoom">
-                                                <option value="1" selected>1 Room</option>
-                                                <option value="2">2 Rooms</option>
-                                                <option value="3">3 Rooms</option>
-                                                <option value="4">4 Rooms</option>
-                                                <option value="5">5 Rooms</option>
-                                            </select> -->
-                                            {{ form.no_of_rooms.label(for="no_of_rooms") }}
-                                            {% if form.no_of_rooms.errors %}
-                                                {{ form.no_of_rooms(class="form-control is-invalid", id="no_of_rooms", placeholder="Flight Type? ") }}
-                                                <div class="invalid-feedback">
-                                                    {% for error in form.no_of_rooms.errors %}
-                                                    <span>{{ error }}</span>
-                                                    {% endfor %}
-                                                </div>
-                                            {% else %}
-                                                {{ form.no_of_rooms(class="form-control", id="no_of_rooms", placeholder="Flight Type?") }}
-                                            {% endif %} 
-                                                                                   
-                                        </div>
-
+                            
                                         
                                         <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
-                                            <!-- <label for="inputRoom">How many rooms?</label>
-                                            <select name="room" class="form-control tm-select" id="inputRoom">
-                                                <option value="1" selected>1 Room</option>
-                                                <option value="2">2 Rooms</option>
-                                                <option value="3">3 Rooms</option>
-                                                <option value="4">4 Rooms</option>
-                                                <option value="5">5 Rooms</option>
-                                            </select> -->
                                             {{ form.cabin_class.label(for="cabin_class") }}
                                             {% if form.cabin_class.errors %}
                                                 {{ form.cabin_class(class="form-control is-invalid", id="cabin_class", placeholder="Cabin Type ") }}
@@ -159,19 +128,6 @@
 
 
                                         <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">                                       
-                                            <!-- <label for="inputAdult">Adult</label>     
-                                            <select name="adult" class="form-control tm-select" id="inputAdult">
-                                                <option value="1" selected>1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                            </select> -->
                                             {{ form.adults.label(for="adults") }}
                                             {% if form.adults.errors %}
                                                 {{ form.adults(class="form-control is-invalid", id="adults", placeholder="Adults ") }}
@@ -185,14 +141,6 @@
                                             {% endif %}                                         
                                         </div>
                                         <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
-
-                                            <!-- <label for="inputChildren">Children</label>                                            
-                                            <select name="children" class="form-control tm-select" id="inputChildren">
-                                            	<option value="0" selected>0</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                            </select>     -->
                                             {{ form.children.label(for="children") }}
                                             {% if form.children.errors %}
                                                 {{ form.children(class="form-control is-invalid", id="children", placeholder="Children ") }}

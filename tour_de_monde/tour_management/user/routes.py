@@ -15,7 +15,8 @@ from tour_management.models import (User,
                                     Locationdetails,
                                     Accomodationdetails,
                                     Ticket,
-                                    Flightbookingtemp)
+                                    Flightbookingtemp,
+                                    Passenger)
 
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
@@ -35,7 +36,8 @@ from tour_management.user.forms import (SignupForm,
                                         DashboardForm,
                                         HotelBookingForm,
                                         FlightBookingForm,
-                                        MyordersForm)
+                                        MyordersForm,
+                                        PassengerInfo)
 
 user = Blueprint('user', __name__)
 
@@ -196,6 +198,7 @@ def dashboard():
         my_orders_temp.source = source
         my_orders_temp.destination = destination
         my_orders_temp.individual = booking_type
+        
         db.session.commit()
         total_no_people = adults + children
         # Add booking Id, No of People, No of rooms to every request              
@@ -226,8 +229,27 @@ def book_flights(booking_id, no_of_people, no_of_rooms):
 @user.route('/hotel_booking' , methods=['GET', 'POST'])
 @login_required
 def hotel_booking():
-    hotel_booking_form = HotelBookingForm()
-    return render_template('user/hotel_booking.html', form=hotel_booking_form)
+    
+    items = None
+    form = HotelBookingForm()
+    if form.validate_on_submit():
+        source = form.source.data.lower()
+        number_of_people = int(form.adults.data) + int(form.children.data)
+        number_of_rooms = int(form.no_of_rooms.data)
+        departure_date = form.inputCheckIn.data
+        arrival_date = form.inputCheckOut.data
+        
+        place_temp = Place.query.filter_by(place=source).first()
+        
+        # flight_details = (db.session.query(Accomodation, Accomodationdetails)
+        #         .join(Accomodation, Accomodationdetails.accomodation_id == Accomodation.flights_id)
+        #         .filter(.source == source,
+        #                     Flightdetails.destination == destination,
+        #                     Flightdetails.departure_date == departure_date,
+        #                     Ticket.type == cabin_class)
+        #         .all())
+        pass
+    return render_template('user/hotel_booking.html', form=form, items = items)
 
 @user.route('/my_orders' , methods=['GET', 'POST'])
 @login_required
@@ -243,27 +265,27 @@ def flight_booking():
     form = FlightBookingForm()
     if form.validate_on_submit():
         print("E")
-        no_of_rooms = form.no_of_rooms.data
-
+        
         source = form.source.data.lower()
         destination = form.destination.data.lower()
-        number_of_people = form.adults.data + form.children.data
+        number_of_people = int(form.adults.data) + int(form.children.data)
         departure_date = form.inputCheckIn.data
         arrival_date = form.inputCheckOut.data
         cabin_class = form.cabin_class.data
+        
         print("\n\n\n\n\n\n\n\n\n\n",cabin_class)
         flight_details = (db.session.query(Flightdetails, Ticket)
                 .join(Flightdetails, Flightdetails.id == Ticket.flights_id)
                 .filter(Flightdetails.source == source,
                             Flightdetails.destination == destination,
                             Flightdetails.departure_date == departure_date,
-                            Ticket.type == "economy")
+                            Ticket.type == cabin_class)
                 .all())
         
         print('\n\n\n\n\n\n\n\n\n', flight_details)
         items = []
         for flight_det, tickets in flight_details:
-            if flight_det.vacant_seats < number_of_people:
+            if flight_det.vacant_seats < int(number_of_people):
                 continue
             temp_dict = {}
             temp_dict['flight_number'] = flight_det.flight_number
@@ -303,29 +325,50 @@ def flight_booking_confirm(flight_number, source, destination, no_of_people, dep
     temp_orders.user_id = user_id
     #change later
     temp_orders.international = True
-    temp_orders.cost = cost
+    temp_orders.cost = int(cost)*int(no_of_people)
     temp_orders.start_date = departure_date
     temp_orders.end_date = arrival_date
     temp_orders.source = source
     temp_orders.destination = destination
     temp_orders.individual = True
     temp_orders.booking_complete = False
+    db.session.add(temp_orders)
     db.session.commit()
-    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, cost = cost, start_date = departure_date, end_date=arrival_date, source=source, destination=destination, booking_complete=False).first()
+    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, start_date = departure_date, end_date=arrival_date, source=source, destination=destination, booking_complete=False).first()
     flight_details = Flightdetails.query.filter_by(flight_number=flight_number).first()
     flight_booking_temp = Flightbookingtemp()
     flight_booking_temp.flight_details_id = flight_details.id
-    flight_booking_temp.cost = cost
+    flight_booking_temp.cost = int(cost)*int(no_of_people)
     flight_booking_temp.no_of_people = no_of_people
     flight_booking_temp.my_orders_id = temp_orders.id
+    db.session.add(flight_booking_temp)
     db.session.commit()
-    return redirect(url_for('user.flightpassengerinfo', booking_id=temp_orders.id, _external=True))
+    return redirect(url_for('user.flightpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_people, current_passenger=1, _external=True))
 
-@user.route('/flight_booking/passenger/<string:booking_id>' , methods=['GET', 'POST'])
+@user.route('/flight_booking/passenger/<string:booking_id>/<string:no_of_people>/<string:current_passenger>' , methods=['GET', 'POST'])
 @login_required
-def flightpassengerinfo(booking_id):
+def flightpassengerinfo(booking_id, no_of_people, current_passenger):
+    booking_id = booking_id
+    no_of_people = int(no_of_people)
+    current_passenger = int(current_passenger)
+    if int(current_passenger) > int(no_of_people):
+        return "Payments Page"
+    form = PassengerInfo()
+    if form.validate_on_submit():
+        passenger_temp = Passenger()
+        passenger_temp.first_name = form.first_name.data.lower()
+        passenger_temp.last_name = form.last_name.data.lower()
+        passenger_temp.email = form.email.data
+        passenger_temp.dob = form.dob.data
+        passenger_temp.sex = form.sex.data.lower()
+        passenger_temp.passport_number = form.passport_number.data
+        passenger_temp.temp_orders_id = booking_id
+        db.session.add(passenger_temp)
+        db.session.commit()
+        current_passenger += 1
+        return redirect(url_for('user.flightpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, current_passenger=current_passenger, _external=True))
 
-    return 'Taking Flight Passenger Info'
+    return render_template('user/Passenger_info.html', form=form, current_passenger = current_passenger, no_of_people=no_of_people)
 
 @user.route('/profile', methods=['GET', 'POST'])
 @login_required

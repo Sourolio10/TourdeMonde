@@ -105,12 +105,9 @@ class ResendValidateotpForm(FlaskForm):
 class DashboardForm(FlaskForm):
     source = StringField('Choose your source', [DataRequired()])
     destination = StringField('Choose your destination', [DataRequired()])
-    no_of_rooms = SelectField('How many rooms?' , choices=[('1 Room'), ('2 Rooms'), ('3 Rooms'), ('4 Rooms'), ('5 Rooms')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    adults = SelectField('Adults' , choices=[('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
+    no_of_rooms = SelectField('How many rooms?' , choices=[('1','1 Room'), ('2','2 Rooms'), ('3','3 Rooms'), ('4','4 Rooms'), ('5','5 Rooms')],validators=[InputRequired()])
+    adults = SelectField('Adults' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')],validators=[InputRequired()])
+    children = SelectField('Children' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')],validators=[InputRequired()])
     inputCheckIn = DateField('Check In Date', validators=[InputRequired()])
     inputCheckOut = DateField('Check Out Date', validators=[InputRequired()])
     international = BooleanField('International Travel ?')
@@ -130,16 +127,11 @@ class DashboardForm(FlaskForm):
 class FlightBookingForm(FlaskForm):
     source = StringField('Choose your source', [DataRequired()])
     destination = StringField('Choose your destination', [DataRequired()])
-    no_of_rooms = SelectField('Flight Type?' , choices=[('Roundtrip'), ('One way'), ('Multi-city')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    adults = SelectField('Adults' , choices=[('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
+    adults = SelectField('Adults' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')],validators=[InputRequired()])
+    children = SelectField('Children' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')],validators=[InputRequired()])
     inputCheckIn = DateField('Check In Date', format='%Y-%m-%d', validators=[InputRequired()])
     inputCheckOut = DateField('Check Out Date', format='%Y-%m-%d', validators=[InputRequired()])
-    cabin_class = SelectField('Cabin Class' , choices=[('Economy'), ('Premium Economy'), ('Business'), ('First')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
+    cabin_class = SelectField('Cabin Class' , choices=[('economy','Economy'), ('premium','Premium'), ('business','Business'), ('first','First')],validators=[InputRequired()])
     submit = SubmitField('Submit')
 
     def validate_source(self, source):
@@ -155,19 +147,44 @@ class FlightBookingForm(FlaskForm):
 
 class HotelBookingForm(FlaskForm):
     source = StringField('Choose your source', [DataRequired()])
-    destination = StringField('Choose your destination', [DataRequired()])
-    no_of_rooms = SelectField('How many rooms?' , choices=[('1 Room'), ('2 Rooms'), ('3 Rooms'), ('4 Rooms'), ('5 Rooms')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    adults = SelectField('Adults' , choices=[('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    children = SelectField('Children' , choices=[('1'), ('2'), ('3'), ('4'), ('5')],validators=[InputRequired()],
-    coerce=lambda x: x == 'True')
-    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
-    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    no_of_rooms = SelectField('How many rooms?' , choices=[('1 Room'), ('2 Rooms'), ('3 Rooms'), ('4 Rooms'), ('5 Rooms')],validators=[InputRequired()])
+    adults = SelectField('Adults' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')],validators=[InputRequired()])
+    children = SelectField('Children' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')],validators=[InputRequired()])
+    inputCheckIn = DateField('Check In Date', format='%Y-%m-%d', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%Y-%m-%d', validators=[InputRequired()])
     submit = SubmitField('Submit')
 
+    def validate_source(self, source):
+        org = Place.query.filter_by(place=source.data.lower()).first()
+        print("\n\n\n\n\n Hey Soruce Check")
+        if org is None or org == []:
+            raise ValidationError('Sorry we do not serve that location yet')
+    
+    def validate_no_of_rooms(self, no_of_rooms, adults, children):
+        no_of_rooms = int(no_of_rooms)
+        adults = int(adults)
+        children = int(children)
+        print("\n\n\n\n\n Hey Rooms Check")
+        if (2*no_of_rooms) >= (adults+children):
+            raise ValidationError('Please Add more rooms as 1 Room Serves 2 People.')
+            
 class MyordersForm(FlaskForm):
     inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
     inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
     submit = SubmitField('Submit')
+
+
+class PassengerInfo(FlaskForm):
+    first_name = StringField('First Name', validators=[
+        DataRequired(), Length(min=2, max=255)])
+    last_name = StringField('Last Name', validators=[
+        DataRequired(), Length(min=2, max=255)])
+    dob = DateField('Date Of Birth',
+                                validators=[InputRequired()])
+    sex = StringField('Gender', validators=[
+        DataRequired(), Length(min=1, max=10)])
+    passport_number = StringField('Passport Number', validators=[
+                           DataRequired(), Length(min=2, max=255)])
+    email = StringField('Email', validators=[Email()])
     
+    submit = SubmitField('Next Passenger')

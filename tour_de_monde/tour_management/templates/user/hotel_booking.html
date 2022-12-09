@@ -75,7 +75,7 @@
                         </div> <!-- row -->
                         <div class="row tm-banner-row" id="tm-section-search">
 
-                            <form action="index.html" method="POST" class="tm-search-form tm-section-pad-2">
+                            <form action="" method="POST" class="tm-search-form tm-section-pad-2">
                                 {{ form.hidden_tag() }}
                                 <div class="form-row tm-search-form-row">            
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
@@ -93,21 +93,6 @@
                                             {{ form.source(class="form-control", id="source", placeholder="Enter your source...") }}
                                         {% endif %}
                                     </div>                    
-                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
-                                        <!-- <label for="inputCity">Choose Your Destination</label>
-                                        <input name="destination" type="text" class="form-control" id="inputCity" placeholder="Enter your destination..."> -->
-                                        {{ form.destination.label(for="destination") }}
-                                        {% if form.destination.errors %}
-                                            {{ form.destination(class="form-control is-invalid", id="destination", placeholder="Enter your destination... ") }}
-                                            <div class="invalid-feedback">
-                                                {% for error in form.destination.errors %}
-                                                <span>{{ error }}</span>
-                                                {% endfor %}
-                                            </div>
-                                        {% else %}
-                                            {{ form.destination(class="form-control", id="destination", placeholder="Enter your destination...") }}
-                                        {% endif %}
-                                    </div>
                                     <div class="form-group tm-form-group tm-form-group-1">                                    
                                         <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
                                             <!-- <label for="inputRoom">How many rooms?</label>
@@ -224,7 +209,45 @@
                     </div>  <!-- .container -->                   
                 </div>              
             </section>
-      
+            <div class="row justify-content-center">
+                {% if items is not none %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight Number</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Number Of People</th>
+                            <th>Departure Date - Time</th>
+                            <th>Arrival Date - Time</th>
+                            <th>Cost - Per Person</th>
+                            <th>Book Ticket</th>
+                        </tr>
+                        </thead>
+                        {% for item in items %}
+                            
+                            <tbody>
+                                
+                                <tr>
+                                    
+                                    <td>{{item['flight_number']}}</td>
+                                    <td>{{item['source']}}</td>
+                                    <td>{{item['destination']}}</td>
+                                    <td>{{item['no_of_people']}}</td>
+                                    <td>{{item['departure_date']}} - {{item['departure_time']}}</td>
+                                    <td>{{item['arrival_date']}} - {{item['arrival_time']}}</td>
+                                    <td>{{item['cost']}}</td>
+                                    <td><a class="" href="{{ url_for('user.flight_booking_confirm', flight_number=item['flight_number'], source=item['source'], destination=item['destination'], no_of_people=item['no_of_people'], departure_date=item['departure_date'], departure_time=item['departure_time'], arrival_date=item['arrival_date'], arrival_time=item['arrival_time'], cost=item['cost'], _external=True) }}">Book</a></td>
+                                    
+                                </tr>
+                                
+                            </tbody>
+                                
+                        {% endfor %}
+                </table>
+                {% else %}
+                    {% endif %}
+            </div>
             <div class="tm-container-outer" id="tm-section-3">
 
             <footer class="tm-container-outer">

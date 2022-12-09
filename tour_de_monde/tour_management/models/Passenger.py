@@ -16,8 +16,8 @@ class Passenger(db.Model, UserMixin):
     dob = db.Column(db.Date, nullable=False)
     sex = db.Column(db.String(255), nullable=False)
     passport_number = db.Column(db.String(255), nullable=False)
-    my_orders_id = db.Column(db.Integer, db.ForeignKey('myorders.id'), nullable=False)
-    temp_orders_id = db.Column(db.Integer, db.ForeignKey('myorderstemp.id'), nullable=False)
+    my_orders_id = db.Column(db.Integer, db.ForeignKey('myorders.id'), nullable=True)
+    temp_orders_id = db.Column(db.Integer, db.ForeignKey('myorderstemp.id'), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     
