@@ -210,3 +210,7 @@ class LocationBookingForm(FlaskForm):
         
         if org is None or org == []:
             raise ValidationError('Sorry we do not serve that location yet')
+
+
+# class PaymentsForm(FlaskForm):
+    

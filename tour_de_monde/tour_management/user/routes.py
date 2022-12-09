@@ -586,6 +586,17 @@ def flightpassengerinfo(booking_id, no_of_people, current_passenger):
 def profile():
     return render_template('user/profile.html', org=current_user)
 
+@user.route('/testing', methods=['GET', 'POST'])
+@login_required
+def testing():
+    return render_template('user/testing.html')
+
+@user.route('/payments', methods=['GET', 'POST'])
+@login_required
+def payments():
+    # payments_form = PaymentsForm()
+    return render_template('user/payments.html')
+
 # @user.route('/flight-booking' , methods=['GET', 'POST'])
 # @login_required
 # def flight_booking():
