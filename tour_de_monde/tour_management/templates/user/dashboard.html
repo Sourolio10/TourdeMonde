@@ -43,6 +43,12 @@
                                         <a href="{{ url_for('user.hotel_booking') }}" class="nav-link">Hotels</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="{{ url_for('user.my_orders') }}" class="nav-link">My Orders</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('user.profile') }}" class="nav-link">Profile</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{ url_for('user.logout') }}" class="nav-link">Logout</a>
                                     </li>
                                 </ul>
@@ -53,7 +59,7 @@
             </div> 
         
 
-        <div class="container-fluid mt-5">
+        <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-6 col-sm-10">
                     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -196,7 +202,7 @@
                                 </div> <!-- form-row -->
                                 <div class="form-row tm-search-form-row">
 
-                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-4">
                                         <!-- <label for="inputCheckIn">Check In Date</label>
                                         <input name="check-in" type="text" class="form-control" id="inputCheckIn" placeholder="Check In"> -->
                                         {{ form.inputCheckIn.label(for="inputCheckIn") }}
@@ -211,7 +217,7 @@
                                                 {{ form.inputCheckIn(class="form-control", id="inputCheckIn", placeholder="inputCheckIn") }}
                                             {% endif %}
                                     </div>
-                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-4">
                                         <!-- <label for="inputCheckOut">Check Out Date</label>
                                         <input name="check-out" type="text" class="form-control" id="inputCheckOut" placeholder="Check Out"> -->
                                         {{ form.inputCheckOut.label(for="inputCheckOut") }}
@@ -227,7 +233,7 @@
                                             {% endif %}
                                     </div>
 
-                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-4">
                                         <!-- <label for="inputCheckOut">Check Out Date</label>
                                         <input name="check-out" type="text" class="form-control" id="inputCheckOut" placeholder="Check Out"> -->
                                         {{ form.international.label(for="international") }}

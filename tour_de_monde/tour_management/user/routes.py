@@ -34,7 +34,8 @@ from tour_management.user.forms import (SignupForm,
                                         ResetPasswordForm,
                                         DashboardForm,
                                         HotelBookingForm,
-                                        FlightBookingForm)
+                                        FlightBookingForm,
+                                        MyordersForm)
 
 user = Blueprint('user', __name__)
 
@@ -167,9 +168,9 @@ def resend_validate_OTP():
     
 
 @user.route('/' , methods=['GET', 'POST'])
-def landing():
-    dashboard_form = DashboardForm()
-    return render_template('user/index.html', form=dashboard_form)
+def index():
+    # dashboard_form = DashboardForm()
+    return render_template('user/index.html')
 
 
 @user.route('/dashboard' , methods=['GET', 'POST'])
@@ -227,6 +228,12 @@ def book_flights(booking_id, no_of_people, no_of_rooms):
 def hotel_booking():
     hotel_booking_form = HotelBookingForm()
     return render_template('user/hotel_booking.html', form=hotel_booking_form)
+
+@user.route('/my_orders' , methods=['GET', 'POST'])
+@login_required
+def my_orders():
+    my_orders_form = MyordersForm()
+    return render_template('user/my_orders.html', form=my_orders_form)
 
 @user.route('/flight_booking' , methods=['GET', 'POST'])
 @login_required

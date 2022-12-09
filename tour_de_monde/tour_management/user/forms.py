@@ -165,14 +165,9 @@ class HotelBookingForm(FlaskForm):
     inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
     inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
     submit = SubmitField('Submit')
+
+class MyordersForm(FlaskForm):
+    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
+    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    submit = SubmitField('Submit')
     
-    def validate_source(self, source):
-        org = Place.query.filter_by(place=source.data.lower()).first()
-        print("\n\n\n\n\n Hey Soruce Check")
-        if org is None or org == []:
-            raise ValidationError('Sorry we do not serve that location yet')
-    
-    def validate_destination(self, destination):
-        org = Place.query.filter_by(place=destination.data.lower()).first()
-        if org is None or org == []:
-            raise ValidationError('Sorry we do not serve that location yet')
