@@ -9,6 +9,7 @@ from tour_management.models import (User,
                                     Location, 
                                     Place, 
                                     Myorderstemp,
+                                    Myorders,
                                     Accomodation,
                                     Flights,
                                     Flightdetails,
@@ -16,14 +17,19 @@ from tour_management.models import (User,
                                     Accomodationdetails,
                                     Ticket,
                                     Flightbookingtemp,
+                                    Flightbooking,
                                     Passenger,
-                                    Accomodationbookingtemp)
+                                    Accomodationbookingtemp,
+                                    Accomodationbooking,
+                                    Locationbooking,
+                                    Locationbookingtemp,
+                                    Payments)
 
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
 import json
-import random
+import random, string
 from cerberus import Validator
 from tour_management.schemas.user_apis import user_signup, user_login
 from flask_api import FlaskAPI, status, exceptions
@@ -41,7 +47,8 @@ from tour_management.user.forms import (SignupForm,
                                         MyordersForm,
                                         PassengerInfo,
                                         PassengerInfoHotel,
-                                        LocationBookingForm)
+                                        LocationBookingForm,
+                                        PaymentsForm)
 
 user = Blueprint('user', __name__)
 
@@ -183,29 +190,10 @@ def dashboard():
     if form.validate_on_submit():
         source = form.source.data.lower()
         destination = form.destination.data.lower()
-        no_of_rooms = form.no_of_rooms.data
-        adults = form.adults.data
-        children = form.children.data
-        inputCheckIn = form.inputCheckIn.data
-        inputCheckOut = form.inputCheckOut.data
-        international = form.international.data
-        booking_type = False
-        my_orders_temp = Myorderstemp()
-        print(current_user.id)
-        my_orders_temp.user_id = current_user.id
-        my_orders_temp.international = international
-        my_orders_temp.start_date = inputCheckIn
-        my_orders_temp.end_date = inputCheckOut
-        my_orders_temp.source = source
-        my_orders_temp.destination = destination
-        my_orders_temp.individual = booking_type
         
-        db.session.commit()
-        total_no_people = adults + children
         # Add booking Id, No of People, No of rooms to every request              
-        flash('Please Select your FLight info', 'info')
+        flash('We Do serve your source and destination. Go ahead book flights, hotels, activities', 'info')
         
-        print(source, destination, no_of_rooms, adults, children, inputCheckIn, inputCheckOut, international)
         return redirect(url_for('user.dashboard'))
     return render_template('user/dashboard.html', form=form)
 
@@ -589,11 +577,42 @@ def profile():
 def testing():
     return render_template('user/testing.html')
 
-@user.route('/payments', methods=['GET', 'POST'])
+@user.route('/payments/<string:booking_id>/<string:cost>/<string:flights>/<string:hotels>/<string:location>', methods=['GET', 'POST'])
 @login_required
-def payments():
-    # payments_form = PaymentsForm()
-    return render_template('user/payments.html')
+def payments(booking_id, cost, flights, hotels, locations):
+    booking_id = booking_id
+    cost = cost
+    flights = int(flights)
+    hotels = int(hotels)
+    locations = int(locations)
+    form = PaymentsForm()
+    if form.validate_on_submit():
+        user_temp = User.query.filter_by(usernname=form.username.data.lower()).first()
+        passenger_temp = Payments()
+        passenger_temp.user_id = user_temp.id
+        passenger_temp.my_orders_id = booking_id
+        passenger_temp.cost = cost
+        passenger_temp.payment_method = str(form.credit_card.data) + str(form.name_on_card.data.lower()) + str(form.expiration_date.data) + str(form.cvv_card.data)
+        passenger_temp.completed = True
+        confirmation = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+        passenger_temp.confirmation_reference = confirmation
+        passenger_temp.billing_addr_1 = form.address_1.data
+        if form.address_2.data is not None or form.address_2.data != '':
+            passenger_temp.billing_addr_2 = form.address_2.data
+        
+        passenger_temp.zip_code = form.zip_code.data
+        db.session.add(passenger_temp)
+        db.session.commit()
+        
+        # Add to my orders
+        # Add to respective flights, hotels, locations
+        # Remove from respective flights , hotels, locations
+        # Remove from temp_orders
+        
+
+
+        return "Booking complete"
+    return render_template('user/payments.html', form=form)
 
 # @user.route('/flight-booking' , methods=['GET', 'POST'])
 # @login_required
