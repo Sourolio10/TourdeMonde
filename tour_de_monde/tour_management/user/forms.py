@@ -212,5 +212,18 @@ class LocationBookingForm(FlaskForm):
             raise ValidationError('Sorry we do not serve that location yet')
 
 
-# class PaymentsForm(FlaskForm):
-    
+class PaymentsForm(FlaskForm):
+    first_name = StringField('Choose your source', [DataRequired()])
+    last_name = StringField('Choose your Activity Type', [DataRequired()])
+    username = StringField('Choose your Activity Type', [DataRequired()])
+    address_1 = StringField('Choose your Activity Type', [DataRequired()])
+    address_2 = StringField('Choose your Activity Type')
+    email = StringField('Email', validators=[Email()])
+    country = SelectField('Adults' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')],validators=[InputRequired()])
+    state = SelectField('Children' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')],validators=[InputRequired()])
+    zip_code = StringField('Choose your Activity Type', [DataRequired()])
+    credit_card = StringField('Choose your Activity Type', [DataRequired()])
+    name_on_card = StringField('Choose your Activity Type', [DataRequired()])
+    expiration_date = StringField('Choose your Activity Type', [DataRequired()])
+    cvv_card =  StringField('Choose your Activity Type', [DataRequired()])
+    submit = SubmitField('Submit')

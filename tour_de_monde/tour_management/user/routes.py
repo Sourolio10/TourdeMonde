@@ -259,7 +259,7 @@ def location_booking():
             temp_dict['location_id'] = acc_d.id
             temp_dict['activity_types'] = acc.activity_types
             temp_dict['no_of_people'] = number_of_people
-            temp_dict['cost'] = acc.cost
+            temp_dict['cost'] = acc_d.cost
             temp_dict['season_visit'] = acc.season_visit
             temp_dict['start_date'] = departure_date
             temp_dict['address'] = acc_d.address
@@ -276,9 +276,11 @@ def location_booking():
     return render_template('user/location_booking.html', form=form, items = items)
 
 
-@user.route('/location_booking/confim/<string:location_name>/<string:activity_types>/<string:no_of_people>/<string:cost>/<string:season_visit>/<string:start_date>/<string:address>/<string:average_review>/<string:average_time>/<string:description>/<string:end_date>/<string:location_id>' , methods=['GET', 'POST'])
+@user.route('/location_booking/confim/<string:location_name>/<string:no_of_people>/<string:cost>/<string:season_visit>/<string:start_date>/<string:address>/<string:average_review>/<string:average_time>/<string:description>/<string:end_date>/<string:location_id>' , methods=['GET', 'POST'])
 @login_required
-def location_booking_confirm(location_name, activity_types, no_of_people, cost, season_visit, start_date, address, average_review, average_time, description, end_date, location_id):
+
+
+def location_booking_confirm(location_name, no_of_people, cost, season_visit, start_date, address, average_review, average_time, description, end_date, location_id):
     location_name = location_name
     activity_types = activity_types
     no_of_people = no_of_people
@@ -295,7 +297,6 @@ def location_booking_confirm(location_name, activity_types, no_of_people, cost, 
 
     temp_orders = Myorderstemp()
     temp_orders.user_id = user_id
-    #change later
     temp_orders.international = True
     temp_orders.cost = int(cost)*int(no_of_people)
     temp_orders.start_date = start_date
@@ -306,21 +307,18 @@ def location_booking_confirm(location_name, activity_types, no_of_people, cost, 
     temp_orders.booking_complete = False
     db.session.add(temp_orders)
     db.session.commit()
-    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, start_date = start_date, end_date=end_date, source = 'hotel', destination = 'hotel', booking_complete=False).first()
+    temp_orders = Myorderstemp.query.filter_by(user_id = user_id, international = True, start_date = start_date, end_date=end_date, source = 'location', destination = 'location', booking_complete=False).first()
     
+    location_booking_temp = Locationbookingtemp()
+    location_booking_temp.location_details_id = location_id
+    location_booking_temp.cost = int(cost)*int(no_of_people)
+    location_booking_temp.no_of_people = int(no_of_people)
+    location_booking_temp.my_orders_id = temp_orders.id
     
-    # hotel_booking_temp = Accomodationbookingtemp()
-    # hotel_booking_temp.accomodation_details_id = accomodation_details_id
-    # hotel_booking_temp.cost = int(cost)*int(no_of_rooms)
-    # hotel_booking_temp.no_of_rooms = no_of_rooms
-    # hotel_booking_temp.start_date = start_date
-    # hotel_booking_temp.end_date = end_date
-    # hotel_booking_temp.my_orders_id = temp_orders.id
-    # db.session.add(hotel_booking_temp)
-    # db.session.commit()
     # return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, current_passenger=1, _external=True))
-
+    return "Payment Info"
     pass
+
 
 
 
