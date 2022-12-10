@@ -569,28 +569,13 @@ def testing():
 def payments(booking_id, cost, flights, hotels, location):
     booking_id = booking_id
     cost = cost
-    flights = int(flights)
-    hotels = int(hotels)
-    location = int(location)
+    flights = flights
+    hotels = hotels
+    location = location
     form = PaymentsForm()
     if form.validate_on_submit():
         print('\n\n\n\n\n\n\n\n\n\n\nData Added')
-        user_temp = User.query.filter_by(usernname=form.username.data.lower()).first()
-        passenger_temp = Payments()
-        passenger_temp.user_id = user_temp.id
-        passenger_temp.my_orders_id = booking_id
-        passenger_temp.cost = cost
-        passenger_temp.payment_method = str(form.credit_card.data) + str(form.name_on_card.data.lower()) + str(form.expiration_date.data) + str(form.cvv_card.data)
-        passenger_temp.completed = True
-        confirmation = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-        passenger_temp.confirmation_reference = confirmation
-        passenger_temp.billing_addr_1 = form.address_1.data
-        if form.address_2.data is not None or form.address_2.data != '':
-            passenger_temp.billing_addr_2 = form.address_2.data
-        
-        passenger_temp.zip_code = form.zip_code.data
-        db.session.add(passenger_temp)
-        db.session.commit()
+        user_temp = User.query.filter_by(username=form.username.data.lower()).first()
         
         
         # Remove from temp_orders
@@ -613,8 +598,27 @@ def payments(booking_id, cost, flights, hotels, location):
         db.session.commit()
 
 
-        temp_main_orders = Myorderstemp.query.filter_by(user_id = user_temp.id, international = True, start_date = temp_orders.start_date, end_date=temp_orders.end_date, source=temp_orders.source, destination=temp_orders.destination, payment_completed=True).first()
+
+
+        temp_main_orders = Myorders.query.filter_by(user_id = user_temp.id, international = True, start_date = temp_orders.start_date, end_date=temp_orders.end_date, source=temp_orders.source, destination=temp_orders.destination, payment_completed=True).first()
             
+        passenger_temp = Payments()
+        passenger_temp.user_id = user_temp.id
+        passenger_temp.my_orders_id = temp_main_orders.id
+        passenger_temp.cost = cost
+        passenger_temp.payment_method = str(form.credit_card.data) + str(form.name_on_card.data.lower()) + str(form.expiration_date.data) + str(form.cvv_card.data)
+        passenger_temp.completed = True
+        confirmation = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+        passenger_temp.confirmation_reference = confirmation
+        passenger_temp.billing_addr_1 = form.address_1.data
+        if form.address_2.data is not None or form.address_2.data != '':
+            passenger_temp.billing_addr_2 = form.address_2.data
+        
+        passenger_temp.zip_code = form.zip_code.data
+        db.session.add(passenger_temp)
+        db.session.commit()
+        
+        
         # Add to respective flights, hotels, locations
         # Remove from respective flights , hotels, locations
         if int(flights) == 1:
@@ -658,11 +662,18 @@ def payments(booking_id, cost, flights, hotels, location):
             Locationbookingtemp.query.filter_by(my_orders_id=booking_id).delete()
             db.session.commit()
             
+        # Passenger Info change temp_orders_id and update my_orders_id
+        passenger_temp = Passenger.query.filter_by(temp_orders_id = booking_id).all()
+        for temp in passenger_temp:
+            temp.temp_orders_id = None
+            temp.my_orders_id = temp_main_orders.id
+            db.session.commit()
+        
         Myorderstemp.query.filter_by(id=booking_id).delete()
         db.session.commit()
         flash ("Your Order Has Been Successfully Placed.", 'info')
         return redirect(url_for('user.dashboard'))
-    return render_template('user/payments.html', form=form)
+    return render_template('user/payments1.html', form=form)
 
 # @user.route('/flight-booking' , methods=['GET', 'POST'])
 # @login_required
