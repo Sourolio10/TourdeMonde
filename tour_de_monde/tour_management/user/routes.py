@@ -266,8 +266,6 @@ def location_booking():
 
 @user.route('/location_booking/confim/<string:location_name>/<string:no_of_people>/<string:cost>/<string:season_visit>/<string:start_date>/<string:address>/<string:average_review>/<string:average_time>/<string:description>/<string:end_date>/<string:location_id>' , methods=['GET', 'POST'])
 @login_required
-
-
 def location_booking_confirm(location_name, no_of_people, cost, season_visit, start_date, address, average_review, average_time, description, end_date, location_id):
     location_name = location_name
     activity_types = activity_types
@@ -304,19 +302,8 @@ def location_booking_confirm(location_name, no_of_people, cost, season_visit, st
     location_booking_temp.my_orders_id = temp_orders.id
     
     # return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, current_passenger=1, _external=True))
-    return "Payment Info"
-    pass
-
-
-
-
-
-
-
-
-
-
-
+    return redirect(url_for('user.payments', booking_id=temp_orders.id, cost=cost, flights=0 ,hotels=0 ,location=1 ,_external=True))
+    
 
 
 
@@ -416,16 +403,16 @@ def hotel_booking_confirm(hotel_name, description, no_of_rooms, room_name, accom
     hotel_booking_temp.my_orders_id = temp_orders.id
     db.session.add(hotel_booking_temp)
     db.session.commit()
-    return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, current_passenger=1, _external=True))
+    return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, cost=cost, current_passenger=1, _external=True))
 
-@user.route('/hotel_booking/passenger/<string:booking_id>/<string:no_of_people>/<string:current_passenger>' , methods=['GET', 'POST'])
+@user.route('/hotel_booking/passenger/<string:booking_id>/<string:no_of_people>/<string:cost>/<string:current_passenger>' , methods=['GET', 'POST'])
 @login_required
-def hotelpassengerinfo(booking_id, no_of_people, current_passenger):
+def hotelpassengerinfo(booking_id, no_of_people, cost, current_passenger):
     booking_id = booking_id
     no_of_people = int(no_of_people)
     current_passenger = int(current_passenger)
     if int(current_passenger) > int(no_of_people):
-        return "Payments Page"
+        return redirect(url_for('user.payments', booking_id=booking_id, cost=cost, flights=0 ,hotels=1 ,location=0 ,_external=True))
     form = PassengerInfoHotel()
     if form.validate_on_submit():
         passenger_temp = Passenger()
@@ -439,7 +426,7 @@ def hotelpassengerinfo(booking_id, no_of_people, current_passenger):
         db.session.add(passenger_temp)
         db.session.commit()
         current_passenger += 1
-        return redirect(url_for('user.hotelpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, current_passenger=current_passenger, _external=True))
+        return redirect(url_for('user.hotelpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, cost=cost, current_passenger=current_passenger, _external=True))
 
     return render_template('user/Passenger_info_hotel.html', form=form, current_passenger = current_passenger, no_of_people=no_of_people)
 
@@ -540,16 +527,16 @@ def flight_booking_confirm(flight_number, source, destination, no_of_people, dep
     flight_booking_temp.my_orders_id = temp_orders.id
     db.session.add(flight_booking_temp)
     db.session.commit()
-    return redirect(url_for('user.flightpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_people, current_passenger=1, _external=True))
+    return redirect(url_for('user.flightpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_people, cost=cost ,current_passenger=1, _external=True))
 
-@user.route('/flight_booking/passenger/<string:booking_id>/<string:no_of_people>/<string:current_passenger>' , methods=['GET', 'POST'])
+@user.route('/flight_booking/passenger/<string:booking_id>/<string:no_of_people>/<string:cost>/<string:current_passenger>' , methods=['GET', 'POST'])
 @login_required
-def flightpassengerinfo(booking_id, no_of_people, current_passenger):
+def flightpassengerinfo(booking_id, no_of_people, cost, current_passenger):
     booking_id = booking_id
     no_of_people = int(no_of_people)
     current_passenger = int(current_passenger)
     if int(current_passenger) > int(no_of_people):
-        return "Payments Page"
+        return redirect(url_for('user.payments', booking_id=booking_id, cost=cost, flights=1 ,hotels=0 ,location=0 ,_external=True))
     form = PassengerInfo()
     if form.validate_on_submit():
         passenger_temp = Passenger()
@@ -563,7 +550,7 @@ def flightpassengerinfo(booking_id, no_of_people, current_passenger):
         db.session.add(passenger_temp)
         db.session.commit()
         current_passenger += 1
-        return redirect(url_for('user.flightpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, current_passenger=current_passenger, _external=True))
+        return redirect(url_for('user.flightpassengerinfo', booking_id=booking_id, no_of_people=no_of_people, cost=cost , current_passenger=current_passenger, _external=True))
 
     return render_template('user/Passenger_info.html', form=form, current_passenger = current_passenger, no_of_people=no_of_people)
 
@@ -579,14 +566,15 @@ def testing():
 
 @user.route('/payments/<string:booking_id>/<string:cost>/<string:flights>/<string:hotels>/<string:location>', methods=['GET', 'POST'])
 @login_required
-def payments(booking_id, cost, flights, hotels, locations):
+def payments(booking_id, cost, flights, hotels, location):
     booking_id = booking_id
     cost = cost
     flights = int(flights)
     hotels = int(hotels)
-    locations = int(locations)
+    location = int(location)
     form = PaymentsForm()
     if form.validate_on_submit():
+        print('\n\n\n\n\n\n\n\n\n\n\nData Added')
         user_temp = User.query.filter_by(usernname=form.username.data.lower()).first()
         passenger_temp = Payments()
         passenger_temp.user_id = user_temp.id
@@ -604,14 +592,76 @@ def payments(booking_id, cost, flights, hotels, locations):
         db.session.add(passenger_temp)
         db.session.commit()
         
+        
+        # Remove from temp_orders
+        temp_orders = Myorderstemp.query.filter_by(id=booking_id).first()
+        temp_orders.booking_complete = True
+        db.session.commit()
+
         # Add to my orders
+        my_orders_temp = Myorders()
+        my_orders_temp.user_id = user_temp.id
+        my_orders_temp.international = True
+        my_orders_temp.cost = cost
+        my_orders_temp.start_date = temp_orders.start_date
+        my_orders_temp.end_date = temp_orders.end_date
+        my_orders_temp.source = temp_orders.source
+        my_orders_temp.destination = temp_orders.destination
+        my_orders_temp.individual = temp_orders.individual
+        my_orders_temp.payment_completed = True
+        db.session.add(my_orders_temp)
+        db.session.commit()
+
+
+        temp_main_orders = Myorderstemp.query.filter_by(user_id = user_temp.id, international = True, start_date = temp_orders.start_date, end_date=temp_orders.end_date, source=temp_orders.source, destination=temp_orders.destination, payment_completed=True).first()
+            
         # Add to respective flights, hotels, locations
         # Remove from respective flights , hotels, locations
-        # Remove from temp_orders
-        
+        if int(flights) == 1:
+            flight_booking_temp = Flightbookingtemp.query.filter_by(my_orders_id= booking_id).first()
+            
+            flight_main_booking_temp = Flightbooking()
+            flight_main_booking_temp.flight_details_id = flight_booking_temp.flight_details_id
+            flight_main_booking_temp.cost = flight_booking_temp.cost
+            flight_main_booking_temp.no_of_people = flight_booking_temp.no_of_people
+            flight_main_booking_temp.my_orders_id = temp_main_orders.id
+            db.session.add(flight_main_booking_temp)
+            db.session.commit()
+            Flightbookingtemp.query.filter_by(my_orders_id= booking_id).delete()
+            db.session.commit()
+            
+        elif int(hotels) == 1:
+            accomodation_booking_temp = Accomodationbookingtemp.query.filter_by(my_orders_id= booking_id).first()
+            
+            accomodation_main_booking_temp = Accomodationbooking()
+            accomodation_main_booking_temp.accomodation_details_id = accomodation_booking_temp.accomodation_details_id
+            accomodation_main_booking_temp.cost = accomodation_booking_temp.cost
+            accomodation_main_booking_temp.no_of_rooms = accomodation_booking_temp.no_of_rooms
+            accomodation_main_booking_temp.my_orders_id = temp_main_orders.id
+            db.session.add(accomodation_main_booking_temp)
+            db.session.commit()
+            
+            Accomodationbookingtemp.query.filter_by(my_orders_id= booking_id).delete()
+            db.session.commit()
+            
+        elif int(location) == 1:
+            location_booking_temp = Locationbookingtemp.query.filter_by(my_orders_id= booking_id).first()
 
+            location_main_booking_temp = Locationbooking()
+            location_main_booking_temp.location_details_id = location_booking_temp.location_details_id
+            location_main_booking_temp.cost = location_booking_temp.cost
+            location_main_booking_temp.no_of_people = location_booking_temp.no_of_people
+            location_main_booking_temp.my_orders_id = temp_main_orders.id
+            db.session.add(location_main_booking_temp)
+            db.session.commit()
 
-        return "Booking complete"
+            Locationbookingtemp.query.filter_by(my_orders_id=booking_id).delete()
+            db.session.commit()
+            
+        Myorderstemp.query.filter_by(id=booking_id).delete()
+        db.session.commit()
+        flash ("Your Order Has Been Successfully Placed.", 'info')
+        return redirect(url_for('user.dashboard'))
     return render_template('user/payments.html', form=form)
 
 # @user.route('/flight-booking' , methods=['GET', 'POST'])
