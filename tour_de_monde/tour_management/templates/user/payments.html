@@ -99,6 +99,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                   <div class="md-form ">
                     <input type="text" id="firstName" class="form-control">
                     <label for="firstName" class="">First name</label>
+                    {{ form.first_name.label(for="first_name") }}
+                    {% if form.first_name.errors %}
+                        {{ form.first_name(class="form-control is-invalid", id="first_name", placeholder="Enter your source... ") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.first_name.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.first_name(class="form-control", id="first_name", placeholder="Enter your source...") }}
+                    {% endif %}
                   </div>
 
                 </div>
@@ -111,6 +122,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                   <div class="md-form">
                     <input type="text" id="lastName" class="form-control">
                     <label for="lastName" class="">Last name</label>
+                    {{ form.last_name.label(for="last_name") }}
+                    {% if form.last_name.errors %}
+                        {{ form.last_name(class="form-control is-invalid", id="last_name", placeholder="Enter your source... ") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.last_name.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.last_name(class="form-control", id="last_name", placeholder="Enter your source...") }}
+                    {% endif %}
                   </div>
 
                 </div>
@@ -125,24 +147,68 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                   <span class="input-group-text" id="basic-addon1">@</span>
                 </div>
                 <input type="text" class="form-control py-0" placeholder="Username" aria-describedby="basic-addon1">
+                {{ form.username.label(for="username") }}
+                {% if form.username.errors %}
+                    {{ form.username(class="form-control is-invalid", id="username", placeholder="Enter your source... ") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.username(class="form-control", id="username", placeholder="Enter your source...") }}
+                {% endif %}
               </div>
 
               <!--email-->
               <div class="md-form mb-5">
                 <input type="text" id="email" class="form-control" placeholder="youremail@example.com">
                 <label for="email" class="">Email (optional)</label>
+                {{ form.email.label(for="email") }}
+                {% if form.email.errors %}
+                    {{ form.email(class="form-control is-invalid", id="email", placeholder="Enter your source... ") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(class="form-control", id="email", placeholder="Enter your source...") }}
+                {% endif %}
               </div>
 
               <!--address-->
               <div class="md-form mb-5">
                 <input type="text" id="address" class="form-control" placeholder="1234 Main St">
                 <label for="address" class="">Address</label>
+                {{ form.address_1.label(for="address_1") }}
+                {% if form.address_1.errors %}
+                    {{ form.address_1(class="form-control is-invalid", id="address_1", placeholder="Enter your source... ") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.address_1.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.address_1(class="form-control", id="address_1", placeholder="Enter your source...") }}
+                {% endif %}
               </div>
 
               <!--address-2-->
               <div class="md-form mb-5">
                 <input type="text" id="address-2" class="form-control" placeholder="Apartment or suite">
                 <label for="address-2" class="">Address 2 (optional)</label>
+                {{ form.address_2.label(for="address_2") }}
+                {% if form.address_2.errors %}
+                    {{ form.address_2(class="form-control is-invalid", id="address_2", placeholder="Enter your source... ") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.address_2.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.address_2(class="form-control", id="address_2", placeholder="Enter your source...") }}
+                {% endif %}
               </div>
 
               <!--Grid row-->
@@ -156,6 +222,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                     <option value="">Choose...</option>
                     <option>United States</option>
                   </select>
+                  {{ form.country.label(for="country") }}
+                  {% if form.country.errors %}
+                      {{ form.country(class="form-control is-invalid", id="country", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.country.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.country(class="form-control", id="country", placeholder="Enter your source...") }}
+                  {% endif %}
                   <div class="invalid-feedback">
                     Please select a valid country.
                   </div>
@@ -171,6 +248,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                     <option value="">Choose...</option>
                     <option>California</option>
                   </select>
+                  {{ form.state.label(for="state") }}
+                  {% if form.state.errors %}
+                      {{ form.state(class="form-control is-invalid", id="state", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.state.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.state(class="form-control", id="state", placeholder="Enter your source...") }}
+                  {% endif %}
                   <div class="invalid-feedback">
                     Please provide a valid state.
                   </div>
@@ -183,6 +271,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
 
                   <label for="zip">Zip</label>
                   <input type="text" class="form-control" id="zip" placeholder="" required>
+                  {{ form.zip_code.label(for="zip_code") }}
+                  {% if form.zip_code.errors %}
+                      {{ form.zip_code(class="form-control is-invalid", id="zip_code", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.zip_code.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.zip_code(class="form-control", id="zip_code", placeholder="Enter your source...") }}
+                  {% endif %}
                   <div class="invalid-feedback">
                     Zip code required.
                   </div>
@@ -201,6 +300,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                 <div class="col-md-6 mb-3">
                   <label for="cc-name">Name on card</label>
                   <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                  {{ form.name_on_card.label(for="name_on_card") }}
+                  {% if form.name_on_card.errors %}
+                      {{ form.name_on_card(class="form-control is-invalid", id="name_on_card", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.name_on_card.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.name_on_card(class="form-control", id="name_on_card", placeholder="Enter your source...") }}
+                  {% endif %}
                   <small class="text-muted">Full name as displayed on card</small>
                   <div class="invalid-feedback">
                     Name on card is required
@@ -209,6 +319,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                 <div class="col-md-6 mb-3">
                   <label for="cc-number">Credit card number</label>
                   <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                  {{ form.credit_card.label(for="credit_card") }}
+                  {% if form.credit_card.errors %}
+                      {{ form.credit_card(class="form-control is-invalid", id="credit_card", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.credit_card.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.credit_card(class="form-control", id="credit_card", placeholder="Enter your source...") }}
+                  {% endif %}
                   <div class="invalid-feedback">
                     Credit card number is required
                   </div>
@@ -218,6 +339,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                 <div class="col-md-3 mb-3">
                   <label for="cc-expiration">Expiration</label>
                   <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                  {{ form.expiration_date.label(for="expiration_date") }}
+                  {% if form.expiration_date.errors %}
+                      {{ form.expiration_date(class="form-control is-invalid", id="expiration_date", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.expiration_date.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.expiration_date(class="form-control", id="expiration_date", placeholder="Enter your source...") }}
+                  {% endif %}
                   <div class="invalid-feedback">
                     Expiration date required
                   </div>
@@ -225,6 +357,17 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                 <div class="col-md-3 mb-3">
                   <label for="cc-expiration">CVV</label>
                   <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                  {{ form.cvv_card.label(for="cvv_card") }}
+                  {% if form.cvv_card.errors %}
+                      {{ form.cvv_card(class="form-control is-invalid", id="cvv_card", placeholder="Enter your source... ") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.cvv_card.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.cvv_card(class="form-control", id="cvv_card", placeholder="Enter your source...") }}
+                  {% endif %}
                   <div class="invalid-feedback">
                     Security code required
                   </div>
