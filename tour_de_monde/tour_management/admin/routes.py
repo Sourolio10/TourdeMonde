@@ -15,7 +15,8 @@ from tour_management.models import (Accomodation,
                                     Place,
                                     Ticket,
                                     Admin,
-                                    AdminToken)
+                                    AdminToken,
+                                    Myorders)
 from tour_management.models.utils import rand_pass
 from tour_management import db, jwt
 from tour_management.utilities.util_helpers import send_confirmation_mail
@@ -548,3 +549,8 @@ def view_accomodation_details():
 def view_location_details():
     location_details_data = Locationdetails.query.all()
     return render_template('admin/view_location_details.html', items=location_details_data)
+
+@admin.route('/view/myorders' ,methods=['GET','POST'])
+def view_my_orders():
+    myorders_data = Myorders.query.all()
+    return render_template('admin/view_my_orders.html', items=myorders_data)

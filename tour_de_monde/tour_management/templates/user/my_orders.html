@@ -77,40 +77,42 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                     <div class="col-lg-10 col-xl-8">
                       <div class="card" style="border-radius: 10px;">
                         <div class="card-header px-4 py-5">
-                          <h5 class="text-muted font-weight-bold mb-0">Thanks for choosing us, <span style="color: #a8729a;">Sahil</span>!</h5>
+                          <h5 class="text-muted font-weight-bold mb-0">Thanks for choosing us, <span style="color: #a8729a;">{{user_name}}</span>!</h5>
                         </div>
                         <div class="card-body p-4">
+                          {% if items['flights'] %}
+                          {% for item in items['flights'] %}
                           <div class="d-flex justify-content-between align-items-center mb-4">
                             <p class="lead font-weight-normal mb-0" style="color: #a8729a;">Flight Receipt</p>
-                            <p class="small text-muted mb-0">Confirmation Number : 1KAU9-84UIL</p>
+                            <p class="small text-muted mb-0">Confirmation Number : {{item['confirmation']}}</p>
+                            <p class="small text-muted mb-0">Order Id : {{item['my_order_id']}}</p>
                           </div>
                           <div class="card shadow-0 border mb-4">
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0">Mumbai to Tokyo</p>
+                                  <p class="text-muted mb-0">{{item['source']}} to {{item['destination']}}</p>
                                 </div>
                                 <div class="col-md-4 text-center d-block justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Take off: Dec 29 at 6:00 AM</p>
-                                  <p class="text-muted mb-0 small">Landing: Jan 4 at 12:00 AM</p>
+                                  <p class="text-muted mb-0 small">Take off: {{item['start_date']}} at {{item['start_time']}}</p>
+                                  <p class="text-muted mb-0 small">Landing: {{item['end_date']}} at {{item['end_time']}}</p>
                                 </div>
                                 <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Number of people: 3</p>
+                                  <p class="text-muted mb-0 small">Number of people: {{item['no_of_people']}}</p>
                                 </div>
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">$499</p>
+                                  <p class="text-muted mb-0 small">${{item['cost']}}</p>
                                 </div>
                               </div>
                               <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
                               <div class="row">
                                 <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Flight Number: NK716</p>
+                                  <p class="text-muted mb-0 small">Flight Number: {{item['flight_number']}}</p>
                                 </div>
                                 <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Duration: 2hr, 6 min</p>
                                 </div>
                                 <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Seat Number: F17</p>
+                                  <p class="text-muted mb-0 small">Number of people: {{item['no_of_people']}}</p>
                                 </div>
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                   <!-- <p class="text-muted mb-0 small">Cancel Flight</p> -->
@@ -119,68 +121,76 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                               </div>
                             </div>
                           </div>
-
-
-                          <div class="d-flex justify-content-between align-items-center mb-4">
-                            <p class="lead font-weight-normal mb-0" style="color: #a8729a;">Hotel Receipt</p>
-                            <p class="small text-muted mb-0">Confirmation Number : 1KAU9-XXX</p>
-                          </div>
-                          <div class="card shadow-0 border mb-4">
-                            <div class="card-body">
-                              <div class="row">
-                                <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0">Marina Bay Sands Hotel</p>
+                          {% endfor %}
+                        {% endif %}
+                        
+                        {% if items['hotels'] %}
+                          {% for item in items['hotels'] %}
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                              <p class="lead font-weight-normal mb-0" style="color: #a8729a;">Hotel Receipt</p>
+                              <p class="small text-muted mb-0">Confirmation Number : {{item['confirmation']}}</p>
+                              <p class="small text-muted mb-0">Order Id : {{item['my_order_id']}}</p>
+                            </div>
+                            <div class="card shadow-0 border mb-4">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0">Hotel Name : {{item['hotel_name']}}</p>
+                                  </div>
+                                  <div class="col-md-4 text-center d-block justify-content-center align-items-center">
+                                    <p class="text-muted mb-0 small">Number of rooms: {{item['no_of_rooms']}}</p>
+                                  </div>
+                                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0 small"></p>
+                                  </div>
+                                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0 small">${{item['cost']}}</p>
+                                  </div>
                                 </div>
-                                <div class="col-md-4 text-center d-block justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Number of people: 3</p>
-                                  <!-- <p class="text-muted mb-0 small">Number of rooms: 2</p> -->
-                                </div>
-                                <div class="col-md-3 text-center d-block justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Number of rooms: 2</p>
-                                </div>
-                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">$499</p>
-                                </div>
-                              </div>
-                              <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                              <div class="row">
-                                <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small"></p>
-                                </div>
-                                <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Arrival Date: Dec 29</p>
-                                </div>
-                                <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Departure Date: Jan 4</p>
-                                </div>
-                                <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                  <!-- <p class="text-muted mb-0 small">Cancel Flight</p> -->
-                                  <button type="button" class="btn btn-danger mb-0">Cancel Hotel</button>
+                                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                <div class="row">
+                                  
+                                  <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0 small">Arrival Date: {{item['start_date']}}</p>
+                                  </div>
+                                  <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                                    <p class="text-muted mb-0 small">Departure Date: {{item['end_date']}}</p>
+                                  </div>
+                                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    
+                                  </div>
+                                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    <!-- <p class="text-muted mb-0 small">Cancel Flight</p> -->
+                                    <button type="button" class="btn btn-danger mb-0">Cancel Hotel</button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-
-
+                          {% endfor %}
+                        {% endif %}
+                          
+                        {% if items['location'] %}
+                          {% for item in items['location'] %}
                           <div class="d-flex justify-content-between align-items-center mb-4">
                             <p class="lead font-weight-normal mb-0" style="color: #a8729a;">Fun Activity Receipt</p>
-                            <p class="small text-muted mb-0">Confirmation Number : 1KAU9-XYZ</p>
+                            <p class="small text-muted mb-0">Confirmation Number : {{item['confirmation']}}</p>
+                            <p class="small text-muted mb-0">Order Id : {{item['my_order_id']}}</p>
                           </div>
                           <div class="card shadow-0 border mb-4">
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0">Sky Diving</p>
+                                  <p class="text-muted mb-0">{{item['name']}}</p>
                                 </div>
                                 <div class="col-md-4 text-center d-block justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Number of people: 1</p>
+                                  <p class="text-muted mb-0 small">Number of people: {{item['no_of_people']}}</p>
                                   <!-- <p class="text-muted mb-0 small">Number of rooms: 2</p> -->
                                 </div>
                                 <div class="col-md-3 text-center d-block justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">Arrival Date: Dec 29</p>
+                                  <p class="text-muted mb-0 small">Arrival Date: {{item['start_date']}}</p>
                                 </div>
                                 <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                  <p class="text-muted mb-0 small">$499</p>
+                                  <p class="text-muted mb-0 small">${{item['cost']}}</p>
                                 </div>
                               </div>
                               <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -201,28 +211,9 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                               </div>
                             </div>
                           </div>
-              
-                          <div class="d-flex justify-content-between pt-2">
-                            <p class="font-weight-bold mb-0">Order Details</p>
-                            <!-- <p class="text-muted mb-0"><span class="font-weight-bold me-4">Total</span> $898.00</p> -->
-                          </div>
-              
-                          <div class="d-flex justify-content-between pt-2">
-                            <p class="text-muted mb-0">Invoice Number : 788152</p>
-                            <p class="text-muted mb-0"><span class="font-weight-bold me-4">Total</span> $1497.00</p>
-                          </div>
-              
-                          <div class="d-flex justify-content-between mb-5">
-                            <p class="text-muted mb-0">Invoice Date : 22 Dec,2022</p>
-                            <p class="text-muted mb-0"><span class="font-weight-bold me-4">GST 18%</span> $103.00</p>
-                          </div>
-              
-                        </div>
-                        <div class="card-footer border-0 px-4 py-5"
-                          style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                          <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-                            paid: <span class="h2 mb-0 ms-2">$1600</span></h5>
-                        </div>
+                          {% endfor %}
+                        {% endif %}
+                        
                       </div>
                     </div>
                   </div>

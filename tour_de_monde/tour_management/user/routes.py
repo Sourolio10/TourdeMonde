@@ -268,7 +268,6 @@ def location_booking():
 @login_required
 def location_booking_confirm(location_name, no_of_people, cost, season_visit, start_date, address, average_review, average_time, description, end_date, location_id):
     location_name = location_name
-    activity_types = activity_types
     no_of_people = no_of_people
     cost = cost
     season_visit = season_visit
@@ -300,7 +299,8 @@ def location_booking_confirm(location_name, no_of_people, cost, season_visit, st
     location_booking_temp.cost = int(cost)*int(no_of_people)
     location_booking_temp.no_of_people = int(no_of_people)
     location_booking_temp.my_orders_id = temp_orders.id
-    
+    db.session.add(location_booking_temp)
+    db.session.commit()
     # return redirect(url_for('user.hotelpassengerinfo', booking_id=temp_orders.id,no_of_people=no_of_rooms, current_passenger=1, _external=True))
     return redirect(url_for('user.payments', booking_id=temp_orders.id, cost=cost, flights=0 ,hotels=0 ,location=1 ,_external=True))
     
@@ -438,8 +438,84 @@ def hotelpassengerinfo(booking_id, no_of_people, cost, current_passenger):
 @user.route('/my_orders' , methods=['GET', 'POST'])
 @login_required
 def my_orders():
-    my_orders_form = MyordersForm()
-    return render_template('user/my_orders.html', form=my_orders_form)
+    form = MyordersForm()
+    if form.validate_on_submit():
+        username = form.username.data.lower()
+        return redirect(url_for('user.my_orders_details', username=username, _external=True))
+    return render_template('user/my_orders_temp.html', form=form)
+
+
+@user.route('/my_orders/<string:username>' , methods=['GET', 'POST'])
+@login_required
+def my_orders_details(username):
+    user_temp = User.query.filter_by(username = username).first()
+    my_orders_temp = Myorders.query.filter_by(user_id = user_temp.id).all()
+    if my_orders_temp is None or my_orders_temp == []:
+        flash ("Sorry you do not have any orders placed", "danger")
+        return redirect(url_for('user.dashboard'))
+    
+    hotels_json = []
+    flights_json = []
+    activities_json = []
+    for my_order in my_orders_temp:
+        payments_temp = Payments.query.filter_by(my_orders_id = my_order.id).first()
+        
+        # Check Flights
+        flights_temp = Flightbooking.query.filter_by(my_orders_id = my_order.id).first()
+        if flights_temp is not None:
+            temp_flights = {}
+            flight_details = Flightdetails.query.filter_by(id = flights_temp.flight_details_id).first()
+            temp_flights['confirmation'] = payments_temp.confirmation_reference
+            temp_flights['source'] = flight_details.source
+            temp_flights['destination'] = flight_details.destination
+            temp_flights['start_date'] = str(flight_details.departure_date)
+            temp_flights['end_date'] = str(flight_details.arrival_date)
+            temp_flights['start_time'] = str(flight_details.departure_time)
+            temp_flights['end_time'] = str(flight_details.arrival_time)
+            temp_flights['no_of_people'] = flights_temp.no_of_people
+            temp_flights['cost'] = my_order.cost
+            temp_flights['flight_number'] = flight_details.flight_number
+            temp_flights['my_order_id'] = my_order.id
+            flights_json.append(temp_flights)
+            continue
+        # Check Hotels
+        hotel_temp = Accomodationbooking.query.filter_by(my_orders_id = my_order.id).first()
+        if hotel_temp is not None:
+            temp_hotels = {}
+            hotel_details = Accomodationdetails.query.filter_by(id = hotel_temp.accomodation_details_id).first()
+            hotel_main_details = Accomodation.query.filter_by(id = hotel_details.accomodation_id).first()
+            temp_hotels['confirmation'] = payments_temp.confirmation_reference
+            temp_hotels['hotel_name'] = hotel_main_details.hotel_name
+            temp_hotels['no_of_rooms'] = hotel_temp.no_of_rooms
+            temp_hotels['room_name'] = hotel_details.room_name
+            temp_hotels['cost'] = my_order.cost
+            temp_hotels['start_date'] = str(my_order.start_date)
+            temp_hotels['end_date'] = str(my_order.end_date)
+            temp_hotels['source'] = my_order.source
+            temp_hotels['my_order_id'] = my_order.id
+            hotels_json.append(temp_hotels)
+            continue
+        # Check Activities
+        location_temp = Locationbooking.query.filter_by(my_orders_id = my_order.id).first()
+        if location_temp is not None:
+            temp_location = {}
+            location_details = Locationdetails.query.filter_by(id = location_temp.location_details_id).first()
+            location_main_details = Location.query.filter_by(id = location_details.location_id).first()
+            temp_location['confirmation'] = payments_temp.confirmation_reference
+            temp_location['name'] = location_main_details.name
+            temp_location['no_of_people'] = location_temp.no_of_people
+            temp_location['cost'] = my_order.cost
+            temp_location['start_date'] = str(my_order.start_date)
+            temp_location['my_order_id'] = my_order.id
+            activities_json.append(temp_location)
+            continue
+    items = {}
+    items['flights'] = flights_json
+    items['hotels'] = hotels_json
+    items['location'] = activities_json
+    print('\n\n\n\n\n\n\n\n\n\n\n\n', items)
+    return render_template('user/my_orders.html', items = items, user_name = user_temp.username)
+
 
 @user.route('/flight_booking' , methods=['GET', 'POST'])
 @login_required

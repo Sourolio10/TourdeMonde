@@ -160,8 +160,8 @@ class HotelBookingForm(FlaskForm):
             raise ValidationError('Sorry we do not serve that location yet')
     
 class MyordersForm(FlaskForm):
-    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
-    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    username = StringField('Enter Your Username', validators=[
+        DataRequired(), Length(min=2, max=255)])
     submit = SubmitField('Submit')
 
 
