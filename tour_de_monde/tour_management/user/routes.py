@@ -529,8 +529,8 @@ def flight_booking():
         source = form.source.data.lower()
         destination = form.destination.data.lower()
         number_of_people = int(form.adults.data) + int(form.children.data)
-        departure_date = form.inputCheckIn.data
-        arrival_date = form.inputCheckOut.data
+        departure_date = form.departure_date.data
+        arrival_date = form.arrival_date.data
         cabin_class = form.cabin_class.data
         
         print("\n\n\n\n\n\n\n\n\n\n",cabin_class)
