@@ -157,8 +157,8 @@ class HotelBookingForm(FlaskForm):
             raise ValidationError('Sorry we do not serve that location yet')
     
 class MyordersForm(FlaskForm):
-    inputCheckIn = DateField('Check In Date', format='%m/%d/%y', validators=[InputRequired()])
-    inputCheckOut = DateField('Check Out Date', format='%m/%d/%y', validators=[InputRequired()])
+    username = StringField('Enter Your Username', validators=[
+        DataRequired(), Length(min=2, max=255)])
     submit = SubmitField('Submit')
 
 
@@ -210,17 +210,17 @@ class LocationBookingForm(FlaskForm):
 
 class PaymentsForm(FlaskForm):
     
-    first_name = StringField('Choose your source', [DataRequired()])
-    last_name = StringField('Choose your Activity Type', [DataRequired()])
-    username = StringField('Choose your Activity Type', [DataRequired()])
-    address_1 = StringField('Choose your Activity Type', [DataRequired()])
-    address_2 = StringField('Choose your Activity Type')
+    first_name = StringField('First Name', [DataRequired()])
+    last_name = StringField('Last Name', [DataRequired()])
+    username = StringField('Username', [DataRequired()])
+    address_1 = StringField('Address Line 1', [DataRequired()])
+    address_2 = StringField('Address Line 2')
     email = StringField('Email', validators=[Email()])
-    country = SelectField('Adults' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5'), ('6','6'), ('7','7'), ('8','8'), ('9','9'), ('10','10')],validators=[InputRequired()])
-    state = SelectField('Children' , choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')],validators=[InputRequired()])
-    zip_code = StringField('Choose your Activity Type', [DataRequired()])
-    credit_card = StringField('Choose your Activity Type', [DataRequired()])
-    name_on_card = StringField('Choose your Activity Type', [DataRequired()])
-    expiration_date = StringField('Choose your Activity Type', [DataRequired()])
-    cvv_card =  StringField('Choose your Activity Type', [DataRequired()])
+    country = SelectField('Country' , choices=[('1','United States')],validators=[InputRequired()])
+    state = SelectField('State' , choices=[('1','Florida'), ('2','Indiana'), ('3','Texas')],validators=[InputRequired()])
+    zip_code = StringField('Zip Code', [DataRequired()])
+    credit_card = StringField('Credit Card', [DataRequired()])
+    name_on_card = StringField('Name On Card', [DataRequired()])
+    expiration_date = StringField('Expiration Date', [DataRequired()])
+    cvv_card =  StringField('CVV', [DataRequired()])
     submit = SubmitField('Submit')
