@@ -84,11 +84,11 @@ def signup():
         else:
             email_conf_token = UserToken.generate_token(
                 'email_confirmation', org.id, 1800)
-            User.generate_smcode(org.id, 180)
+            otp = User.generate_smcode(org.id, 180)
             try:
                 send_confirmation_mail(org.email,
                                    url_for('user.email_confirmation',
-                                           token=email_conf_token.token, _external=True))
+                                           token=email_conf_token.token, _external=True), otp=otp)
             except Exception as err:
                 print ('Error Logged : ', err)
                 flash('Email sending failed', 'danger')
