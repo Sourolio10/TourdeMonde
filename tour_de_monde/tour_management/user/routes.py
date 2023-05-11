@@ -816,7 +816,7 @@ def send_email_confirmation():
             'email_confirmation', org.id, 1800)
         send_confirmation_mail(org.email,
                                url_for('.email_confirmation',
-                                       token=email_conf_token.token, _external=True))
+                                       token=email_conf_token.token, _external=True),email_conf_token.token)
         flash('The email confirmation link has been sent to your email. Please check your email', 'info')
         return redirect(url_for('.login'))
     return render_template('user/resend_email_confirmation.html', form=form)
